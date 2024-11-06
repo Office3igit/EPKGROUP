@@ -15,7 +15,7 @@ import { ScaleLoader } from 'react-spinners';
 
 
 function AddDailyAccounts() {
-
+    // this is office3i
     // ------------------------------------------------------------------------------------------------
     // Redirect to the edit page
     const navigate = useNavigate();
@@ -616,7 +616,7 @@ function AddDailyAccounts() {
                     {/* ------------------------------------------------------------------------------------------------ */}
                     {/* List table */}
                     <h5 className='mb-3' style={{ fontWeight: 'bold', color: '#00275c' }}>Daily Accounts List</h5>
-                    <div style={{ display: 'flex', alignItems: 'center', paddingBottom: '10px', justifyContent: 'space-between', flexWrap:'wrap', gap:'17px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', paddingBottom: '10px', justifyContent: 'space-between', flexWrap: 'wrap', gap: '17px' }}>
                         <div>
                             <input
                                 type="text"
