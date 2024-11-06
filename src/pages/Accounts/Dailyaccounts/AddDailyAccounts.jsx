@@ -15,7 +15,7 @@ import { ScaleLoader } from 'react-spinners';
 
 
 function AddDailyAccounts() {
-    // this is office3i
+    
     // ------------------------------------------------------------------------------------------------
     // Redirect to the edit page
     const navigate = useNavigate();
