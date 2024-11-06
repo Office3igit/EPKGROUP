@@ -101,7 +101,7 @@ export default function DashboardViewEmpDetails() {
     // -----------------------------------------------------------------------------------------------------------
 
     const handleExportCSV = () => {
-        const csvData = attendanceData.map(({ first_name, checkin_time, checkout_time, emp_present, emp_late,
+        const csvData = attendanceData.map(({ hrms_emp_id,first_name, checkin_time, checkout_time, emp_present, emp_late,
             emp_permission,
             //  emp_onduty, 
             checkout_total_hours }, index) => {
@@ -118,6 +118,7 @@ export default function DashboardViewEmpDetails() {
             return {
                 'S.No': index + 1,
                 Name: first_name,
+                EmpID:hrms_emp_id,
                 Date: date, // Date column
                 'In Time': time, // In Time column
                 'Out Time': outTime,
@@ -131,6 +132,7 @@ export default function DashboardViewEmpDetails() {
 
         const headers = [
             { label: 'S.No', key: 'S.No' },
+            { label: 'Emp-ID', key: 'EmpID' },
             { label: 'Name', key: 'Name' },
             { label: 'Date', key: 'Date' },
             { label: 'In Time', key: 'In Time' },
@@ -163,7 +165,7 @@ export default function DashboardViewEmpDetails() {
 
         const doc = new jsPDF('landscape', unit, size);
 
-        const data = attendanceData.map(({ first_name, checkin_time, checkout_time, emp_present, emp_late, emp_permission, emp_onduty, checkout_total_hours }, index) => {
+        const data = attendanceData.map(({ hrms_emp_id,first_name, checkin_time, checkout_time, emp_present, emp_late, emp_permission, emp_onduty, checkout_total_hours }, index) => {
             // Check if checkin_time is null
             const inTimeParts = checkin_time ? checkin_time.split(' ') : ['', '']; // If null, set date and time to empty strings
             const date = inTimeParts[0]; // Extracting the date
@@ -175,6 +177,7 @@ export default function DashboardViewEmpDetails() {
 
             return [
                 index + 1,
+                hrms_emp_id,
                 first_name,
                 date, // Date column
                 time, // In Time column
@@ -202,7 +205,7 @@ export default function DashboardViewEmpDetails() {
 
 
         doc.autoTable({
-            head: [['S.No', 'Name', 'Date', 'In Time', 'Out Time', 'P/A/L/HL', 'LA', 'PR',
+            head: [['S.No', 'Emp-ID', 'Name', 'Date', 'In Time', 'Out Time', 'P/A/L/HL', 'LA', 'PR',
                 // 'OnDuty', 
                 // 'Total Hours'
             ]],
@@ -316,6 +319,7 @@ export default function DashboardViewEmpDetails() {
                             <thead className="thead-dark">
                                 <tr>
                                     <th scope="col" style={{ textAlign: 'center' }}>S.No</th>
+                                    <th scope="col" style={{ textAlign: 'center' }}>Emp-ID</th>
                                     <th scope="col" style={{ textAlign: 'center' }}>Employee Name</th>
                                     <th scope="col" style={{ textAlign: 'center' }}>Date</th>
                                     <th scope="col" style={{ textAlign: 'center' }}>In Time</th>
@@ -352,6 +356,7 @@ export default function DashboardViewEmpDetails() {
                                             return (
                                                 <tr key={row.id}>
                                                     <td style={{ textAlign: 'center' }}>{serialNumber}</td>
+                                                    <td>{row.hrms_emp_id}</td>
                                                     <td>{row.first_name}</td>
 
                                                     <td style={{ textAlign: 'center' }}>{date}</td> {/* Date column */}

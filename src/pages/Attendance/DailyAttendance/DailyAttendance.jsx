@@ -459,9 +459,12 @@ function DailyAttendance() {
 
 
     const handleExportCSV = () => {
-        const csvData = tableData.map(({ first_name, checkin_date, checkin_time, checkout_time, emp_present, emp_late, emp_permission, emp_onduty, checkout_total_hours }, index) => ({
+        const csvData = tableData.map(({ hrms_emp_id, first_name, department_name, role_name, checkin_date, checkin_time, checkout_time, emp_present, emp_late, emp_permission, emp_onduty, checkout_total_hours }, index) => ({
             '#': index + 1,
+            hrms_emp_id,
             first_name,
+            department_name,
+            role_name,
             checkin_date,
             checkin_time,
             checkout_time,
@@ -470,13 +473,14 @@ function DailyAttendance() {
             emp_permission,
             emp_onduty,
             checkout_total_hours,
-
-
         }));
 
         const headers = [
             { label: 'S.No', key: '#' },
+            { label: 'Emp-ID', key: 'hrms_emp_id' },
             { label: 'Employee Name', key: 'first_name' },
+            { label: 'Department', key: 'department_name' },
+            { label: 'Role', key: 'role_name' },
             { label: 'Date', key: 'checkin_date' },
             { label: 'In Time', key: 'checkin_time' },
             { label: 'Out Time', key: 'checkout_time' },
@@ -511,9 +515,12 @@ function DailyAttendance() {
         const size = 'A4'; // You can change to 'letter' or other sizes as needed
         const doc = new jsPDF('landscape', unit, size);
 
-        const data = tableData.map(({ first_name, checkin_date, checkin_time, checkout_time, emp_present, emp_late, emp_permission, emp_onduty, checkout_total_hours }, index) => [
+        const data = tableData.map(({ hrms_emp_id,first_name, department_name,role_name,checkin_date, checkin_time, checkout_time, emp_present, emp_late, emp_permission, emp_onduty, checkout_total_hours }, index) => [
             index + 1,
+            hrms_emp_id,
             first_name,
+            department_name,
+            role_name,
             checkin_date,
             checkin_time,
             checkout_time,
@@ -526,7 +533,7 @@ function DailyAttendance() {
         ]);
 
         doc.autoTable({
-            head: [['S.No', 'Employee Name', 'Date', 'In Time', 'Out Time', 'P/A/L/HL', 'LA', 'PR', 'OT', 'Total Hours']],
+            head: [['S.No', 'Emp-ID','Employee Name', 'Department', 'Role', 'Date', 'In Time', 'Out Time', 'P/A/L/HL', 'LA', 'PR', 'OT', 'Total Hours']],
             body: data,
             // styles: { fontSize: 10 },
             // columnStyles: { 0: { halign: 'center', fillColor: [100, 100, 100] } }, 
@@ -653,7 +660,10 @@ display: none !important;
                             <thead className="thead-dark">
                                 <tr>
                                     <th>S.No</th>
+                                    <th>Emp-ID</th>
                                     <th>Employee Name</th>
+                                    <th>Department </th>
+                                    <th>Role </th>
                                     <th>Date</th>
                                     <th>In time</th>
                                     <th>Out Time</th>
@@ -678,7 +688,10 @@ display: none !important;
                                         return (
                                             <tr key={row.id}>
                                                 <td>{serialNumber}</td>
+                                                <td>{row.hrms_emp_id}</td>
                                                 <td>{row.first_name}</td>
+                                                <td>{row.department_name}</td>
+                                                <td>{row.role_name}</td>
                                                 <td>{row.checkin_date}</td>
                                                 <td>{row.checkin_time}</td>
                                                 <td>{row.checkout_time}</td>

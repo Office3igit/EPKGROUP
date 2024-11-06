@@ -140,8 +140,9 @@ function MissedCount() {
 
 
     const handleExportCSV = () => {
-        const csvData = tableData.map(({ employee_name, misseddate }, index) => ({
+        const csvData = tableData.map(({ hrms_emp_id,employee_name, misseddate }, index) => ({
             '#': index + 1,
+            hrms_emp_id,
             employee_name,
             misseddate,
 
@@ -149,6 +150,7 @@ function MissedCount() {
 
         const headers = [
             { label: '#', key: '#' },
+            { label: 'Emp-ID', key: 'hrms_emp_id' },
             { label: 'Employee name', key: 'employee_name' },
             { label: 'Date', key: 'misseddate' },
 
@@ -176,14 +178,15 @@ function MissedCount() {
         const size = 'A4'; // You can change to 'letter' or other sizes as needed
         const doc = new jsPDF('landscape', unit, size);
 
-        const data = tableData.map(({ employee_name, misseddate }, index) => [
+        const data = tableData.map(({ hrms_emp_id,employee_name, misseddate }, index) => [
             index + 1,
+            hrms_emp_id,
             employee_name,
             misseddate,
         ]);
 
         doc.autoTable({
-            head: [['#', 'Employee Name', 'Date']],
+            head: [['#', 'Emp-ID','Employee Name', 'Date']],
             body: data,
             // styles: { fontSize: 10 },
             // columnStyles: { 0: { halign: 'center', fillColor: [100, 100, 100] } }, 
@@ -612,6 +615,7 @@ function MissedCount() {
                             <thead className="thead-dark">
                                 <tr>
                                     <th>S.No</th>
+                                    <th>Emp-ID</th>
                                     <th>Employee Name</th>
                                     <th>Action</th>
 
@@ -631,6 +635,7 @@ function MissedCount() {
                                         return (
                                             <tr key={row.id}>
                                                 <td>{serialNumber}</td>
+                                                <td>{row.hrms_emp_id}</td>
                                                 <td>{row.employee_name}</td>
                                                 <td style={{display:'flex', gap:'10px'}}>
 

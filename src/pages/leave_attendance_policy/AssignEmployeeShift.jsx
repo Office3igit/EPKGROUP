@@ -433,8 +433,9 @@ function Attendancelocation() {
         };
 
 
-        const csvData = tableData.map(({ department_name, first_name, start_date, end_date, shift_slot, week_off, status }, index) => ({
+        const csvData = tableData.map(({ hrms_emp_id,department_name, first_name, start_date, end_date, shift_slot, week_off, status }, index) => ({
             '#': index + 1,
+            hrms_emp_id,
             department_name,
             first_name,
             start_date,
@@ -446,7 +447,8 @@ function Attendancelocation() {
 
         const headers = [
             { label: 'S.No', key: '#' },
-            { label: 'Department Name', key: 'department_name' },
+            { label: 'Emp-ID', key: 'hrms_emp_id'},
+            { label: 'Role', key: 'department_name' },
             { label: 'Employee Name', key: 'first_name' },
             { label: 'Start Date', key: 'start_date' },
             { label: 'End Date', key: 'end_date' },
@@ -485,8 +487,9 @@ function Attendancelocation() {
         };
 
 
-        const data = tableData.map(({ department_name, first_name, start_date, end_date, shift_slot, week_off, status }, index) => [
+        const data = tableData.map(({ hrms_emp_id,department_name, first_name, start_date, end_date, shift_slot, week_off, status }, index) => [
             index + 1,
+            hrms_emp_id,
             department_name,
             first_name,
             start_date,
@@ -497,7 +500,7 @@ function Attendancelocation() {
         ]);
 
         doc.autoTable({
-            head: [['S.No', 'Department Name', 'Employee Name', 'Start Date', 'End Date', 'Shift Slot', 'Week Off', 'Status']],
+            head: [['S.No', 'Emp-ID','Role', 'Employee Name', 'Start Date', 'End Date', 'Shift Slot', 'Week Off', 'Status']],
             body: data,
             // styles: { fontSize: 10 },
             // columnStyles: { 0: { halign: 'center', fillColor: [100, 100, 100] } }, 
@@ -716,9 +719,9 @@ function Attendancelocation() {
                         <thead className="thead-dark">
                             <tr>
                                 <th scope="col">S.No</th>
-                                <th scope="col">Department Name</th>
-
+                                <th scope="col">Emp-ID</th>
                                 <th scope="col">Employee Name</th>
+                                <th scope="col">Role</th>
                                 <th scope="col">Start Date</th>
                                 <th scope="col">End Date</th>
                                 <th scope="col">Shift Slot</th>
@@ -753,8 +756,10 @@ function Attendancelocation() {
                                         return (
                                             <tr key={row.id}>
                                                 <th scope="row">{serialNumber}</th>
-                                                <td>{row.department_name}</td>
+                                                <td>{row.hrms_emp_id}</td>
                                                 <td>{row.first_name}</td>
+                                                <td>{row.department_name}</td>
+                                              
                                                 <td>{row.start_date}</td>
                                                 <td>{row.end_date}</td>
                                                 <td>{row.shift_slot}</td>

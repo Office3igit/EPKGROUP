@@ -115,7 +115,10 @@ function MonthlyList() {
         // Prepare the headers dynamically
         const headers = [
             { label: 'S.No', key: 'serialNumber' },
+            { label: 'Emp-ID', key: 'empid' },
             { label: 'Employee Name', key: 'name' },
+            { label: 'Department', key: 'department' },
+            { label: 'Role', key: 'role' },
             ...allKeys.map(day => ({ label: day, key: day }))
         ];
 
@@ -125,6 +128,9 @@ function MonthlyList() {
             const rowData = {
                 serialNumber,
                 name: row.Name,
+                empid: row.hrms_emp_id,
+                department: row.DepartmentName,
+                role: row.RoleName,
                 ...allKeys.reduce((acc, day) => ({ ...acc, [day]: row[day] || '' }), {})
             };
             return rowData;
@@ -159,12 +165,12 @@ function MonthlyList() {
         doc.text(title, titleX, titleY);
 
         // Prepare the table headers
-        const head = [['S.No', 'Employee Name', ...allKeys]];
+        const head = [['S.No', 'Emp-ID','Employee Name','Department','Role', ...allKeys]];
 
         // Prepare the table data
         const body = filteredleaveData.map((row, rowIndex) => {
             const serialNumber = currentPage * itemsPerPage + rowIndex + 1;
-            return [serialNumber, row.Name, ...allKeys.map(day => row[day] || '')];
+            return [serialNumber, row.hrms_emp_id,row.Name,row.DepartmentName,row.RoleName, ...allKeys.map(day => row[day] || '')];
         });
 
         // Define colors based on the values
@@ -287,7 +293,7 @@ function MonthlyList() {
     // Header and body dates iterate
     const allKeys = filteredleaveData.reduce((keys, record) => {
         Object.keys(record).forEach(key => {
-            if (!keys.includes(key) && key !== "Name" && key !== "id" && key !== "emp_status") {
+            if (!keys.includes(key) && key !== "Name" && key !== "hrms_emp_id" && key !== "DepartmentName" && key !== "RoleName" && key !== "id" && key !== "emp_status") {
                 keys.push(key);
             }
         });
@@ -350,8 +356,10 @@ function MonthlyList() {
                             <thead className="thead-dark">
                                 <tr>
                                     <th>S.No</th>
+                                    <th>Emp-ID</th>
                                     <th>Employee Name</th>
-
+                                    <th>Department </th>
+                                    <th>Role </th>
                                     {allKeys.map((day, index) => (
                                         <th key={index}>{day}</th>
                                     ))}
@@ -389,7 +397,31 @@ function MonthlyList() {
                                                     padding: '10px 15px',
                                                     borderRadius: '5px'
                                                 }}>
+                                                    {row.hrms_emp_id}
+                                                </td>
+                                                <td style={{
+                                                    height: '60px',
+                                                    verticalAlign: 'middle',
+                                                    padding: '10px 15px',
+                                                    borderRadius: '5px'
+                                                }}>
                                                     {row.Name}
+                                                </td>
+                                                <td style={{
+                                                    height: '60px',
+                                                    verticalAlign: 'middle',
+                                                    padding: '10px 15px',
+                                                    borderRadius: '5px'
+                                                }}>
+                                                    {row.DepartmentName}
+                                                </td>
+                                                <td style={{
+                                                    height: '60px',
+                                                    verticalAlign: 'middle',
+                                                    padding: '10px 15px',
+                                                    borderRadius: '5px'
+                                                }}>
+                                                    {row.RoleName}
                                                 </td>
                                                 {allKeys.map((day, index) => (
                                                     <td key={index}

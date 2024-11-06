@@ -28,9 +28,8 @@ export default function EditRelievingLetter() {
     const [annualCTC, setAnnualCTC] = useState('');
 
 
-
     const [date, setDate] = useState('');
-    const [employeeName, setEmployeeName] = useState('');
+    //const [employeeName, setEmployeeName] = useState('');
     const [designation, setDesignation] = useState('');
     const [companyName, setCompanyName] = useState('');
     const [joiningDate, setJoiningDate] = useState('');
@@ -43,6 +42,84 @@ export default function EditRelievingLetter() {
     const [refreshKey, setRefreshKey] = useState(0);
     const [headerFooterData, setHeaderFooterData] = useState([]); // Initialize with an empty array
     const [loading, setLoading] = useState(true);
+
+    const [maindepartment, setMainDepartment] = useState([]);
+    const [selectdepartment, setSelectdepartment] = useState('');
+    const [selectrole, setSelectRole] = useState([]);
+    const [selectedmainroleid, setSelectMainRoleId] = useState('');
+    const [selectmainemployee, setSelectMainEmployee] = useState([]);
+    const [selectedemployee, setSelectedMainEmployee] = useState('');
+
+    
+    useEffect(() => {
+        axios.get('https://epkgroup.in/crm/api/public/api/department_list', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${usertoken}`
+            }
+        })
+            .then(response => {
+                const { data } = response.data;
+                console.log("department and supervisor options", response.data);
+
+                if (Array.isArray(data)) {
+                    setMainDepartment(data);
+                } else {
+                    console.error("Unexpected data format:", data);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching department and supervisor options:', error);
+            });
+    }, [usertoken]);
+
+     // --------------------------------------- Role Dropdown ------------------------------------------------
+
+     useEffect(() => {
+        const apiUrl = `https://epkgroup.in/crm/api/public/api/departmentbasedrole_list/${selectdepartment}`;
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(apiUrl,
+
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${usertoken}`
+                        }
+                    });
+                const data = response.data.data;
+                setSelectRole(data);
+                console.log("setEmployeesDropdown", data)
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchData();
+    }, [selectdepartment]);
+
+     // --------------------------------------- Employee Dropdown ------------------------------------------------
+
+     useEffect(() => {
+        const apiUrl = `https://epkgroup.in/crm/api/public/api/supervisorrole_list/${selectedmainroleid}`;
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(apiUrl,
+
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${usertoken}`
+                        }
+                    });
+                const data = response.data.data;
+                setSelectMainEmployee(data);
+                console.log("setEmployeesDropdown", data)
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchData();
+    }, [selectedmainroleid]);
+
+
 
     const handleSave = async (e) => {
         e.preventDefault();
@@ -65,8 +142,16 @@ export default function EditRelievingLetter() {
         if (!date) {
             errors.date = 'Date is required.';
         }
-        if (!employeeName) {
-            errors.employeeName = 'Employee Name is required.';
+        
+        if (!selectdepartment) {
+            errors.selectdepartment = 'Department Name is required.';
+        }
+        
+        if (!selectedmainroleid) {
+            errors.selectedmainroleid = 'Role Name is required.';
+        }
+        if (!selectedemployee) {
+            errors.selectedemployee = 'Employee Name is required.';
         }
         if (!designation) {
             errors.designation = 'Designation is required.';
@@ -113,7 +198,7 @@ export default function EditRelievingLetter() {
         formData.append('annual_ctc', annualCTC);
 
         formData.append('date', date);
-        formData.append('employee_name', employeeName);
+        formData.append('employee_name', selectedemployee);
         formData.append('designation', designation);
         formData.append('company_name', companyName);
         formData.append('joining_date', joiningDate);
@@ -137,9 +222,12 @@ export default function EditRelievingLetter() {
                 // setHeaderAttachment(null);
                 // setFooterAttachment(null);
                 setheader_footer_layout_id('');
+                setSelectMainRoleId('');
+                setSelectdepartment('');
+                setSelectedMainEmployee('');
                 setSalutation('');
                 setDate('');
-                setEmployeeName('');
+              //  setEmployeeName('');
                 setDesignation('');
                 setCompanyName('');
                 setJoiningDate('');
@@ -190,10 +278,14 @@ export default function EditRelievingLetter() {
                     // setHeaderAttachment(data.header_attachment)
                     // setFooterAttachment(data.footer_attached)
                     setheader_footer_layout_id(data.layout_id);
-                    setSalutation(data.salutation)
+                    setSelectdepartment(data.department_id);
+                    setSelectMainRoleId(data.role_id);
+                    setSelectedMainEmployee(data.emp_id);
+                    
+                    setSalutation(data.salutation);
                     setAnnualCTC(data.annual_ctc);
                     setDate(data.date)
-                    setEmployeeName(data.employee_name)
+                   // setEmployeeName(data.employee_name)
                     setDesignation(data.designation)
 
                     setCompanyName(data.company_name)
@@ -381,6 +473,74 @@ export default function EditRelievingLetter() {
                     </Row>
 
                     <Row className="mb-3">
+                                <Col md={6}>
+                                    {/* Select Salutation */}
+                                    <div className="mb-3">
+                                        <label htmlFor="departmentname" className="form-label">Select Department</label>
+                                        <select
+                                            id="departmentname"
+                                            className="form-control"
+                                            value={selectdepartment}
+                                            onChange={(e) => setSelectdepartment(e.target.value)}
+                                        >
+                                            <option value="" >Select Department</option>
+                                            {maindepartment.map(option => (
+                                                <option key={option.id} value={option.id}>
+                                                    {option.depart_name}
+                                                </option>
+                                            ))}
+
+                                            {/* Add more options as needed */}
+                                        </select>
+                                        {formErrors.selectdepartment && <span className="text-danger">{formErrors.selectdepartment}</span>}
+                                    </div>
+                                </Col>
+                                <Col md={6}>
+                                <div className="mb-3">
+                                        <label htmlFor="selectrolename" className="form-label">Select Role</label>
+                                        <select
+                                            id="selectrolename"
+                                            className="form-control"
+                                            value={selectedmainroleid}
+                                            onChange={(e) => setSelectMainRoleId(e.target.value)}
+                                        >
+                                            <option value="" >Select Role</option>
+                                            {selectrole.map(option => (
+                                                <option key={option.id} value={option.id}>
+                                                    {option.role_name}
+                                                </option>
+                                            ))}
+
+                                            {/* Add more options as needed */}
+                                        </select>
+                                        {formErrors.selectedmainroleid && <span className="text-danger">{formErrors.selectedmainroleid}</span>}
+                                    </div>
+                                </Col>
+                            </Row>
+
+                    <Row className="mb-3">
+
+                    <Col md={6}>
+                    <div className="mb-3">
+                                        <label htmlFor="selectrolename" className="form-label">Select Employee</label>
+                                        <select
+                                            id="selectrolename"
+                                            className="form-control"
+                                            value={selectedemployee}
+                                            onChange={(e) => setSelectedMainEmployee(e.target.value)}
+                                        >
+                                            <option value="">Select Employee</option>
+                                            {selectmainemployee.map(option => (
+                                                <option key={option.id} value={option.id}>
+                                                    {option.supervisor_name}
+                                                </option>
+                                            ))}
+
+                                            {/* Add more options as needed */}
+                                        </select>
+                                        {formErrors.selectedemployee && <span className="text-danger">{formErrors.selectedemployee}</span>}
+                                    </div>
+                        </Col>
                         <Col md={6}>
                             <div className="mb-3">
                                 <label className="form-label">Date</label>
@@ -400,18 +560,7 @@ export default function EditRelievingLetter() {
                                 {formErrors.date && <span className="text-danger">{formErrors.date}</span>}
                             </div>
                         </Col>
-                        <Col md={6}>
-                            <div className="mb-3">
-                                <label className="form-label">Employee Name</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    value={employeeName}
-                                    onChange={(e) => setEmployeeName(e.target.value)}
-                                />
-                                {formErrors.employeeName && <span className="text-danger">{formErrors.employeeName}</span>}
-                            </div>
-                        </Col>
+                      
                     </Row>
 
                     <Row className="mb-3">

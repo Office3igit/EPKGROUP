@@ -25,7 +25,6 @@ export default function RelievingLetterList() {
 
     // ------------------------------------------------------------------------------------------------
 
-
     // ------------------------------------------------------------------------------------------------
     // Navigat to editevent
     const navigate = useNavigate();
@@ -152,19 +151,23 @@ export default function RelievingLetterList() {
 
 
     const handleExportCSV = () => {
-        const csvData = tableData.map(({ date, employee_name, designation }, index) => ({
+        const csvData = tableData.map(({ date, hrms_emp_id, employee_names, department_name,role_name, }, index) => ({
             '#': index + 1,
             date,
-            employee_name,
-            designation
+            hrms_emp_id,
+            employee_names,
+            department_name,
+            role_name
         }));
 
         const headers = [
             { label: 'S.No', key: '#' },
             { label: 'Date', key: 'date' },
-            { label: 'Employee Name', key: 'employee_name' },
-            { label: 'Designation', key: 'designation' },
-
+            { label: 'Emp-ID', key: 'hrms_emp_id' },
+            { label: 'Employee Name', key: 'employee_names' },
+            { label: 'Department', key: 'department_name' },
+            { label: 'Role', key: 'role_name' },
+            
         ];
 
         const csvReport = {
@@ -188,15 +191,17 @@ export default function RelievingLetterList() {
         const size = 'A4'; // You can change to 'letter' or other sizes as needed
         const doc = new jsPDF('landscape', unit, size);
 
-        const data = tableData.map(({ date, employee_name, designation }, index) => [
+        const data = tableData.map(({ date, hrms_emp_id,employee_names, department_name,role_name }, index) => [
             index + 1,
             date,
-            employee_name,
-            designation,
+            hrms_emp_id,
+            employee_names,
+            department_name,
+            role_name
         ]);
 
         doc.autoTable({
-            head: [['S.No', 'Date', 'Employee Name', 'Designation']],
+            head: [['S.No', 'Date', 'Emp-ID','Employee Name', 'Department','Role']],
             body: data,
             // styles: { fontSize: 10 },
             // columnStyles: { 0: { halign: 'center', fillColor: [100, 100, 100] } }, 
@@ -319,8 +324,10 @@ display: none !important;
                                 <tr>
                                     <th>S.No</th>
                                     <th>Date</th>
+                                    <th>Emp-ID</th>
                                     <th>Employee Name</th>
-                                    <th>Designation</th>
+                                    <th>Department</th>
+                                    <th>Role</th>
                                     <th style={{ width: '250px' }} className='no-print'>Actions</th>
 
                                 </tr>
@@ -339,8 +346,10 @@ display: none !important;
                                             <tr key={index}>
                                                 <td>{index + 1}</td>
                                                 <td>{row.date}</td>
-                                                <td>{row.employee_name}</td>
-                                                <td>{row.designation}</td>
+                                                <td>{row.hrms_emp_id}</td>
+                                                <td>{row.employee_names}</td>
+                                                <td>{row.department_name}</td>
+                                                <td>{row.role_name}</td>
 
                                                 <td className='no-print'>
                                                     <span style={{ display: 'flex', gap: '5px' }}>

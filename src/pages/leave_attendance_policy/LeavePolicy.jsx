@@ -381,8 +381,9 @@ function LeavePolicy() {
 
 
     const handleExportCSV = () => {
-        const csvData = tableData.map(({ first_name, role_name, category_name, start_date, end_date, leave_count, monthly_count }, index) => ({
+        const csvData = tableData.map(({ hrms_emp_id,first_name, role_name, category_name, start_date, end_date, leave_count, monthly_count }, index) => ({
             '#': index + 1,
+            hrms_emp_id,
             first_name,
             role_name,
             category_name,
@@ -394,6 +395,7 @@ function LeavePolicy() {
 
         const headers = [
             { label: 'S.No', key: '#' },
+            { label: 'Emp-ID', key: 'hrms_emp_id' },
             { label: 'Employee name', key: 'first_name' },
             { label: 'Role name', key: 'role_name' },
             { label: 'Category name', key: 'category_name' },
@@ -424,8 +426,9 @@ function LeavePolicy() {
         const size = 'A4'; // You can change to 'letter' or other sizes as needed
         const doc = new jsPDF('landscape', unit, size);
 
-        const data = tableData.map(({ first_name, role_name, category_name, start_date, end_date, leave_count, monthly_count }, index) => [
+        const data = tableData.map(({ hrms_emp_id,first_name, role_name, category_name, start_date, end_date, leave_count, monthly_count }, index) => [
             index + 1,
+            hrms_emp_id,
             first_name,
             role_name,
             category_name,
@@ -436,7 +439,7 @@ function LeavePolicy() {
         ]);
 
         doc.autoTable({
-            head: [['S.No', 'Employee Name', 'Role Name', 'Category Name', 'Start Date', 'End Date', 'Yearly Count', 'Monthly Count']],
+            head: [['S.No', 'Emp-ID','Employee Name', 'Role Name', 'Category Name', 'Start Date', 'End Date', 'Yearly Count', 'Monthly Count']],
             body: data,
             // styles: { fontSize: 10 },
             // columnStyles: { 0: { halign: 'center', fillColor: [100, 100, 100] } }, 
@@ -686,8 +689,8 @@ function LeavePolicy() {
                             <thead className="thead-dark">
                                 <tr>
                                     <th scope="col">S.No</th>
+                                    <th scope="col">Emp-ID</th>
                                     <th scope="col">Employee Name</th>
-
                                     <th scope="col">Role Name</th>
                                     <th scope="col">Category Name</th>
                                     <th scope="col">Start Date</th>
@@ -713,6 +716,7 @@ function LeavePolicy() {
                                             return (
                                                 <tr key={row.id}>
                                                     <th scope="row">{serialNumber}</th>
+                                                    <td>{row.hrms_emp_id}</td>
                                                     <td>{row.first_name}</td>
                                                     <td>{row.role_name}</td>
                                                     <td>{row.category_name}</td>

@@ -105,11 +105,12 @@ function EmployeeConfirmation() {
 
 
     const handleExportCSV = () => {
-        const csvData = tableData.map(({ employee_id, emp_name, department_name, doj, confirmation_date, con_status, conf_reason }, index) => ({
+        const csvData = tableData.map(({ employee_id, emp_name, department_name, role_name, doj, confirmation_date, con_status, conf_reason }, index) => ({
             '#': index + 1,
             employee_id,
             emp_name,
             department_name,
+            role_name,
             doj,
             confirmation_date,
             con_status,
@@ -121,12 +122,12 @@ function EmployeeConfirmation() {
             { label: 'S.No', key: '#' },
             { label: 'Employee ID', key: 'employee_id' },
             { label: 'Employee Name', key: 'emp_name' },
-            { label: 'Designation', key: 'department_name' },
+            { label: 'Department', key: 'department_name' },
+            { label: 'Role', key: 'role_name' },
             { label: 'doj', key: 'doj' },
             { label: 'Confirmation', key: 'confirmation_date' },
             { label: 'Status', key: 'con_status' },
             { label: 'Reason', key: 'conf_reason' },
-
         ];
 
         const csvReport = {
@@ -150,11 +151,12 @@ function EmployeeConfirmation() {
         const size = 'A4'; // You can change to 'letter' or other sizes as needed
         const doc = new jsPDF('landscape', unit, size);
 
-        const data = tableData.map(({ employee_id, emp_name, department_name, doj, confirmation_date, con_status, conf_reason }, index) => [
+        const data = tableData.map(({ employee_id, emp_name, department_name,role_name, doj, confirmation_date, con_status, conf_reason }, index) => [
             index + 1,
             employee_id,
             emp_name,
             department_name,
+            role_name,
             doj,
             confirmation_date,
             con_status,
@@ -162,7 +164,7 @@ function EmployeeConfirmation() {
         ]);
 
         doc.autoTable({
-            head: [['S.No', 'Employee ID', 'Employee Name', 'Designation', 'doj', 'Confirmation', 'Status', 'Reason']],
+            head: [['S.No', 'Employee ID', 'Employee Name', 'Department', 'Role', 'doj', 'Confirmation', 'Status', 'Reason']],
             body: data,
             // styles: { fontSize: 10 },
             // columnStyles: { 0: { halign: 'center', fillColor: [100, 100, 100] } }, 
@@ -412,9 +414,10 @@ display: none !important;
                         <thead className="thead-dark">
                             <tr>
                                 <th scope="col" style={{ width: '3%' }}>S.No</th>
-                                <th scope="col" style={{ width: '11.11%' }}>Employee ID</th>
+                                <th scope="col" style={{ width: '11.11%' }}>Emp-ID</th>
                                 <th scope="col" style={{ width: '15%' }}>Employee Name</th>
-                                <th scope="col" style={{ width: '15%' }}>Designation</th>
+                                <th scope="col" style={{ width: '15%' }}>Department</th>
+                                <th scope="col" style={{ width: '15%' }}>Role</th>
                                 <th scope="col" style={{ width: '11.11%' }}>DOJ</th>
                                 <th scope="col" style={{ width: '11.11%' }}>Confirmation</th>
                                 <th scope="col" style={{ width: '11.11%' }}>Status</th>
@@ -441,6 +444,7 @@ display: none !important;
                                                 <td>{row.employee_id}</td>
                                                 <td>{row.emp_name}</td>
                                                 <td>{row.department_name}</td>
+                                                <td>{row.role_name}</td>
                                                 <td>{row.doj}</td>
                                                 <td>{row.confirmation_date || "-"}</td>
                                                 <td>{row.con_status}</td>

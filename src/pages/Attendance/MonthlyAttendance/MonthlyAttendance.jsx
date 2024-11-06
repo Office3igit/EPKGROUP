@@ -111,9 +111,12 @@ function MonthlyAttendance() {
 
 
     const handleExportCSV = () => {
-        const csvData = tableData.map(({ first_name, days_present, days_leave, days_absent, days_halfday, days_late, days_permission, ot_count }, index) => ({
+        const csvData = tableData.map(({ hrms_emp_id,first_name, department_name, role_name, days_present, days_leave, days_absent, days_halfday, days_late, days_permission, ot_count }, index) => ({
             '#': index + 1,
+            hrms_emp_id,
             first_name,
+            department_name,
+            role_name,
             days_present,
             days_leave,
             days_absent,
@@ -126,7 +129,10 @@ function MonthlyAttendance() {
 
         const headers = [
             { label: 'S.No', key: '#' },
+            { label: 'Emp-ID', key: 'hrms_emp_id' },
             { label: 'Employee Name', key: 'first_name' },
+            { label: 'Department', key: 'department_name' },
+            { label: 'Role', key: 'role_name' },
             { label: 'P', key: 'days_present' },
             { label: 'L', key: 'days_leave' },
             { label: 'A', key: 'days_absent' },
@@ -157,9 +163,12 @@ function MonthlyAttendance() {
         const size = 'A4'; // You can change to 'letter' or other sizes as needed
         const doc = new jsPDF('landscape', unit, size);
 
-        const data = tableData.map(({ first_name, days_present, days_leave, days_absent, days_halfday, days_late, days_permission, ot_count }, index) => [
+        const data = tableData.map(({ hrms_emp_id,first_name, department_name,role_name,days_present, days_leave, days_absent, days_halfday, days_late, days_permission, ot_count }, index) => [
             index + 1,
+            hrms_emp_id,
             first_name,
+            department_name,
+            role_name,
             days_present,
             days_leave,
             days_absent,
@@ -171,7 +180,7 @@ function MonthlyAttendance() {
         ]);
 
         doc.autoTable({
-            head: [['S.No', 'Employee Name', 'P', 'L', 'A', 'HL', 'LA', 'PR', 'OT']],
+            head: [['S.No', 'Emp-ID','Employee Name', 'Department', 'Role', 'P', 'L', 'A', 'HL', 'LA', 'PR', 'OT']],
             body: data,
             // styles: { fontSize: 10 },
             // columnStyles: { 0: { halign: 'center', fillColor: [100, 100, 100] } }, 
@@ -281,7 +290,10 @@ function MonthlyAttendance() {
                             <thead className="thead-dark">
                                 <tr>
                                     <th style={{ width: '8%' }}>S.No</th>
-                                    <th style={{ width: '25%' }}>Employee Name</th>
+                                    <th>Emp-ID</th>
+                                    <th>Employee Name</th>
+                                    <th>Department </th>
+                                    <th>Role </th>
                                     <th>P</th>
                                     <th>L</th>
                                     <th>A</th>
@@ -303,7 +315,10 @@ function MonthlyAttendance() {
                                         return (
                                             <tr key={row.id} title="Click to know more" style={{cursor:'pointer'}}>
                                                 <td>{serialNumber}</td>
+                                                <td>{row.hrms_emp_id}</td>
                                                 <td onClick={() => handlevisitcalendar(row.id, row.first_name)}>{row.first_name}</td>
+                                                <td>{row.department_name}</td>
+                                                <td>{row.role_name}</td>
                                                 <td>{row.days_present}</td>
                                                 <td>{row.days_leave}</td>
                                                 <td>{row.days_absent}</td>
