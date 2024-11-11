@@ -44,6 +44,7 @@ function Sidebar() {
     const userrole = userData?.userrole || '';
     const usertoken = userData?.token || '';
     const userempid = userData?.userempid || '';
+    const sluge = userData?.sluge || '';
 
 
     // ------------------------------------------------------------------------------------------------\
@@ -67,6 +68,7 @@ function Sidebar() {
         'HRSupport': [],
         'TLApproval': [],
         'HelpDesk': [],
+        'HelpDeskTenant': [],
         'Assets': [],
         'Events': [],
         'Meeting': [],
@@ -393,6 +395,20 @@ function Sidebar() {
         }
         return false;
     };
+    // --------------------------------------------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------------------------------------------
+
+    const HelpDeskTenantPermissions = ['Add_Tenant', 'Tenant_List', 'Raise_Ticket', 'Ticket_List', 'Assigned_List'];
+
+    // Check if user has access based on permissions
+    const hasAccessToHelpDeskTenant = () => {
+        if (!userrole.includes('1') || !userrole.includes('2')) {
+            return HelpDeskTenantPermissions.some(permission => checkedNames.HelpDeskTenant.includes(permission));
+        }
+        return false;
+    };
+
     // --------------------------------------------------------------------------------------------------------------------
 
     // --------------------------------------------------------------------------------------------------------------------
@@ -1990,6 +2006,89 @@ function Sidebar() {
                                 <hr />
                             </>
                         )}
+                        {/* --------------------------------------------------------------- */}
+
+
+                        {/* --------------------------------------------------------------- */}
+
+                        {((hasAccessToHelpDeskTenant() && checkedNames.HelpDeskTenant.length > 0) || sluge === "TENANT") && (
+
+                            <>
+                                <Link
+                                    // onClick={HandleclickAttendanceCalculation}
+                                    className="nav-link collapsed"
+                                    to="#"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#Help_Desk_Tenant"
+                                    aria-expanded="false"
+                                    aria-controls="Help_Desk_Tenant"
+                                >
+                                    <div className="sb-nav-link-icon">
+                                        <FontAwesomeIcon icon={faClipboardUser} />
+                                    </div>
+                                    Help Desk - Tenant
+                                    <div className="sb-sidenav-collapse-arrow">
+                                        <i className="fas fa-angle-down"></i>
+                                    </div>
+                                </Link>
+
+                                <div className="collapse" id="Help_Desk_Tenant" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                                    <nav className="sb-sidenav-menu-nested nav">
+                                        {checkedNames.HelpDeskTenant.includes('Add_Tenant') && (
+                                            <Link
+                                                to="/admin/add_tenant"
+                                                className={`nav-link ${location.pathname === '/admin/add_tenant' ? 'active' : ''}`}
+                                                style={location.pathname === '/admin/add_tenant' ? activeStyle : {}}
+                                            >
+                                                Add Tenant
+                                            </Link>
+                                        )}
+                                        {checkedNames.HelpDeskTenant.includes('Tenant_List') && (
+                                            <Link
+                                                to="/admin/list_tenant"
+                                                className={`nav-link ${location.pathname === '/admin/list_tenant' ? 'active' : ''}`}
+                                                style={location.pathname === '/admin/list_tenant' ? activeStyle : {}}
+                                            >
+                                                Tenant List
+                                            </Link>
+                                        )}
+                                        {(checkedNames.HelpDeskTenant.includes('Raise_Ticket') || sluge == "TENANT") && (
+                                            <Link
+                                                to="/admin/raise_ticket_tenant"
+                                                className={`nav-link ${location.pathname === '/admin/raise_ticket_tenant' ? 'active' : ''}`}
+                                                style={location.pathname === '/admin/raise_ticket_tenant' ? activeStyle : {}}
+                                            >
+                                                Raise Ticket
+                                            </Link>
+                                        )}
+                                        {(checkedNames.HelpDeskTenant.includes('Ticket_List') || sluge === "TENANT") && (
+                                            <Link
+                                                to="/admin/tenant_ticket_list"
+                                                className={`nav-link ${location.pathname === '/admin/tenant_ticket_list' ? 'active' : ''}`}
+                                                style={location.pathname === '/admin/tenant_ticket_list' ? activeStyle : {}}
+                                            >
+                                                Ticket List
+                                            </Link>
+                                        )}
+                                        {checkedNames.HelpDeskTenant.includes('Assigned_List') && (
+                                            <Link
+                                                to="/admin/tenant_assigned_list"
+                                                className={`nav-link ${location.pathname === '/admin/tenant_assigned_list' ? 'active' : ''}`}
+                                                style={location.pathname === '/admin/tenant_assigned_list' ? activeStyle : {}}
+                                            >
+                                                Assigned List
+                                            </Link>
+                                        )}
+                                    </nav>
+                                </div>
+                                <hr />
+                            </>
+                        )}
+
+
+
+
+
                         {/* --------------------------------------------------------------- */}
 
 

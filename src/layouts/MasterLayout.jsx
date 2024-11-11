@@ -215,6 +215,16 @@ import VerticalOrgChart from '../pages/organization_structure/VerticalOrgChart'
 import EmployeeDashboardPowerBIReport from '../pages/employee/EmployeeDashboard/EmployeeDashboard'
 import MainDashboard from '../pages/dashboard/MainDashboard/MainDashboard'
 
+// For Tenant
+import Add_Tenant from '../pages/HelpDeskTenant/AddTenant.jsx';
+import TenantList from '../pages/HelpDeskTenant/TenantListView.jsx';
+import EditTenant from '../pages/HelpDeskTenant/EditTenant.jsx';
+
+import Tenant_raise_ticket from '../pages/HelpDeskTenant/RaiseTicket/Tenant_raise_ticket.jsx';
+import Tenant_ticket_list from '../pages/HelpDeskTenant/RaiseTicket/TenantTicketList.jsx';
+import TenantEditTicketList from '../pages/HelpDeskTenant/RaiseTicket/TenantEditTicketList.jsx';
+import TenantAssignedList from '../pages/HelpDeskTenant/RaiseTicket/TenantAssignedList.jsx';
+
 
 
 
@@ -537,6 +547,17 @@ function MasterLayout() {
 
                             <Route path="/department" element={<AuthRoute><DepartmentList /></AuthRoute>} />
                             <Route path="/editdepartment/:id" element={<AuthRoute><EditDepartmentList /></AuthRoute>} />
+
+                            {/* Tenant Help Desk */}
+
+                            <Route path="/add_tenant" element={<AuthRoute><Add_Tenant /></AuthRoute>} />
+                            <Route path="/list_tenant" element={<AuthRoute><TenantList /></AuthRoute>} />
+                            <Route path="/edit_tenant/:id" element={<AuthRoute><EditTenant /></AuthRoute>} />
+
+                            <Route path="/raise_ticket_tenant" element={<AuthRoute><Tenant_raise_ticket /></AuthRoute>} />
+                            <Route path="/tenant_ticket_list" element={<AuthRoute><Tenant_ticket_list /></AuthRoute>} />
+                            <Route path="/tenant_edit_ticket_list/:id" element={<AuthRoute><TenantEditTicketList /></AuthRoute>} />
+                            <Route path="/tenant_assigned_list" element={<AuthRoute><TenantAssignedList /></AuthRoute>} />
 
 
 

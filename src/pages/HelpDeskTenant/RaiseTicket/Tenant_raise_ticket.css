@@ -1,0 +1,16 @@
+.form__area{
+    background-color: #F4FDFF !important;
+    border-radius: 10px;
+}
+.in-active{
+    background: #DCC9BD !important;
+    border: 1px solid #FFDAC2
+}
+.escalation-active{
+    background: #FFB486 !important;
+    border: 1px solid #E85900
+}
+.escalation-sended{
+    background: #923800 !important;
+    border: 1px solid #AE551E
+}

@@ -55,6 +55,7 @@ const EditRole = () => {
         'HRSupport': [],
         'TLApproval': [],
         'HelpDesk': [],
+        'HelpDeskTenant': [],
         'Assets': [],
 
         'TeamManagement': {
@@ -231,7 +232,7 @@ const EditRole = () => {
                     text: response.data.message,
                 });
                 GoTorolelist()
-            } else if(response.data.status === 'error')  {
+            } else if (response.data.status === 'error') {
 
                 Swal.fire({
                     icon: 'error',
@@ -455,7 +456,7 @@ const EditRole = () => {
                     <Col sm={12} md={6} lg={6} xl={6}>
                         <Form.Group controlId="formRole" className='mb-3'>
                             <Form.Label style={{ fontWeight: 'bold' }}>Add Role Name</Form.Label>
-                            <Form.Control type="text" value={role} onChange={handleRoleChange} placeholder="Enter Role Name" disabled/>
+                            <Form.Control type="text" value={role} onChange={handleRoleChange} placeholder="Enter Role Name" />
                         </Form.Group>
                     </Col>
                 </Row>
@@ -1467,6 +1468,80 @@ const EditRole = () => {
                                     value="Assigned_List"
                                     name="HelpDesk"
                                     checked={checkedNames['HelpDesk'] && checkedNames['HelpDesk'].includes('Assigned_List')}
+                                    onChange={handlesingleCheckboxChange}
+                                />
+                                <span className="checkmark"></span>
+                                <span className="checkbox-label">Assigned List</span>
+                            </label>
+                        </Col>
+
+                        <Col sm={12} md={6} lg={6} xl={3} className='mb-3 list__colum'>
+                            <h4 className='list__title' id="HelpDeskTenant">HelpDesk-Tenant</h4>
+
+                            {/* Add Tenat */}
+                            <label className="checkbox-container">
+                                <input
+                                    type="checkbox"
+                                    id="AddTenant"
+                                    value="Add_Tenant"
+                                    name="HelpDeskTenant"
+                                    checked={checkedNames['HelpDeskTenant'] && checkedNames['HelpDeskTenant'].includes('Add_Tenant')}
+                                    onChange={handlesingleCheckboxChange}
+                                />
+                                <span className="checkmark"></span>
+                                <span className="checkbox-label">Add Tenat</span>
+                            </label>
+
+                            {/* Tenant List */}
+                            <label className="checkbox-container">
+                                <input
+                                    type="checkbox"
+                                    id="TenantList"
+                                    value="Tenant_List"
+                                    name="HelpDeskTenant"
+                                    checked={checkedNames['HelpDeskTenant'] && checkedNames['HelpDeskTenant'].includes('Tenant_List')}
+                                    onChange={handlesingleCheckboxChange}
+                                />
+                                <span className="checkmark"></span>
+                                <span className="checkbox-label">Tenant List</span>
+                            </label>
+
+                            {/* Raise Ticket */}
+                            <label className="checkbox-container">
+                                <input
+                                    type="checkbox"
+                                    id="RaiseTicket"
+                                    value="Raise_Ticket"
+                                    name="HelpDeskTenant"
+                                    checked={checkedNames['HelpDeskTenant'] && checkedNames['HelpDeskTenant'].includes('Raise_Ticket')}
+                                    onChange={handlesingleCheckboxChange}
+                                />
+                                <span className="checkmark"></span>
+                                <span className="checkbox-label">Raise Ticket</span>
+                            </label>
+
+                            {/* Ticket List */}
+                            <label className="checkbox-container">
+                                <input
+                                    type="checkbox"
+                                    id="TicketList"
+                                    value="Ticket_List"
+                                    name="HelpDeskTenant"
+                                    checked={checkedNames['HelpDeskTenant'] && checkedNames['HelpDeskTenant'].includes('Ticket_List')}
+                                    onChange={handlesingleCheckboxChange}
+                                />
+                                <span className="checkmark"></span>
+                                <span className="checkbox-label">Ticket List</span>
+                            </label>
+
+                            {/* Ticket List */}
+                            <label className="checkbox-container">
+                                <input
+                                    type="checkbox"
+                                    id="AssignedList"
+                                    value="Assigned_List"
+                                    name="HelpDeskTenant"
+                                    checked={checkedNames['HelpDeskTenant'] && checkedNames['HelpDeskTenant'].includes('Assigned_List')}
                                     onChange={handlesingleCheckboxChange}
                                 />
                                 <span className="checkmark"></span>
