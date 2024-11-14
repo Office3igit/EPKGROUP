@@ -36,7 +36,7 @@ const TenantEditTicketList = () => {
   var tenant_identification = false;
   var userrole;
 
-  if (userData.sluge == "TENANT") {
+  if (userData?.sluge == "TENANT") {
 
     token_user_id = userData?.token_user_id || '';
     userimage = userData?.userimage || '';
@@ -65,6 +65,9 @@ const TenantEditTicketList = () => {
   const [attachment, setAttachment] = useState(null);
   const [status, setStatus] = useState("");
   const [commands, setCommands] = useState("");
+  const [issues_type, setIssesType] = useState("");
+
+  
 
   const [formErrors, setFormErrors] = useState({});
 
@@ -157,7 +160,7 @@ const TenantEditTicketList = () => {
 
   // --------------------------------------- Getting Issues Type ------------------------------------------------
   useEffect(() => {
-    const apiUrl = `http://epkgroup.in/crm/api/public/api/editview_newissuetype/1`;
+    const apiUrl = `http://epkgroup.in/crm/api/public/api/editview_newissuetype/${issues_type}`;
     const fetchData = async () => {
       try {
         const response = await axios.get(
@@ -178,7 +181,7 @@ const TenantEditTicketList = () => {
       }
     };
     fetchData();
-  }, [formattedSelectedDepartment]);
+  }, [issues_type]);
 
   // -------------------------------- Department Lists -------------------------------------------------
 
@@ -217,7 +220,7 @@ const TenantEditTicketList = () => {
           }
         );
         if (response.status === 200) {
-          console.log('this is comes responce',response);
+          console.log('############this is comes responce',response);
           const DepartmentNameArray = response.data.data.assign_deps
             ? response.data.data.assign_deps.split(",").map((dep) => dep.trim())
             : [];
@@ -230,6 +233,7 @@ const TenantEditTicketList = () => {
           setStartDate(response.data.data.start_date);
           setEndDate(response.data.data.start_date);
           setStatus(response.data.data.status);
+          setIssesType(response.data.data.issue_type);
         }
       } catch (error) {
         console.error("Error fetching selected departments:", error);
@@ -402,7 +406,7 @@ const TenantEditTicketList = () => {
                 <Form.Control
                   type="date"
                   value={startDate}
-                  max="9999-12-31"
+                  max={endDate}
                   disabled = {tenant_identification ? true : false}
                   onChange={(e) => setStartDate(e.target.value)}
                 />
@@ -417,6 +421,7 @@ const TenantEditTicketList = () => {
                 <Form.Control
                   type="date"
                   value={endDate}
+                  min={startDate}
                   max="9999-12-31"
                   disabled = {tenant_identification ? true : false}
                   onChange={(e) => setEndDate(e.target.value)}

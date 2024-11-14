@@ -725,7 +725,7 @@ export default function ViewProfile() {
                             </MDBCard>
 
                         </Accordion>
-                        {(userrole.includes('1') || userrole.includes('2')) &&
+                        {((userrole === "1" || userrole === "2")) &&
                             <button className="btn btn-primary" onClick={() => handleVisitedit(id)}>
                                 Edit
                             </button>

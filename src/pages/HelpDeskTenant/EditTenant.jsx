@@ -35,7 +35,7 @@ export default function EditOfferLetter() {
   var userempid;
   var tenant_identification = false;
 
-  if (userData.sluge == "TENANT") {
+  if (userData?.sluge == "TENANT") {
 
     token_user_id = userData?.token_user_id || '';
     userimage = userData?.userimage || '';

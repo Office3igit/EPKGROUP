@@ -12,7 +12,7 @@ import { ScaleLoader } from 'react-spinners';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    faBars, faEye, faFilter, faFolderOpen, faInfo, faPen, faTrashCan, faEyeSlash, faBell
+     faFilter, faInfo, faPen, faBell, faFile, faPaperclip
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import Select from 'react-select';
@@ -39,7 +39,7 @@ function Tenant_ticket_list() {
     var userrole;
 
 
-    if (userData.sluge == "TENANT") {
+    if (userData?.sluge == "TENANT") {
 
         token_user_id = userData?.token_user_id || '';
         userimage = userData?.userimage || '';
@@ -911,14 +911,18 @@ function Tenant_ticket_list() {
 
 
                                                 <td className='no-print'>{row.attachment !== '-' ?
-                                                    <button style={{ padding: '6px' }} className="btn-view" onClick={() => { window.open(`https://epkgroup.in/crm/api/storage/app/${row.attachment}`, '_blank') }}>
-                                                        <FontAwesomeIcon icon={faEye} />
+                                                    <button
+                                                    style={{ padding: "6px 12px", background: "#bbd3eb", border:"1px solid grey" }}
+                                                    className="btn-view" onClick={() => { window.open(`https://epkgroup.in/crm/api/storage/app/${row.attachment}`, '_blank') }}>
+                                                        <FontAwesomeIcon icon={faPaperclip} />
                                                     </button>
 
                                                     :
-                                                    <button style={{ padding: '6px' }} className="btn-view">
+                                                    <button 
+                                                    style={{ padding: "6px 12px", background: "#bbd3eb", border:"1px solid grey" }}
+                                                    className="btn-view">
                                                         <FontAwesomeIcon
-                                                            icon={faEyeSlash}
+                                                            icon={faFile}
                                                             onClick={() => alert('No attachment available for this ticket')}
                                                         />                                                    </button>
                                                 }

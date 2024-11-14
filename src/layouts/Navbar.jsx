@@ -9,19 +9,37 @@ import { useState } from 'react';
 function Navbar() {
 
 
-
-
     // ===========================================================================================================
 
     //  Retrieve userData from local storage
     const userData = JSON.parse(localStorage.getItem('userData'));
 
-    const usertoken = userData?.token || '';
-    const token = usertoken.slice(usertoken.indexOf('|') + 1);
-    console.log("usertoken-------------------------------------->", token)
-    const token_user_id = userData?.token_user_id || '';
-    const userimage = userData?.userimage || '';
-    const userempid = userData?.userempid || '';
+    // const usertoken = userData?.token || '';
+    // const token = usertoken.slice(usertoken.indexOf('|') + 1);
+    // console.log("usertoken-------------------------------------->", token)
+    // const token_user_id = userData?.token_user_id || '';
+    // const userimage = userData?.userimage || '';
+    // const userempid = userData?.userempid || '';
+
+    var usertoken = userData?.token || '';
+    var token = usertoken.slice(usertoken.indexOf('|') + 1);
+    var token_user_id;
+    var userimage;
+    var userempid;
+    var tenant_identification = false;
+
+    if (userData?.sluge === "TENANT") {
+
+        token_user_id = userData?.token_user_id || '';
+        userimage = userData?.userimage || '';
+        userempid = userData?.tenat_id || '';
+        tenant_identification = true;
+    } else {
+
+        token_user_id = userData?.token_user_id || '';
+        userimage = userData?.userimage || '';
+        userempid = userData?.userempid || '';
+    }
 
     // ===========================================================================================================
 
@@ -236,7 +254,8 @@ function Navbar() {
 
 
                     <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><Link className="dropdown-item" to={`/admin/viewprofile/${userempid}`}>Profile</Link></li>
+
+                        <li><Link className="dropdown-item" to={tenant_identification ? `/admin/edit_tenant/${userempid}` : `/admin/viewprofile/${userempid}`}> Profile </Link> </li>
                         {/* <li><Link className="dropdown-item" to="/admin/activitylog">Activity Log</Link></li> */}
                         <li><hr className="dropdown-divider" /></li>
                         <li><Link className="dropdown-item" to="#!" onClick={handleLogout}>Logout</Link></li>

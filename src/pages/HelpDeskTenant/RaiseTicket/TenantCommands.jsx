@@ -355,7 +355,7 @@ const Tenant_Command = ({ Commands_id }) => {
                                     <th>Start Date</th>
                                     <th>Estimate Date</th>
                                     <th>Status</th>
-                                    <th>Commands</th>
+                                    <th>Comments</th>
                                 </tr>
                             </thead>
                             <tbody>

@@ -18,7 +18,7 @@ const Tenant_raise_ticket = () => {
     var userempid;
     var tenant_identification = false;
     
-    if (userData.sluge == "TENANT") {
+    if (userData?.sluge == "TENANT") {
   
       token_user_id = userData?.token_user_id || '';
       userimage = userData?.userimage || '';
@@ -95,7 +95,7 @@ const Tenant_raise_ticket = () => {
         const formData = new FormData();
         
         formData.append('tenant_id', userempid);
-        formData.append('issue_type', 1);
+        formData.append('issue_type', issueType);
         formData.append('description', description);
         formData.append('attachment', attachment);
         formData.append('status', 1);

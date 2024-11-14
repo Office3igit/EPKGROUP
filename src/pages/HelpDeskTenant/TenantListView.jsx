@@ -581,9 +581,9 @@ display: none !important;
                   <th style={{width:'10%'}}>Tenant Name</th>
                   <th style={{width:'15%'}}>Company Name</th>
                   <th style={{width:'10%'}}>Mobile Number</th>
-                  <th style={{width:'15%'}}>Email</th>
+                  <th style={{width:'20%'}}>Email</th>
                   <th style={{width:'10%'}}>Status</th>
-                  <th style={{width:'15%'}}>More Details</th>
+                  <th style={{width:'10%'}}>More Details</th>
                   {/* <th>Status</th> */}
                   <th style={{width:'10%'}} className="no-print">
                     Actions
@@ -605,12 +605,13 @@ display: none !important;
                       <td style={{width:'10%'}}>{row.tnt_name}</td>
                       <td style={{width:'15%'}}>{row.company_name}</td>
                       <td style={{width:'10%'}}>{row.contact_number}</td>
-                      <td style={{width:'15%'}}>{row.email}</td>
+                      <td style={{width:'20%'}}>{row.email}</td>
                       <td style={{width:'10%'}}>
                         {row.status === "Active" ? (
                           <button
                             type="button"
                             className="btn btn_for_status btn-success btn-sm"
+                            style={{cursor:'auto'}}
                           >
                             Active
                           </button>
@@ -618,18 +619,20 @@ display: none !important;
                           <button
                             type="button"
                             className="btn btn_for_status btn-danger btn-sm"
+                            style={{cursor:'auto'}}
                           >
                             In-Active
                           </button>
                         )}
                       </td>
-                      <td style={{width:'15%'}}>
+                      <td style={{width:'10%'}}>
                         {" "}
                         <button
                           className="btn-view"
+                          style={{padding:'6px 12px'}}
                           onClick={() => handleButtonClick(row.id)} // Use an arrow function here
                         >
-                          <FontAwesomeIcon icon={faEye} /> View
+                          <FontAwesomeIcon icon={faEye} /> 
                         </button>
                       </td>
                       <td style={{width:'10%'}} className="no-print">
@@ -640,7 +643,7 @@ display: none !important;
                               GoToEditPage(row.id);
                             }}
                           >
-                            <FontAwesomeIcon icon={faPen} /> Edit
+                            <FontAwesomeIcon icon={faPen} /> 
                           </button>
                           {/* <button
                             className="btn-delete"

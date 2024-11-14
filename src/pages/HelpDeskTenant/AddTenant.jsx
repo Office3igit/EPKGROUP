@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
+
 export default function Add_Tenant() {
   const navigate = useNavigate();
 
@@ -22,7 +23,7 @@ export default function Add_Tenant() {
   const [name, setName] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [tenant_type, setTenant_type] = useState("");
-  
+
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -77,7 +78,7 @@ export default function Add_Tenant() {
     if (!email) errors.email = "Email is required.";
     if (!password) errors.password = "Password is required.";
     if (!building) errors.building = "Building Name is required.";
-    if (!cubicle) errors.cubicle = "Cubicle Name is required."; 
+    if (!cubicle) errors.cubicle = "Cubicle Name is required.";
     if (!advance_amount) errors.advance_amount = "Advance amount is required.";
     if (!rent_amount) errors.rent_amount = "Rent amount is required.";
     if (!agreement_start)
@@ -301,7 +302,7 @@ export default function Add_Tenant() {
               </Row>
 
               <Row className="mb-3">
-                
+
                 <Col md={6}>
                   {/* Name */}
                   <div className="mb-3">
@@ -312,7 +313,7 @@ export default function Add_Tenant() {
                       type="number"
                       className="form-control"
                       id="tenant_mobile"
-                      placeholder="Enter Mobile Number"
+                      placeholder="Enter Mobile Number"n
                       value={mobile}
                       onChange={(e) => setMobile(e.target.value)}
                     />
@@ -492,14 +493,26 @@ export default function Add_Tenant() {
                   {/* Name */}
                   <div className="mb-3">
                     <label htmlFor="notice_period" className="form-label">
-                      Notice Period
+                      Notice Period (In Days)
+                      {/* <OverlayTrigger
+                        placement="top"
+                        overlay={
+                          <Tooltip id="info-tooltip">
+                            Please enter the notice period in days (e.g., 30)
+                          </Tooltip>
+                        }
+                      >
+                        <span style={{ marginLeft: '5px', cursor: 'pointer' }}>
+                          <FontAwesomeIcon icon={faInfoCircle} />
+                        </span>
+                      </OverlayTrigger> */}
                     </label>
                     <input
-                      type="text"
+                      type="number"
                       className="form-control"
                       id="notice_period"
                       value={notice_period}
-                      placeholder="Enter the notice period"
+                      placeholder="(e.g., 30)"
                       onChange={(e) => setNotice_period(e.target.value)}
                     />
                     {formErrors.notice_period && (
@@ -512,13 +525,25 @@ export default function Add_Tenant() {
                   {/* Name */}
                   <div className="mb-3">
                     <label htmlFor="generate_charges" className="form-label">
-                      Generate Charges
+                      Generator Charges
+                      {/* <OverlayTrigger
+                        placement="top"
+                        overlay={
+                          <Tooltip id="info-tooltip">
+                            Please enter the charges as a number (e.g., 100 or 150.50)
+                          </Tooltip>
+                        }
+                      >
+                        <span style={{ marginLeft: '5px', cursor: 'pointer' }}>
+                          <FontAwesomeIcon icon={faInfoCircle} />
+                        </span>
+                      </OverlayTrigger> */}
                     </label>
                     <input
-                      type="text"
+                      type="number"
                       className="form-control"
                       id="generate_charges"
-                      placeholder="Enter the generate charges"
+                      placeholder="(e.g., 100 or 150.50)"
                       value={generate_charges}
                       onChange={(e) => setGenerate_charges(e.target.value)}
                     />
