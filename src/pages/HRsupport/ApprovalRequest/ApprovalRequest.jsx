@@ -889,7 +889,7 @@ export default function ApprovalRequest() {
             <div className="approval-container">
                 <h3 className="approval-title">Approval List</h3>
                 <>
-                    {(userrole.includes('1') || userrole.includes('2')) && (
+                    {(userrole === "1" || userrole === "2") && (
                         <div className="button-group">
                             <Button onClick={openIsTimeOff}>
                                 Add Leave / Permission / Half Day

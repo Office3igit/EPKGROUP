@@ -515,7 +515,7 @@ const Holiday = () => {
 
           {/* --------------------------------------------------------------------------------------------------------------- */}
           {/* Add Holiday btn */}
-          {(userrole.includes('1') || userrole.includes('2')) && (
+          {(userrole === "1" || userrole === "2") && (
             <>
               <div>
                 <button
@@ -714,7 +714,7 @@ const Holiday = () => {
                   <th scope="col">Date</th>
                   <th scope="col">Day</th>
 
-                  {(userrole.includes('1') || userrole.includes('2')) && (
+                  {(userrole === "1" || userrole === "2") && (
                     <th scope="col" className="no-print">Action</th>
                   )}
 
@@ -740,7 +740,7 @@ const Holiday = () => {
                           <td style={isDeclaredHoliday ? { color: '#0A62F1', fontWeight: 'bold' } : {}}>{row.h_name}</td>
                           <td style={isDeclaredHoliday ? { color: '#0A62F1', fontWeight: 'bold' } : {}}>{row.h_date}</td>
                           <td style={isDeclaredHoliday ? { color: '#0A62F1', fontWeight: 'bold' } : {}}>{row.h_day}</td>
-                          {(userrole.includes('1') || userrole.includes('2')) && (
+                          {(userrole === "1" || userrole === "2") && (
                             <td className="no-print">
                               <button
                                 className="btn btn-info btn-sm mr-2 btn-edit"

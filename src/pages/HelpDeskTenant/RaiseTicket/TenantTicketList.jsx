@@ -192,7 +192,7 @@ function Tenant_ticket_list() {
 
         formData.append('department_id', selectedDepartment);
         formData.append('issue_type', selectedEmployee);
-        formData.append('emp_id', (userrole.includes('1') || userrole.includes('2')) ? selectedEmployee : userempid);
+        formData.append('emp_id', (userrole === "1" || userrole === "2") ? selectedEmployee : userempid);
         formData.append('from_date', fromDate);
         formData.append('to_date', toDate);
         formData.append('status', status);
@@ -782,7 +782,7 @@ function Tenant_ticket_list() {
                                 </Modal.Header>
                                 <Modal.Body>
                                     <Form>
-                                        {(userrole.includes('1') || userrole.includes('2')) && (
+                                        {(userrole === "1" || userrole === "2") && (
                                             <>
                                                 <Form.Group controlId="formRole">
                                                     <Form.Label style={{ fontWeight: 'bold' }}>Department</Form.Label>
@@ -862,8 +862,8 @@ function Tenant_ticket_list() {
                                             <th>Tenant Name</th>
                                         </>
                                     ) : null}
-                                    {/* {(userrole.includes('1') || userrole.includes('2')) && (<th>Department</th>)}
-                                    {(userrole.includes('1') || userrole.includes('2')) && (<th>Assigned To</th>)} */}
+                                    {/* {(userrole === "1" || userrole === "2") && (<th>Department</th>)}
+                                    {(userrole === "1" || userrole === "2") && (<th>Assigned To</th>)} */}
                                     <th>Status</th>
                                     <th>Attachment</th>
                                     <th>Action</th>
@@ -871,7 +871,7 @@ function Tenant_ticket_list() {
                                     {/* <th className='no-print'>Attachment</th>
                                     <th>Task Status</th>
                                     <th>Priority</th>
-                                    {(userrole.includes('1') || userrole.includes('2')) && (<th className='no-print'>Action</th>)} */}
+                                    {(userrole === "1" || userrole === "2") && (<th className='no-print'>Action</th>)} */}
 
 
                                 </tr>
@@ -898,8 +898,8 @@ function Tenant_ticket_list() {
                                                 <td>{row.department_name}</td>
                                                 <td>{row.issue_name}</td>
                                                 {/* <td style={Description} onClick={() => handleOpenModal(row.description)}>{row.description}</td>
-                                                {(userrole.includes('1') || userrole.includes('2')) && (<td>{row.department}</td>)}
-                                                {(userrole.includes('1') || userrole.includes('2')) && (<td>{row.assign_to}</td>)} */}
+                                                {(userrole === "1" || userrole === "2") && (<td>{row.department}</td>)}
+                                                {(userrole === "1" || userrole === "2") && (<td>{row.assign_to}</td>)} */}
                                                 {!tenant_identification ? (
                                                     <>
                                                         <td>{row.tnt_id}</td>
@@ -929,7 +929,7 @@ function Tenant_ticket_list() {
                                                 </td>
                                                 {/* 
 
-                                                {/* {(userrole.includes('1') || userrole.includes('2')) && ( */}
+                                                {/* {(userrole === "1" || userrole === "2") && ( */}
                                                 <td className='no-print'>
                                                     <button className="btn-edit" onClick={() => { GoToEditPage(row.id) }}>
                                                         <FontAwesomeIcon icon={faPen} />

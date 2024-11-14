@@ -1343,7 +1343,7 @@ function Sidebar() {
 
                                         {checkedNames.Payroll.includes('Payslip_list') && (
                                             <>
-                                                {(userrole.includes('1') || userrole.includes('2')) ? (
+                                                {(userrole === "1" || userrole === "2") ? (
                                                     <Link
                                                         to="/admin/paysliplist"
                                                         className={`nav-link ${location.pathname === '/admin/paysliplist' ? 'active' : ''}`}
@@ -1969,7 +1969,7 @@ function Sidebar() {
 
                                         {checkedNames.HelpDesk.includes('Raise_Ticket') && (
                                             <>
-                                                {(userrole.includes('1') || userrole.includes('2')) ? (
+                                                {(userrole === "1" || userrole === "2") ? (
                                                     <Link
                                                         to="/admin/raiseticket"
                                                         className={`nav-link ${location.pathname === '/admin/raiseticket' ? 'active' : ''}`}

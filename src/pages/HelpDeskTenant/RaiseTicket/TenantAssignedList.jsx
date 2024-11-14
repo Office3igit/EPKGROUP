@@ -1046,9 +1046,9 @@ function Tenant_assign_list() {
                   <th>S.No</th>
                   <th>Ticket ID</th>
                   <th>Raised Date</th>
-                  {(userrole.includes('1') || userrole.includes('2')) && (<th>Emp ID</th>)}
-                  {(userrole.includes('1') || userrole.includes('2')) && (<th>Emp Name</th>)}
-                  {(userrole.includes('1') || userrole.includes('2')) && (<th>Department</th>)}
+                  {(userrole === "1" || userrole === "2") && (<th>Emp ID</th>)}
+                  {(userrole === "1" || userrole === "2") && (<th>Emp Name</th>)}
+                  {(userrole === "1" || userrole === "2") && (<th>Department</th>)}
                   <th>Raised By</th>
                   <th>Issues Type</th>
                   <th>Status</th>
@@ -1058,7 +1058,7 @@ function Tenant_assign_list() {
                   {/* <th className='no-print'>Attachment</th>
 <th>Task Status</th>
 <th>Priority</th>
-{(userrole.includes('1') || userrole.includes('2')) && (<th className='no-print'>Action</th>)} */}
+{(userrole === "1" || userrole === "2") && (<th className='no-print'>Action</th>)} */}
                 </tr>
               </thead>
 
@@ -1082,15 +1082,15 @@ function Tenant_assign_list() {
                             return `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
                           })()}
                         </td>
-                        {(userrole.includes('1') || userrole.includes('2')) && (<td>{row.hrms_emp_id}</td>)}
-                        {(userrole.includes('1') || userrole.includes('2')) && (<td>{row.emp_name}</td>)}
-                        {(userrole.includes('1') || userrole.includes('2')) && (<td>{row.department_name}</td>)}
+                        {(userrole === "1" || userrole === "2") && (<td>{row.hrms_emp_id}</td>)}
+                        {(userrole === "1" || userrole === "2") && (<td>{row.emp_name}</td>)}
+                        {(userrole === "1" || userrole === "2") && (<td>{row.department_name}</td>)}
                         <td>{row.created_by}</td>
                         {/* <td>{row.created_date}</td> */}
                         <td>{row.issue_name}</td>
                         {/* <td style={Description} onClick={() => handleOpenModal(row.description)}>{row.description}</td>
-{(userrole.includes('1') || userrole.includes('2')) && (<td>{row.department}</td>)}
-{(userrole.includes('1') || userrole.includes('2')) && (<td>{row.assign_to}</td>)} */}
+{(userrole === "1" || userrole === "2") && (<td>{row.department}</td>)}
+{(userrole === "1" || userrole === "2") && (<td>{row.assign_to}</td>)} */}
                         <td>{row.status_description}</td>
                         <td style={{ width: '10%' }}>
                           {" "}

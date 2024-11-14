@@ -299,7 +299,7 @@ function TicketsList() {
             <Container style={{ padding: '10px 40px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
                     <h3 className="mb-5" style={{ fontWeight: 'bold', color: '#00275c' }}>Tickets List</h3>
-                    {(userrole.includes('1') || userrole.includes('2')) && (<Button onClick={() => { GoToaddmanualRaiseticket() }}>Add Manual Raise Ticket</Button>)}
+                    {(userrole === "1" || userrole === "2") && (<Button onClick={() => { GoToaddmanualRaiseticket() }}>Add Manual Raise Ticket</Button>)}
                 </div>
 
                 {/* ------------------------------------------------------------------------------------------------ */}
@@ -332,11 +332,11 @@ function TicketsList() {
                                 <th style={{ width: '150px' }}>Ticket ID</th>
                                 <th style={{ width: '200px' }}>Ticket Title</th>
                                 <th style={{ width: '100px' }}>Issue Type</th>
-                                {(userrole.includes('1') || userrole.includes('2')) && (<th style={{ width: '200px' }}>Assigned Department</th>)}
-                                {(userrole.includes('1') || userrole.includes('2')) && (<th style={{ width: '200px' }}>Assigned Employee</th>)}
+                                {(userrole === "1" || userrole === "2") && (<th style={{ width: '200px' }}>Assigned Department</th>)}
+                                {(userrole === "1" || userrole === "2") && (<th style={{ width: '200px' }}>Assigned Employee</th>)}
                                 <th style={{ width: '100px' }} className='no-print'>Attachment</th>
                                 <th style={{ width: '100px' }}>Status</th>
-                                {(userrole.includes('1') || userrole.includes('2')) && (<th style={{ width: '100px' }} className='no-print'>Action</th>)}
+                                {(userrole === "1" || userrole === "2") && (<th style={{ width: '100px' }} className='no-print'>Action</th>)}
 
                             </tr>
                         </thead>
@@ -360,8 +360,8 @@ function TicketsList() {
                                                 <td>{row.ticket_id}</td>
                                                 <td>{row.ticket_title}</td>
                                                 <td>{row.issue_type_name}</td>
-                                                {(userrole.includes('1') || userrole.includes('2')) && (<td>{row.role_name !== null ? row.role_name : '-'}</td>)}
-                                                {(userrole.includes('1') || userrole.includes('2')) && (<td>{row.Assigned_empname !== null ? row.Assigned_empname : '-'}</td>)}
+                                                {(userrole === "1" || userrole === "2") && (<td>{row.role_name !== null ? row.role_name : '-'}</td>)}
+                                                {(userrole === "1" || userrole === "2") && (<td>{row.Assigned_empname !== null ? row.Assigned_empname : '-'}</td>)}
 
                                                 <td className='no-print'>
                                                     {row.attachment !== '-' ?
@@ -374,7 +374,7 @@ function TicketsList() {
                                                 <td>{row.status}</td>
 
 
-                                                {(userrole.includes('1') || userrole.includes('2')) && (
+                                                {(userrole === "1" || userrole === "2") && (
                                                     <td style={{ display: 'flex', gap: '10px' }} className='no-print'>
                                                         <button className="btn-edit" onClick={() => { GoToEditPage(row.id) }}>
                                                             <FontAwesomeIcon icon={faPen} />

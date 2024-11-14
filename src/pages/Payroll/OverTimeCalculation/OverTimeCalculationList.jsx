@@ -558,7 +558,7 @@ function OverTimeCalculationList() {
                                     <th>OT Amount</th>
                                     <th>Created By</th>
                                     <th>Updated By</th>
-                                    {(userrole.includes('1') || userrole.includes('2')) && (<th className='no-print'>Action</th>)}
+                                    {(userrole === "1" || userrole === "2") && (<th className='no-print'>Action</th>)}
 
 
                                 </tr>
@@ -588,7 +588,7 @@ function OverTimeCalculationList() {
                                                 <td>{row.created_name}</td>
                                                 <td>{row.updated_name}</td>
 
-                                                {(userrole.includes('1') || userrole.includes('2')) && (
+                                                {(userrole === "1" || userrole === "2") && (
                                                     <td style={{ display: 'flex', gap: '10px' }} className='no-print'>
                                                         <button className="btn-edit" onClick={() => { handleovertimeedit(row.id) }}>
                                                             <FontAwesomeIcon icon={faPen} />

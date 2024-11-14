@@ -491,9 +491,9 @@ display: none !important;
                                     <th style={{ width: '150px' }}>End Time</th>
                                     <th style={{ width: '300px' }}>Agenda</th>
                                     <th style={{ width: '300px' }}>Remarks</th>
-                                    {(userrole.includes('1') || userrole.includes('2')) && (<th style={{ width: '150px' }}>Approved List</th>)}
-                                    {(userrole.includes('1') || userrole.includes('2')) && (<th style={{ width: '150px' }}>Rejected List</th>)}
-                                    {!(userrole.includes('1') || userrole.includes('2')) && (<th style={{ width: '150px' }}>Reason</th>)}
+                                    {(userrole === "1" || userrole === "2") && (<th style={{ width: '150px' }}>Approved List</th>)}
+                                    {(userrole === "1" || userrole === "2") && (<th style={{ width: '150px' }}>Rejected List</th>)}
+                                    {!(userrole === "1" || userrole === "2") && (<th style={{ width: '150px' }}>Reason</th>)}
                                     <th style={{ width: '250px' }} className='no-print'>Actions</th>
 
                                 </tr>
@@ -523,11 +523,11 @@ display: none !important;
                                                     {meeting.m_remarks}
                                                 </td>
 
-                                                {(userrole.includes('1') || userrole.includes('2')) && (<td onClick={() => handleShow(meeting, 'Approved')} style={{ cursor: 'pointer' }} >{meeting.approved_approval}</td>)}
-                                                {(userrole.includes('1') || userrole.includes('2')) && (<td onClick={() => handleShow(meeting, 'Rejected')} style={{ cursor: 'pointer' }} >{meeting.rejected_approval}</td>)}
-                                                {!(userrole.includes('1') || userrole.includes('2')) && (<td>{meeting.empreason}</td>)}
+                                                {(userrole === "1" || userrole === "2") && (<td onClick={() => handleShow(meeting, 'Approved')} style={{ cursor: 'pointer' }} >{meeting.approved_approval}</td>)}
+                                                {(userrole === "1" || userrole === "2") && (<td onClick={() => handleShow(meeting, 'Rejected')} style={{ cursor: 'pointer' }} >{meeting.rejected_approval}</td>)}
+                                                {!(userrole === "1" || userrole === "2") && (<td>{meeting.empreason}</td>)}
 
-                                                {(userrole.includes('1') || userrole.includes('2')) ? (
+                                                {(userrole === "1" || userrole === "2") ? (
                                                     <td className='no-print'>
                                                         <button className="btn-edit"
                                                             style={{ marginRight: '15px' }}
