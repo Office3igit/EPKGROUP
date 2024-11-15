@@ -161,7 +161,7 @@ function AdminAssignedTaskList() {
 
         const formData = new FormData();
         formData.append('department_id', selectedDepartment);
-        formData.append('emp_id', (userrole.includes('1') || userrole.includes('2')) ? selectedEmployee : userempid);
+        formData.append('emp_id', (userrole === "1" || userrole === "2") ? selectedEmployee : userempid);
         formData.append('from_date', fromDate);
         formData.append('to_date', toDate);
         formData.append('status', status);
@@ -622,7 +622,7 @@ function AdminAssignedTaskList() {
                                 </Modal.Header>
                                 <Modal.Body>
                                     <Form>
-                                        {(userrole.includes('1') || userrole.includes('2')) && (
+                                        {(userrole === "1" || userrole === "2") && (
                                             <>
                                                 <Form.Group controlId="formRole">
                                                     <Form.Label style={{ fontWeight: 'bold' }}>Department</Form.Label>
@@ -698,15 +698,15 @@ function AdminAssignedTaskList() {
                                     <th>Project Name</th>
                                     <th>Project Work Type</th>
                                     <th style={{ width: '200px' }}>Description</th>
-                                    {(userrole.includes('1') || userrole.includes('2')) && (<th>Department</th>)}
-                                    {(userrole.includes('1') || userrole.includes('2')) && (<th>Assigned To</th>)}
+                                    {(userrole === "1" || userrole === "2") && (<th>Department</th>)}
+                                    {(userrole === "1" || userrole === "2") && (<th>Assigned To</th>)}
                                     <th>Created By</th>
                                     <th>Start Date</th>
                                     <th>End Date</th>
                                     <th className='no-print'>Attachment</th>
                                     <th>Task Status</th>
                                     <th>Priority</th>
-                                    {(userrole.includes('1') || userrole.includes('2')) && (<th className='no-print'>Action</th>)}
+                                    {(userrole === "1" || userrole === "2") && (<th className='no-print'>Action</th>)}
 
 
                                 </tr>
@@ -728,8 +728,8 @@ function AdminAssignedTaskList() {
                                                 <td>{row.project_name}</td>
                                                 <td>{row.project_worktype}</td>
                                                 <td style={Description} onClick={() => handleOpenModal(row.description)}>{row.description}</td>
-                                                {(userrole.includes('1') || userrole.includes('2')) && (<td>{row.department}</td>)}
-                                                {(userrole.includes('1') || userrole.includes('2')) && (<td>{row.assign_to}</td>)}
+                                                {(userrole === "1" || userrole === "2") && (<td>{row.department}</td>)}
+                                                {(userrole === "1" || userrole === "2") && (<td>{row.assign_to}</td>)}
                                                 <td>{row.created_by}</td>
                                                 <td>{row.start_date}</td>
                                                 <td>{row.end_date}</td>
@@ -745,7 +745,7 @@ function AdminAssignedTaskList() {
 
                                                 <td>
 
-                                                    {(userrole.includes('1') || userrole.includes('2')) ? (
+                                                    {(userrole === "1" || userrole === "2") ? (
                                                         <>
                                                             {row.task_status}
                                                             <span
@@ -803,7 +803,7 @@ function AdminAssignedTaskList() {
 
                                                 </td>
 
-                                                {(userrole.includes('1') || userrole.includes('2')) && (
+                                                {(userrole === "1" || userrole === "2") && (
                                                     <td style={{ display: 'flex', gap: '10px' }} className='no-print'>
                                                         <button className="btn-edit" onClick={() => { GoToEditPage(row.id) }}>
                                                             <FontAwesomeIcon icon={faPen} />

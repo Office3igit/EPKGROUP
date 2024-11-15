@@ -4,17 +4,15 @@ import Ontime from '../../../assets/admin/assets/img/Dashboard/leave.png';
 import employee from '../../../assets/admin/assets/img/Dashboard/employee.png';
 import permission from "../../../assets/admin/assets/img/Dashboard/absent.png";
 import slow from "../../../assets/admin/assets/img/Dashboard/late.png";
-import { Modal, Button, Form, Table } from "react-bootstrap";
+import { Modal, Button, Form } from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight, faStar, faStarOfLife } from '@fortawesome/free-solid-svg-icons';
+import { faStarOfLife } from '@fortawesome/free-solid-svg-icons';
 
 
 export default function ApprovalRequest() {
-
-
     // ----------------------------------------------------------------------------------------------------
     // Redirect to the Request page
 
@@ -889,7 +887,7 @@ export default function ApprovalRequest() {
             <div className="approval-container">
                 <h3 className="approval-title">Approval List</h3>
                 <>
-                    {(userrole.includes('1') || userrole.includes('2')) && (
+                    {(userrole === "1" || userrole === "2") && (
                         <div className="button-group">
                             <Button onClick={openIsTimeOff}>
                                 Add Leave / Permission / Half Day
@@ -917,8 +915,6 @@ export default function ApprovalRequest() {
                 <Modal.Body>
 
                     <Form onSubmit={handleSubmitTimeoff}>
-
-
                         <Form.Group controlId="department" className='mb-2'>
                             <Form.Label style={{ fontWeight: "bold", color: '#4b5c72' }}>Select Department<sup><FontAwesomeIcon icon={faStarOfLife} style={{ color: '#fb1816', fontSize: '8px' }} /></sup></Form.Label>
                             <Form.Control

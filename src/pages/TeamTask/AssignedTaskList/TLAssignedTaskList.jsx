@@ -688,7 +688,7 @@ function TLAssignedTaskList() {
 
                                                 <td>
 
-                                                    {(userrole.includes('1') || userrole.includes('2')) ? (
+                                                    {(userrole === "1" || userrole === "2") ? (
                                                         <>
                                                             {row.task_status}
                                                             <span

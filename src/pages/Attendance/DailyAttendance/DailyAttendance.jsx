@@ -672,7 +672,7 @@ display: none !important;
                                     <th>PR</th>
                                     <th>OT</th>
                                     <th>Total Hours</th>
-                                    {(userrole.includes('1')) && (<th className='no-print'>Action</th>)}
+                                    {['1', '2'].includes(userrole) && (<th className='no-print'>Action</th>)}
 
                                 </tr>
                             </thead>
@@ -701,7 +701,7 @@ display: none !important;
                                                 <td>{row.emp_onduty}</td>
                                                 <td>{row.checkout_total_hours}</td>
                                                 <td className='no-print'>
-                                                    {(userrole.includes('1')) && (
+                                                    {['1', '2'].includes(userrole)  && (
                                                         <>
                                                             <span style={{ display: 'flex', gap: '5px' }}>
                                                                 <button

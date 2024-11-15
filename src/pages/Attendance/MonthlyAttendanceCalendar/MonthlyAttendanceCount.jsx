@@ -829,7 +829,7 @@ console.log("props.formattedCenterDate", props.formattedCenterDate)
         {/* ------------------------------------------------------------------------------------------------ */}
         {/* Title */}
         <div>
-          {(userrole.includes('1') || userrole.includes('2')) ?
+          {(userrole === "1" || userrole === "2") ?
             <h2 style={{ color: '#00275C', marginLeft: '-14px' }}>{props.username || username} - {props.formattedCenterDate} Attendance <span>{props.calendertotal}</span></h2>
             :
             <>
@@ -848,7 +848,7 @@ console.log("props.formattedCenterDate", props.formattedCenterDate)
           <div style={{ display: 'flex', alignItems: 'center' }}>
 
 
-            {(!userrole.includes('1')) && 
+            {(userrole !== "1") && 
               <>
                 <Button style={{ marginRight: '15px' }} onClick={openTimeOff}>
                   L / P / H

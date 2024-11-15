@@ -51,6 +51,7 @@ const AddRole = () => {
     'HRSupport': [],
     'TLApproval': [],
     'HelpDesk': [],
+    'HelpDeskTenant': [],
     'Assets': [],
     'TeamManagement': {
       'Events': {
@@ -263,6 +264,7 @@ const AddRole = () => {
       'HRSupport': [],
       'TLApproval': [],
       'HelpDesk': [],
+      'HelpDeskTenant': [],
       'Assets': [],
       'TeamManagement': {
         'Events': {
@@ -1376,18 +1378,18 @@ const AddRole = () => {
             <Col sm={12} md={6} lg={6} xl={3} className='mb-3 list__colum'>
               <h4 className='list__title' id="HelpDesk">HelpDesk</h4>
 
-              {/* Issue Type */}
+              {/*Add Issue */}
               <label className="checkbox-container">
                 <input
                   type="checkbox"
-                  id="IssueType"
-                  value="Issue_Type"
+                  id="AddIssue"
+                  value="Add_Issue"
                   name="HelpDesk"
-                  checked={checkedNames['HelpDesk'] && checkedNames['HelpDesk'].includes('Issue_Type')}
+                  checked={checkedNames['HelpDesk'] && checkedNames['HelpDesk'].includes('Add_Issue')}
                   onChange={handlesingleCheckboxChange}
                 />
                 <span className="checkmark"></span>
-                <span className="checkbox-label">Issue Type</span>
+                <span className="checkbox-label">Add Issue</span>
               </label>
 
               {/* Raise Ticket */}
@@ -1433,6 +1435,81 @@ const AddRole = () => {
               </label>
             </Col>
 
+
+            <Col sm={12} md={6} lg={6} xl={3} className='mb-3 list__colum'>
+              <h4 className='list__title' id="HelpDeskTenant">HelpDesk-Tenant</h4>
+
+              {/* Add Tenat */}
+              <label className="checkbox-container">
+                <input
+                  type="checkbox"
+                  id="AddTenant"
+                  value="Add_Tenant"
+                  name="HelpDeskTenant"
+                  checked={checkedNames['AddTenant'] && checkedNames['AddTenant'].includes('Add_Tenant')}
+                  onChange={handlesingleCheckboxChange}
+                />
+                <span className="checkmark"></span>
+                <span className="checkbox-label">Add Tenat</span>
+              </label>
+
+              {/* Tenant List */}
+              <label className="checkbox-container">
+                <input
+                  type="checkbox"
+                  id="TenantList"
+                  value="Tenant_List"
+                  name="HelpDeskTenant"
+                  checked={checkedNames['TenantList'] && checkedNames['TenantList'].includes('Tenant_List')}
+                  onChange={handlesingleCheckboxChange}
+                />
+                <span className="checkmark"></span>
+                <span className="checkbox-label">Tenant List</span>
+              </label>
+
+              {/* Raise Ticket */}
+              <label className="checkbox-container">
+                <input
+                  type="checkbox"
+                  id="RaiseTicket"
+                  value="Raise_Ticket"
+                  name="HelpDeskTenant"
+                  checked={checkedNames['RaiseTicket'] && checkedNames['RaiseTicket'].includes('Raise_Ticket')}
+                  onChange={handlesingleCheckboxChange}
+                />
+                <span className="checkmark"></span>
+                <span className="checkbox-label">Raise Ticket</span>
+              </label>
+
+              {/* Ticket List */}
+              <label className="checkbox-container">
+                <input
+                  type="checkbox"
+                  id="TicketList"
+                  value="Ticket_List"
+                  name="HelpDeskTenant"
+                  checked={checkedNames['TicketList'] && checkedNames['TicketList'].includes('Ticket_List')}
+                  onChange={handlesingleCheckboxChange}
+                />
+                <span className="checkmark"></span>
+                <span className="checkbox-label">Ticket List</span>
+              </label>
+
+              {/* Ticket List */}
+              <label className="checkbox-container">
+                <input
+                  type="checkbox"
+                  id="AssignedList"
+                  value="Assigned_List"
+                  name="HelpDeskTenant"
+                  checked={checkedNames['AssignedList'] && checkedNames['AssignedList'].includes('Assigned_List')}
+                  onChange={handlesingleCheckboxChange}
+                />
+                <span className="checkmark"></span>
+                <span className="checkbox-label">Assigned List</span>
+              </label>
+            </Col>
+
             <Col sm={12} md={6} lg={6} xl={3} className='mb-3 list__colum'>
               <h4 className='list__title' id="Logs">Logs</h4>
               {/* 1 */}
@@ -1457,8 +1534,6 @@ const AddRole = () => {
 
           </Row>
           {/* ----------3-------------- */}
-
-
           <Row>
             <Col style={{ display: 'flex', gap: '15px' }}>
               <Button className='checklist__submit__btn' onClick={handleSubmit}>Submit</Button>

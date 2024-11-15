@@ -491,7 +491,7 @@ function ProjectsList() {
                                     <th>Notes/Description</th>
                                     <th>Attachment</th>
 
-                                    {(userrole.includes('1') || userrole.includes('2')) && (<th className='no-print'>Action</th>)}
+                                    {(userrole === "1" || userrole === "2") && (<th className='no-print'>Action</th>)}
 
 
                                 </tr>
@@ -524,7 +524,7 @@ function ProjectsList() {
                                                 <td>{row.p_attachment}</td>
 
 
-                                                {(userrole.includes('1') || userrole.includes('2')) && (
+                                                {(userrole === "1" || userrole === "2") && (
                                                     <td style={{ display: 'flex', gap: '10px' }} className='no-print'>
                                                         <button className="btn-edit" onClick={() => { GoToEditPage(row.id) }}>
                                                             <FontAwesomeIcon icon={faPen} />

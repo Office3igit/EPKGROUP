@@ -402,7 +402,7 @@ function Templates() {
 
 
                     {/* ------------------------------------------------------------------------------------------------ */}
-                    {(userrole.includes('1') || userrole.includes('2')) && (
+                    {(userrole === "1" || userrole === "2") && (
                         <>
                             <h5 className='mb-2'>Add Company Policy</h5>
                             {/* shift slot add form */}
@@ -530,7 +530,7 @@ function Templates() {
                                                             <FontAwesomeIcon icon={faDownload} /> Download
                                                         </button>
 
-                                                        {(userrole.includes('1') || userrole.includes('2')) && (
+                                                        {(userrole === "1" || userrole === "2") && (
                                                             <>
                                                                 <button className="btn-edit" onClick={() => { GoToEditPage(row.id) }}>
                                                                     <FontAwesomeIcon icon={faPen} /> Edit

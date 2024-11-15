@@ -14,7 +14,7 @@ import ReactPaginate from 'react-paginate';
 import { ScaleLoader } from 'react-spinners';
 
 
-function AddDailyAccounts() {
+function AddDailyAccounts() { 
     
     // ------------------------------------------------------------------------------------------------
     // Redirect to the edit page

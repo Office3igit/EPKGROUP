@@ -408,7 +408,7 @@ function ProjectList() {
                                     <th>From Date</th>
                                     <th>To Date</th>
                                     <th>Status</th>
-                                    {(userrole.includes('1') || userrole.includes('2')) && (<th className='no-print'>Action</th>)}
+                                    {(userrole === "1" || userrole === "2") && (<th className='no-print'>Action</th>)}
 
 
                                 </tr>
@@ -435,7 +435,7 @@ function ProjectList() {
                                                 <td>{row.from_date}</td>
                                                 <td>{row.to_date}</td>
                                                 <td>{row.status}</td>
-                                                {(userrole.includes('1') || userrole.includes('2')) && (
+                                                {(userrole === "1" || userrole === "2") && (
                                                     <td style={{ display: 'flex', gap: '10px' }} className='no-print'>
                                                         <button className="btn-edit" onClick={() => { GoToEditPage(row.id) }}>
                                                             <FontAwesomeIcon icon={faPen} />

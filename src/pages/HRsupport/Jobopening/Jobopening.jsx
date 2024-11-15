@@ -198,7 +198,7 @@ const Jobopening = () => {
       <h3 className='mb-5' style={{ fontWeight: 'bold', color: '#00275c' }}>Job Openings</h3>
       {/* ------------------------------------------------------------------------------------------------ */}
       {/* add job */}
-      {(userrole.includes('1') || userrole.includes('2')) && (
+      {(userrole === "1" || userrole === "2") && (
         <div style={{ paddingBottom: '80px' }}>
 
           <h5 className='mb-2'>Add Job</h5>

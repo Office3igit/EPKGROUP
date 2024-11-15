@@ -414,7 +414,7 @@ function Head_footer_layout() {
 
 
                     {/* ------------------------------------------------------------------------------------------------ */}
-                    {(userrole.includes('1') || userrole.includes('2')) && (
+                    {(userrole === "1" || userrole === "2") && (
                         <>
                             <h5 className='mb-2'>Add Header Footer</h5>
                             {/* shift slot add form */}

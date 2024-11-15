@@ -1,0 +1,53 @@
+.modal-body .mb-3 p:first-child {
+    color: #0A62F1 !important; /* Set your desired color */
+    font-weight: bold;
+  }
+  .btn_for_status{
+    width: 100%;
+    border-radius: 10px;
+  }
+  .modal {
+    /* position: fixed; */
+    /* top: 20; */
+    /* left: 0; */
+    /* width: 100vw; */
+    /* height: 100vh; */
+    /* display: flex; */
+    /* align-items: center;
+    justify-content: center;*/
+    background: rgba(0, 0, 0, 0.5);  
+    /* Semi-transparent background */
+  }
+  
+  .modal-dialog {
+    max-height: 80vh; /* Set max height for scrolling */
+    overflow-y: auto; /* Enable vertical scroll for content overflow */
+    width: 600px; /* Adjust width as needed */
+    background: white; /* Modal background color */
+    border-radius: 8px; /* Optional: for rounded corners */
+    padding: 20px;
+  }
+  
+  @keyframes fadeInSlideDown {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .modal-dialog {
+    animation: fadeInSlideDown 0.5s ease-out; /* Set animation duration */
+  }
+  th,td{
+    text-align: center;
+    vertical-align: middle; 
+  }
+  td {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 150px; /* Set a max-width to prevent excessive stretching */
+  }

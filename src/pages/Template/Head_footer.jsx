@@ -470,7 +470,7 @@ function Head_footer_layout() {
 
 
                     {/* ------------------------------------------------------------------------------------------------ */}
-                    {(userrole.includes('1') || userrole.includes('2')) && (
+                    {(userrole === "1" || userrole === "2") && (
                         <>
                             <h5 className='mb-2'>Add Header Footer</h5>
                             {/* shift slot add form */}
@@ -617,7 +617,7 @@ function Head_footer_layout() {
                                                         </button>
 
 
-                                                        {(userrole.includes('1') || userrole.includes('2')) && (
+                                                        {(userrole === "1" || userrole === "2") && (
                                                             <>
                                                                 <button className="btn-edit" onClick={() => { GoToEditPage(row.id) }}>
                                                                     <FontAwesomeIcon icon={faPen} /> Edit
@@ -639,7 +639,7 @@ function Head_footer_layout() {
                                                 //             <FontAwesomeIcon icon={faEye} /> View
                                                 //         </button>
 
-                                                //         {(userrole.includes('1') || userrole.includes('2')) && (
+                                                //         {(userrole === "1" || userrole === "2") && (
                                                 //             <>
                                                 //                 <button className="btn-edit" onClick={() => { GoToEditPage(row.id) }}>
                                                 //                     <FontAwesomeIcon icon={faPen} /> Edit

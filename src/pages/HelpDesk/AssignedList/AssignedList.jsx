@@ -20,11 +20,6 @@ function AssignedList() {
     // Redirect to the edit page
     const navigate = useNavigate();
 
-    const GoToEditPage = (id) => {
-        navigate(`/admin/editassignedlist/${id}`);
-    };
-
-
     // ------------------------------------------------------------------------------------------------
 
     // ------------------------------------------------------------------------------------------------
@@ -44,7 +39,10 @@ function AssignedList() {
     // Table list view api
 
     const [tableData, setTableData] = useState([]);
-
+    
+    const GoToEditPage = (id) => {
+        navigate(`/admin/editassignedlist/${id}`);
+    };
     useEffect(() => {
         fetchData();
     }, []);
@@ -55,7 +53,7 @@ function AssignedList() {
             assign_empid: userempid
         };
         try {
-            const response = await fetch('https://epkgroup.in/crm/api/public/api/view_raiseassign_list', {
+            const response = await fetch('https://epkgroup.in/crm/api/public/api/view_newraiseassign_list', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -66,7 +64,6 @@ function AssignedList() {
             if (response.ok) {
                 const responseData = await response.json();
                 setTableData(responseData.data);
-                console.log('----------0-0->', responseData.data)
                 setLoading(false);
             } else {
                 throw new Error('Error fetching data');
@@ -163,26 +160,28 @@ function AssignedList() {
 
 
     const handleExportCSV = () => {
-        const csvData = tableData.map(({ emp_name, ticket_id, ticket_title, role_name, issue_type_name, Assigned_empname, status }, index) => ({
+        const csvData = tableData.map(({ emp_name, ticket_id,created_by,department_name,status_description, created_date, hrms_emp_id, issue_name }, index) => ({
             '#': index + 1,
             emp_name,
-            ticket_id,
-            ticket_title,
-            issue_type_name,
-            role_name: role_name || '-',
-            Assigned_empname: Assigned_empname || '-',
-            status
+            ticket_id, 
+            created_by,
+            department_name,
+            created_date,
+            status_description,
+            hrms_emp_id,
+            issue_name,
         }));
 
         const headers = [
             { label: 'S.No', key: '#' },
-            { label: 'Employee Name', key: 'emp_name' },
             { label: 'Ticket ID', key: 'ticket_id' },
-            { label: 'Ticket Title', key: 'ticket_title' },
-            { label: 'Issue Type', key: 'issue_type_name' },
-            { label: 'Assigned Department', key: 'role_name' },
-            { label: 'Assigned Employee', key: 'Assigned_empname' },
-            { label: 'Status', key: 'status' },
+            { label: 'Created Date', key: 'created_date' },
+            { label: 'Created By', key: 'created_by' },
+            { label: 'Department Name', key: 'department_name' },
+            { label: 'Employee Name', key: 'emp_name' },
+            { label: 'Employee ID', key: 'hrms_emp_id' },
+            { label: 'Issue Name', key: 'issue_name' },
+            { label: 'Status', key: 'status_description' },
         ];
 
         const csvReport = {
@@ -206,22 +205,21 @@ function AssignedList() {
         const size = 'A4'; // You can change to 'letter' or other sizes as needed
         const doc = new jsPDF('landscape', unit, size);
 
-        const data = tableData.map(({ emp_name, ticket_id, ticket_title, role_name, issue_type_name, Assigned_empname, status }, index) => [
+        const data = tableData.map(({ emp_name, ticket_id, created_date,status_description,created_by,department_name, hrms_emp_id, issue_name }, index) => [
             index + 1,
             emp_name,
             ticket_id,
-            ticket_title,
-            issue_type_name,
-            role_name || '-',
-            Assigned_empname || '-',
-            status
+            created_date,
+            created_by,
+            department_name,
+            hrms_emp_id,
+            issue_name,
+            status_description,
         ]);
 
         doc.autoTable({
-            head: [['S.No', 'Employee Name', 'Ticket ID', 'Ticket Title', 'Issue Type', 'Assigned Department', 'Assigned Employee', 'Status']],
-            body: data,
-            // styles: { fontSize: 10 },
-            // columnStyles: { 0: { halign: 'center', fillColor: [100, 100, 100] } }, 
+            head: [['S.No', 'Employee Name', 'Ticket ID', 'Created Date', 'Created By', 'Department Name', 'Employee ID', 'Issue Name','Status']],
+            body: data, 
         });
 
         doc.save('AssignTicketRaiseList.pdf');
@@ -271,7 +269,6 @@ function AssignedList() {
         fontSize: '16px',
         border: '1px solid #0d6efd',
         marginRight: '15px',
-
         padding: '5px 7px',
         boxShadow: 'rgba(13, 110, 253, 0.5) 0px 0px 10px 1px'
     };
@@ -289,6 +286,18 @@ function AssignedList() {
       }
     `}
             </style>
+            {loading ? (
+                <div style={{
+                    height: '100vh',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    background: '#f6f6f6'
+                }}>
+                    <ScaleLoader color="rgb(20 166 249)" />
+                </div>
+            ) : (
+
             <Container style={{ padding: '10px 40px' }}>
                 <h3 className="mb-5" style={{ fontWeight: 'bold', color: '#00275c' }}>Assigned List</h3>
 
@@ -311,23 +320,21 @@ function AssignedList() {
                         <button style={myStyles} onClick={handlePrint}><i className="fas fa-print" style={{ fontSize: '25px', color: '#0d6efd' }}></i></button>
                     </div>
                 </div>
-
                 <div ref={componentRef} style={{ width: '100%', overflowX: 'auto' }}>
-
                     <table className="table" style={{ minWidth: '100%', width: 'max-content' }}>
                         <thead className="thead-dark">
                             <tr>
                                 <th style={{ width: '80px' }}>S.No</th>
-                                <th style={{ width: '150px' }}>Employee Name</th>
                                 <th style={{ width: '150px' }}>Ticket ID</th>
-                                <th style={{ width: '200px' }}>Ticket Title</th>
+                                <th style={{ width: '150px' }}>Raised Date</th>
+                                <th style={{ width: '150px' }}>Raised By</th>
+                                <th style={{ width: '150px' }}>Department</th>
                                 <th style={{ width: '100px' }}>Issue Type</th>
-                                <th style={{ width: '200px' }}>Assigned Department</th>
-                                <th style={{ width: '200px' }}>Assigned Employee</th>
-                                <th style={{ width: '100px' }} className='no-print'>Attachment</th>
-                                <th style={{ width: '100px' }}>Status</th>
+                                <th style={{ width: '150px' }}>Employee ID</th>
+                                <th style={{ width: '150px' }}>Employee Name</th>
+                                <th style={{ width: '200px' }}>Status</th>
+                                <th style={{ width: '200px' }}>Attachment</th>
                                 <th style={{ width: '100px' }} className='no-print'>Action</th>
-
                             </tr>
                         </thead>
                         <tbody>
@@ -337,50 +344,40 @@ function AssignedList() {
                                         <td colSpan="8" style={{ textAlign: 'center' }}>No search data found</td>
                                     </tr>
                                 ) : (
-
-
                                     filteredleaveData.map((row, index) => {
-
                                         const serialNumber = currentPage * itemsPerPage + index + 1;
-
                                         return (
                                             <tr key={row.id}>
                                                 <th scope="row">{serialNumber}</th>
-                                                <td>{row.emp_name}</td>
                                                 <td>{row.ticket_id}</td>
-                                                <td>{row.ticket_title}</td>
-                                                <td>{row.issue_type_name}</td>
-                                                <td>{row.role_name !== null ? row.role_name : '-'}</td>
-                                                <td >{row.Assigned_empname !== null ? row.Assigned_empname : '-'}</td>
+                                                <td>{row.created_date}</td>
+                                                <td>{row.created_by}</td>
+                                                <td>{row.department_name}</td>
+                                                <td>{row.issue_name}</td>
+                                                <td>{row.hrms_emp_id}</td>
+                                                <td>{row.emp_name}</td>
+                                                <td>{row.status_description}</td>
                                                 <td className='no-print'>
                                                     {row.attachment !== '-' ?
                                                         <button className="btn-view" onClick={() => { window.open(`https://epkgroup.in/crm/api/storage/app/${row.attachment}`, '_blank') }}>
-                                                            <FontAwesomeIcon icon={faEye} /> View
+                                                            <FontAwesomeIcon icon="fa-solid fa-eye" />View
                                                         </button>
 
-                                                        : <img src={emptyfolder} alt='empty' style={{ width: '40%' }} />}
+                                                        : <img src={emptyfolder} alt='empty' style={{ width: '30%' }} />}
                                                 </td>
-                                                <td>{row.status}</td>
-
-
                                                 <td style={{ display: 'flex', gap: '10px' }} className='no-print'>
-                                                    <button className="btn-edit" onClick={() => { GoToEditPage(row.id) }}>
+                                                    <button className="btn-edit" onClick={() => { GoToEditPage(row.id, row.ticket_id) }}>
                                                         <FontAwesomeIcon icon={faPen} />
                                                     </button>
-                                                    {/* <button className="btn-delete" onClick={() => handleDelete(row.id)}>
-                                                    <FontAwesomeIcon icon={faTrashCan} />
-                                                </button> */}
                                                 </td>
                                             </tr>
                                         );
                                     })
-
                                 )}
                         </tbody>
                     </table>
 
                 </div>
-
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
                     <ReactPaginate
                         previousLabel={<span aria-hidden="true">&laquo;</span>}
@@ -405,12 +402,9 @@ function AssignedList() {
                         activeLinkClassName={'bg-dark text-white'}
                     />
                 </div>
-
                 {/* ------------------------------------------------------------------------------------------------ */}
-
-
-
             </Container>
+            )}
         </>
     )
 }

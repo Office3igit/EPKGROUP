@@ -391,7 +391,7 @@ display: none !important;
                 <th style={{ width: '120px' }}>Return Date</th>
                 <th style={{ width: '300px' }}>Remarks</th>
                 <th style={{ width: '100px' }}>Status</th>
-                {(userrole.includes('1') || userrole.includes('2')) && (<th style={{ width: '100px' }} className='no-print'>Action</th>)}
+                {(userrole === "1" || userrole === "2") && (<th style={{ width: '100px' }} className='no-print'>Action</th>)}
 
               </tr>
             </thead>
@@ -424,7 +424,7 @@ display: none !important;
                         <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', wordBreak: 'break-word', cursor: 'pointer', }} 
                         onClick={() => handleOpenModal(row.remarks, 'Remarks')}>{row.remarks}</td>
                         <td>{row.status}</td>
-                        {(userrole.includes('1') || userrole.includes('2')) && (
+                        {(userrole === "1" || userrole === "2") && (
                           <td style={{ display: 'flex', gap: '10px' }} className='no-print'>
                             <button className="btn-edit" onClick={() => { GoToEditPage(row.id) }} disabled={row.return_on !== null}
                             style={{background: row.return_on !== null ?'grey':'', borderColor: row.return_on !== null ?'grey':'', cursor: row.return_on !== null ?'no-drop':''}}>
