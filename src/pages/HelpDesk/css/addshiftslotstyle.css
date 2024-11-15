@@ -1,0 +1,82 @@
+.shift__container{
+    padding: 10px 20px;
+}
+.shift__row{
+    background: #ffffff;
+    padding: 60px 10px;
+    box-shadow: 0px 0px 10px rgb(0 0 0 / 43%);
+    margin: 2px;
+}
+.submit__cancel{
+    display: flex;
+    gap: 20px;
+}
+.shift__submit__btn{
+    padding: 6px 22px;
+    font-weight: bold;
+}
+.shift__submit__btn:hover{
+    background: white;
+    color: #0d6efd;
+    font-weight: bold;
+}
+
+.shift__cancel__btn{
+       /* background: blue; */
+       background: white;
+       color: #0d6efd;
+       font-weight: bold;
+       padding: 6px 22px; 
+}
+.shift__cancel__btn:hover{
+    background: #0d6efd;
+}
+
+.thead-dark {
+    background-color: #0d6efd;
+    color:white;
+}
+.table{
+    box-shadow: 0px 0px 10px rgb(0 0 0 / 43%);
+}
+.btn-edit{
+    background: #0d6efd;
+    color: white;
+    padding: 5px 16px;
+    border-radius: 10px;
+    border-color: #0d6efd;
+    border-radius: 22px;
+    padding: 6px 11px;
+}
+.btn-delete{
+    background: #fd0d49;
+    color: white;
+    padding: 5px 16px;
+    border-radius: 10px;
+    border-color: #fd0d49; 
+    border-radius: 22px;
+    padding: 6px 12px;
+}
+/* action btn hidden for print */
+@media print {
+    .no-print {
+      display: none !important;
+    }
+  }
+
+  .description {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    height: 5.2em; 
+    line-height: 1.5em; 
+    cursor: pointer;
+  }
+  
+
+
+  
+  
