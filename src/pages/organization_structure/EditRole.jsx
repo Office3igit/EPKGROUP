@@ -1418,18 +1418,18 @@ const EditRole = () => {
                         <Col sm={12} md={6} lg={6} xl={3} className='mb-3 list__colum'>
                             <h4 className='list__title' id="HelpDesk">HelpDesk</h4>
 
-                            {/* Issue Type */}
+                            {/* Add Issue */}
                             <label className="checkbox-container">
                                 <input
                                     type="checkbox"
-                                    id="IssueType"
-                                    value="Issue_Type"
+                                    id="AddIssue"
+                                    value="Add_Issue"
                                     name="HelpDesk"
-                                    checked={checkedNames['HelpDesk'] && checkedNames['HelpDesk'].includes('Issue_Type')}
+                                    checked={checkedNames['HelpDesk'] && checkedNames['HelpDesk'].includes('Add_Issue')}
                                     onChange={handlesingleCheckboxChange}
                                 />
                                 <span className="checkmark"></span>
-                                <span className="checkbox-label">Issue Type</span>
+                                <span className="checkbox-label">Add Issue</span>
                             </label>
 
                             {/* Raise Ticket */}

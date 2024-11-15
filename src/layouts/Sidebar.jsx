@@ -387,7 +387,7 @@ function Sidebar() {
 
     // --------------------------------------------------------------------------------------------------------------------
 
-    const HelpDeskPermissions = ['Issue_Type', 'Raise_Ticket', 'Tickets_List', 'Assigned_List'];
+    const HelpDeskPermissions = ['Add_Issue', 'Raise_Ticket', 'Tickets_List', 'Assigned_List'];
 
     const hasAccessToHelpDesk = () => {
         if (!userrole.includes('1') || !userrole.includes('2')) {
@@ -1953,18 +1953,18 @@ function Sidebar() {
                             <>
                                 <Link className="nav-link collapsed" to="#" data-bs-toggle="collapse" data-bs-target="#HelpDesk" aria-expanded="false" aria-controls="HelpDesk">
                                     <div className="sb-nav-link-icon"><FontAwesomeIcon icon={faHandshakeAngle} /></div>
-                                    HelpDesk
+                                    Employee Help Desk
                                     <div className="sb-sidenav-collapse-arrow"><i className="fas fa-angle-down"></i></div>
                                 </Link>
 
                                 <div className="collapse" id="HelpDesk" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
                                     <nav className="sb-sidenav-menu-nested nav">
-                                        {checkedNames.HelpDesk.includes('Issue_Type') && (
+                                        {checkedNames.HelpDesk.includes('Add_Issue') && (
                                             <Link
-                                                to="/admin/issuetype"
-                                                className={`nav-link ${location.pathname === '/admin/issuetype' ? 'active' : ''}`}
-                                                style={location.pathname === '/admin/issuetype' ? activeStyle : {}}
-                                            >Issue Type</Link>
+                                                to="/admin/addissue"
+                                                className={`nav-link ${location.pathname === '/admin/addissue' ? 'active' : ''}`}
+                                                style={location.pathname === '/admin/addissue' ? activeStyle : {}}
+                                            >Add Issue</Link>
                                         )}
 
                                         {checkedNames.HelpDesk.includes('Raise_Ticket') && (

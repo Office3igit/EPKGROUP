@@ -2,17 +2,15 @@ import React, { useState } from 'react'
 import { Button, Container } from 'react-bootstrap';
 import { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faBell, faEye, faPen  } from '@fortawesome/free-solid-svg-icons';
 import { CSVLink } from 'react-csv';
 import jsPDF from 'jspdf';
 import { useReactToPrint } from 'react-to-print';
 import 'jspdf-autotable';
 import ReactPaginate from 'react-paginate';
-import { ScaleLoader } from 'react-spinners';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import emptyfolder from '../../../assets/admin/assets/img/empty-folder.png'
-
 function TicketsList() {
 
     // ------------------------------------------------------------------------------------------------
@@ -59,7 +57,7 @@ function TicketsList() {
             emp_id: userempid
         };
         try {
-            const response = await fetch('https://epkgroup.in/crm/api/public/api/view_raiseticket_list', {
+            const response = await fetch('http://epkgroup.in/crm/api/public/api/view_newraiseticket_list', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -164,8 +162,6 @@ function TicketsList() {
 
     // ========================================
     // CSV start
-
-
     const handleExportCSV = () => {
         const csvData = tableData.map(({ emp_name, ticket_id, ticket_title, role_name, issue_type_name, Assigned_empname, status }, index) => ({
             '#': index + 1,
@@ -293,18 +289,13 @@ function TicketsList() {
           }
         `}
             </style>
-
-
-
             <Container style={{ padding: '10px 40px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
                     <h3 className="mb-5" style={{ fontWeight: 'bold', color: '#00275c' }}>Tickets List</h3>
-                    {(userrole === "1" || userrole === "2") && (<Button onClick={() => { GoToaddmanualRaiseticket() }}>Add Manual Raise Ticket</Button>)}
+                    {/* {(userrole.includes('1') || userrole.includes('2')) && (<Button onClick={() => { GoToaddmanualRaiseticket() }}>Add Manual Raise Ticket</Button>)} */}
                 </div>
-
                 {/* ------------------------------------------------------------------------------------------------ */}
                 {/* List table */}
-
                 <div style={{ display: 'flex', alignItems: 'center', paddingBottom: '10px', justifyContent: 'space-between', flexWrap:'wrap', gap:'17px' }}>
                     <div>
                         <input
@@ -313,7 +304,10 @@ function TicketsList() {
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             style={myStyles1}
-                        />
+                        />    
+                        <Button variant="primary" >
+                        <FontAwesomeIcon icon="fa-solid fa-filter" /> Filter
+                        </Button>
                     </div>
                     <div>
                         <button style={myStyles}>{handleExportCSV()}</button>
@@ -321,23 +315,21 @@ function TicketsList() {
                         <button style={myStyles} onClick={handlePrint}><i className="fas fa-print" style={{ fontSize: '25px', color: '#0d6efd' }}></i></button>
                     </div>
                 </div>
-
                 <div ref={componentRef} style={{ width: '100%', overflowX: 'auto' }}>
-
                     <table className="table" style={{ minWidth: '100%', width: 'max-content' }}>
                         <thead className="thead-dark">
                             <tr>
                                 <th style={{ width: '80px' }}>S.No</th>
-                                <th style={{ width: '150px' }}>Employee Name</th>
                                 <th style={{ width: '150px' }}>Ticket ID</th>
-                                <th style={{ width: '200px' }}>Ticket Title</th>
+                                <th style={{ width: '150px' }}>Raised Date</th>
+                                <th style={{ width: '150px' }}>Employee ID</th>
+                                <th style={{ width: '150px' }}>Employee Name</th>
+                                <th style={{ width: '150px' }}>Department</th>
                                 <th style={{ width: '100px' }}>Issue Type</th>
-                                {(userrole === "1" || userrole === "2") && (<th style={{ width: '200px' }}>Assigned Department</th>)}
-                                {(userrole === "1" || userrole === "2") && (<th style={{ width: '200px' }}>Assigned Employee</th>)}
+                                <th style={{ width: '200px' }}>Status</th>
                                 <th style={{ width: '100px' }} className='no-print'>Attachment</th>
-                                <th style={{ width: '100px' }}>Status</th>
-                                {(userrole === "1" || userrole === "2") && (<th style={{ width: '100px' }} className='no-print'>Action</th>)}
-
+                                {(userrole.includes('1') || userrole.includes('2')) && (<th style={{ width: '100px' }} className='no-print'>Action</th>)}
+                                <th style={{ width: '100px' }} className='no-print'>Esclation</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -347,22 +339,18 @@ function TicketsList() {
                                         <td colSpan="8" style={{ textAlign: 'center' }}>No search data found</td>
                                     </tr>
                                 ) : (
-
-
                                     filteredleaveData.map((row, index) => {
-
                                         const serialNumber = currentPage * itemsPerPage + index + 1;
-
                                         return (
                                             <tr key={row.id}>
                                                 <th scope="row">{serialNumber}</th>
-                                                <td>{row.emp_name}</td>
                                                 <td>{row.ticket_id}</td>
-                                                <td>{row.ticket_title}</td>
-                                                <td>{row.issue_type_name}</td>
-                                                {(userrole === "1" || userrole === "2") && (<td>{row.role_name !== null ? row.role_name : '-'}</td>)}
-                                                {(userrole === "1" || userrole === "2") && (<td>{row.Assigned_empname !== null ? row.Assigned_empname : '-'}</td>)}
-
+                                                <td>{row.created_date}</td>
+                                                <td>{row.hrms_emp_id}</td>
+                                                <td>{row.emp_name}</td>
+                                                <td>{row.department_name}</td>
+                                                <td>{row.issue_name}</td>
+                                                <td>{row.status_description}</td>
                                                 <td className='no-print'>
                                                     {row.attachment !== '-' ?
                                                         <button className="btn-view" onClick={() => { window.open(`https://epkgroup.in/crm/api/storage/app/${row.attachment}`, '_blank') }}>
@@ -371,29 +359,27 @@ function TicketsList() {
 
                                                         : <img src={emptyfolder} alt='empty' style={{ width: '40%' }} />}
                                                 </td>
-                                                <td>{row.status}</td>
-
-
-                                                {(userrole === "1" || userrole === "2") && (
-                                                    <td style={{ display: 'flex', gap: '10px' }} className='no-print'>
+                                                {(userrole.includes('1') || userrole.includes('2')) && (
+                                                    <>
+                                                    <td className='no-print'>
                                                         <button className="btn-edit" onClick={() => { GoToEditPage(row.id) }}>
                                                             <FontAwesomeIcon icon={faPen} />
                                                         </button>
+                                                    </td>
+                                                    <td  className='no-print'>
                                                         <button className="btn-delete" onClick={() => handleDelete(row.id)}>
-                                                            <FontAwesomeIcon icon={faTrashCan} />
+                                                            <FontAwesomeIcon icon={faBell} />
                                                         </button>
                                                     </td>
+                                                    </>
                                                 )}
                                             </tr>
                                         );
                                     })
-
                                 )}
                         </tbody>
                     </table>
-
                 </div>
-
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
                     <ReactPaginate
                         previousLabel={<span aria-hidden="true">&laquo;</span>}
@@ -418,14 +404,9 @@ function TicketsList() {
                         activeLinkClassName={'bg-dark text-white'}
                     />
                 </div>
-
                 {/* ------------------------------------------------------------------------------------------------ */}
-
-
-
             </Container>
         </>
     )
 }
-
 export default TicketsList

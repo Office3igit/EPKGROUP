@@ -13,7 +13,7 @@ function EditIssueType() {
     const { id } = useParams();
     const navigate = useNavigate();
     const handleVisitaddshiftslot = () => {
-        navigate(`/admin/issuetype`);
+        navigate(`/admin/addissue`);
     };
     // loading state
     const [loading, setLoading] = useState(true);
@@ -89,15 +89,12 @@ function EditIssueType() {
                 });
 
                 console.error('There was an error with the API:', error);
-
             });
     };
-
     const handleCancel = () => {
         handleVisitaddshiftslot()
         setFormErrors({});
     };
-
     const handleInputChange = (setter) => (e) => {
         let value = e.target.value;
         if (value.startsWith(' ')) {
@@ -105,14 +102,11 @@ function EditIssueType() {
         }
         setter(value);
     };
-
     // ------------------------------------------------------------------------------------------------
     // fetch data fromapi to set initial issue type state
-
     const [data, setData] = useState([]);
-
     useEffect(() => {
-        axios.get(`https://epkgroup.in/crm/api/public/api/editview_issuetype/${id}`, {
+        axios.get(`http://epkgroup.in/crm/api/public/api/editnewview_raiselist/${id}`, {
             headers: {
                 'Authorization': `Bearer ${usertoken}`
             }
@@ -129,17 +123,9 @@ function EditIssueType() {
                 console.log(error);
             });
     }, [id, usertoken]);
-
-    console.log("data------------->", data)
-
+    console.log("vieweditraisedata------------->", data)
     // ------------------------------------------------------------------------------------------------
-
-
-
-
     return (
-
-
         <>
             {loading ? (
                 <div style={{
@@ -156,7 +142,6 @@ function EditIssueType() {
                     <h5 className='mb-5' style={{ fontWeight: 'bold', color: '#00275c' }}>Edit Issue Type</h5>
 
                     {/* Issue Type Edit form */}
-
                     <Row className='mb-5 shift__row'>
                         <Col>
                             <Form>
@@ -165,7 +150,6 @@ function EditIssueType() {
                                     <Form.Control type="text" placeholder="Enter Issue Type" value={issueType} onChange={(e) => handleInputChange(setIssueType)(e)} />
                                     {formErrors.issueType && <span className="text-danger">{formErrors.issueType}</span>}
                                 </Form.Group>
-
                             </Form>
                         </Col>
                         <Col>
@@ -177,8 +161,7 @@ function EditIssueType() {
                                     <option value="In-Active">In-Active</option>
                                 </Form.Control>
                                 {formErrors.status && <span className="text-danger">{formErrors.status}</span>}
-                            </Form.Group>
-
+                            </Form.Group>  
                         </Col>
                         <div className='submit__cancel mt-5'>
                             <Button variant="primary" type="submit" className='shift__submit__btn' onClick={handleSave}>
@@ -189,11 +172,9 @@ function EditIssueType() {
                             </Button>
                         </div>
                     </Row>
-
                 </Container>
             )}
         </>
     )
 }
-
 export default EditIssueType

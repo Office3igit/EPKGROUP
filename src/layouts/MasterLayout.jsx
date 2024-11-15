@@ -373,7 +373,7 @@ function MasterLayout() {
                             <Route path="/editassets/:id" element={<AuthRoute><EditAssets /></AuthRoute>} />
 
 
-                            <Route path="/issuetype" element={<AuthRoute><IssueType /></AuthRoute>} />
+                            <Route path="/addissue" element={<AuthRoute><IssueType /></AuthRoute>} />
                             <Route path="/editissuetype/:id" element={<AuthRoute><EditIssueType /></AuthRoute>} />
 
                             <Route path="/raiseticket" element={<AuthRoute><RaiseTicket /></AuthRoute>} />
