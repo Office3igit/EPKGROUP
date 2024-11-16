@@ -1,16 +1,23 @@
 import React, { useState } from 'react'
-import { Button, Container } from 'react-bootstrap';
+import { Button, Container,Modal,Form } from 'react-bootstrap';
 import { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell, faEye, faPen  } from '@fortawesome/free-solid-svg-icons';
+import { faBell, faEye, faFile, faPen  } from '@fortawesome/free-solid-svg-icons';
 import { CSVLink } from 'react-csv';
 import jsPDF from 'jspdf';
 import { useReactToPrint } from 'react-to-print';
 import 'jspdf-autotable';
 import ReactPaginate from 'react-paginate';
+import { Dialog, DialogActions, DialogTitle } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import emptyfolder from '../../../assets/admin/assets/img/empty-folder.png'
+import axios from 'axios';
+import { ScaleLoader } from 'react-spinners';
+import Select from 'react-select';
+import SendMail from "../../../assets/images/SendMail.gif"
+import Escalation from "../../../assets/images/Escalation.gif"
+import NotActive from "../../../assets/images/NotActive.gif"
+
 function TicketsList() {
 
     // ------------------------------------------------------------------------------------------------
@@ -46,10 +53,87 @@ function TicketsList() {
     // Table list view api
 
     const [tableData, setTableData] = useState([]);
+    const [showFilterModal, setShowFilterModal] = useState(false);
+    const [departmentDropdown, setDepartmentDropdown] = useState([]);
+    const [selectedDepartment, setSelectedDepartment] = useState('');
+    const [IssuesType, setIssuesType] = useState([]);
+    const [selectedEmployee, setSelectedEmployee] = useState('');
+    const [fromDate, setFromDate] = useState('');
+    const [toDate, setToDate] = useState('');
+    const [status, setStatus] = useState('');
+    const [refreshKey, setRefreshKey] = useState(0);
+    const [open, setOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const [isNotActive, setIsNotActive] = useState(false);
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, []); 
+
+       const applyFilter = async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+
+        console.log('from date', fromDate);
+
+        formData.append('department_id', selectedDepartment);
+        formData.append('issue_type', selectedEmployee);
+        formData.append('emp_id', (userrole === "1" || userrole === "2") ? selectedEmployee : userempid);
+        formData.append('from_date', fromDate);
+        formData.append('to_date', toDate);
+        formData.append('status', status);
+
+        try {
+            const response = await fetch('http://epkgroup.in/crm/api/public/api/raiseticket_filter', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Authorization': `Bearer ${usertoken}`
+                }
+            });
+
+            const data = await response.json();
+
+            const { status, message } = data;
+
+            if (status === 'success') {
+                setTableData(data.data);
+                setShowFilterModal(false);
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: message,
+
+                });
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: `Error: ${error.message}`,
+            });
+        }
+    };
+
+    useEffect(() => {
+        const fetchrole = async () => {
+            try {
+                const response = await axios.get('https://epkgroup.in/crm/api/public/api/department_list', {
+                    headers: {
+                        'Authorization': `Bearer ${usertoken}`
+                    }
+                });
+                const data = response.data.data || [];
+                setDepartmentDropdown(data);
+            } catch (error) {
+                console.error('Error fetching department options:', error);
+            }
+        };
+
+        fetchrole();
+    }, [usertoken]);
 
     const fetchData = async () => {
         const requestData = {
@@ -76,6 +160,52 @@ function TicketsList() {
         } catch (error) {
             console.error('Error fetching data:', error);
         }
+    };
+
+    
+    useEffect(() => {
+        const fetchData = async () => {
+            const apiUrl = 'http://epkgroup.in/crm/api/public/api/view_issuetypes';
+            try {
+                const response = await axios.get(apiUrl, {
+                    headers: {
+                        'Authorization': `Bearer ${usertoken}`
+                    }
+                });
+                const data = response.data.data;
+                setIssuesType(data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchData();
+    }, [usertoken]);
+
+
+    const formattedDepartmentDropdown = departmentDropdown.map(department => ({
+        label: department.depart_name,
+        value: department.id
+    }));
+
+    const handleSelectDepartmentChange = (selectedOption) => {
+        setSelectedDepartment(selectedOption ? selectedOption.value : null);
+    };
+    const cancelFilter = () => {
+        setSelectedDepartment('');
+        setSelectedEmployee('');
+        setFromDate('');
+        setToDate('');
+        setStatus('');
+        setShowFilterModal(false);
+        setRefreshKey()
+    };
+    const formattedIssuesType = IssuesType.map(employee => ({
+        label: employee.issue_type,
+        value: employee.id
+    }));
+
+    const handleSelectEmployeeChange = (selectedOption) => {
+        setSelectedEmployee(selectedOption ? selectedOption.value : null);
     };
 
     // ------------------------------------------------------------------------------------------------
@@ -277,6 +407,174 @@ function TicketsList() {
     };
 
     // ===============================================
+    const getHoursDifference = (createdDate, createdTime) => {
+        const createdDateTime = new Date(`${createdDate}T${createdTime}`);
+        const currentTime = new Date();
+        const diffInMs = currentTime - createdDateTime;
+        return diffInMs / (1000 * 60 * 60); // Convert milliseconds to hours
+    };
+
+    const Escalaltion_Mail = async (id) => {
+        console.log("esclation maiolid",id);
+        
+        try {
+            const response = await fetch(`https://epkgroup.in/crm/api/public/api/for_escalation_mail/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${usertoken}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            console.log("datajevvvvvvbbbbbaaaaaa",data);
+            
+            const { status, message } = data;
+
+            if (status === 'success') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: message,
+                });
+                // handleVisitprojectlist();
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: message,
+                });
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: `Error: ${error.message}`,
+            });
+        }
+    }
+    // Mail Sended
+    const handleClickOpen = () => {
+        setOpen(true);
+      };
+      const handleClose = () => {
+        setOpen(false);
+      };
+    //   Escalation
+    const handleMailClickOpen = () => {
+        setIsOpen(true);
+      };
+      const handleMailClose = () => {
+        setIsOpen(false);
+      };
+      //Not Active
+    const handleNotActiveOpen = () => {
+        setIsNotActive(true);
+      };
+      const handleNotActiveClose = () => {
+        setIsNotActive(false);
+      };
+
+    // For Escalaltion
+    const renderEscalationButton = (row) => {
+        const hoursDifference = getHoursDifference(row.created_date, row.created_time);
+
+        if (row.escalation_status === 1) {
+            return (
+                <>  
+                <button
+                    className="btn-edit escalation-sended"
+                    onClick={handleClickOpen}
+                >
+                    <FontAwesomeIcon icon={faBell} />
+                </button>
+                <Dialog open={open}>
+                    <img 
+                        src={SendMail}
+                        alt="Loading"
+                        style={{
+                            width: '150px', 
+                            height: '150px', 
+                            display: 'block',
+                            margin: '0 auto 10px', 
+                        }}
+                    />
+                    <DialogTitle>
+                    {"Already escalated mail sent to admin. Kindly wait for response"}
+                    </DialogTitle>
+                    <DialogActions style={{display:"flex",margin:'20px' , justifyContent:"center"}}>
+                    <Button  onClick={handleClose}>OK</Button>
+                    </DialogActions>
+                </Dialog>
+                </>
+            );
+        } else if (row.escalation_status === 0) {
+            if (hoursDifference >= 24) {
+                return (
+                    <>
+                    <button
+                        className="btn-edit escalation-active"
+                        onClick={handleMailClickOpen}
+                    >
+                    <FontAwesomeIcon icon={faBell} />
+                    </button>
+                    <Dialog open={isOpen}style={{backgroundColor: "transparent",}}>
+                    <img 
+                        src={Escalation}
+                        alt="Loading"
+                        style={{
+                            width: '150px', 
+                            height: '150px', 
+                            display: 'block',
+                            margin: '0 auto 10px', 
+                        }}
+                    />
+                    <DialogTitle>
+                    {`Are you sure you want to send the escalation mail for ticket ID ${row.ticket_id}?`}
+                    </DialogTitle>
+                    <DialogActions style={{display:"flex",margin:'20px' ,gap:"10px", justifyContent:"center"}}>
+                    <Button  onClick={()=>{Escalaltion_Mail(row.id);fetchData();}}>Submit</Button>
+                    <Button variant='secondary' onClick={handleMailClose}>Cancel</Button>
+                    </DialogActions>
+                    </Dialog>
+                    </>
+                );
+            } else {
+                return (
+                    <>
+                    <button
+                        className="btn-edit in-active"
+                        onClick={handleNotActiveOpen}
+                    >
+                        <FontAwesomeIcon icon={faBell} />
+                    </button>
+                    <Dialog open={isNotActive}>
+                    <img 
+                        src={NotActive}
+                        alt="Loading"
+                        style={{
+                            width: '150px', 
+                            height: '150px', 
+                            display: 'block',
+                            margin: '0 auto 10px', 
+                        }}
+                    />
+                    <DialogTitle>
+                    {"Not yet reached 24 hours for this ticket escalation"}
+                    </DialogTitle>
+                    <DialogActions style={{display:"flex",margin:'20px' , justifyContent:"center"}}>
+                    <Button  onClick={handleNotActiveClose}>OK</Button>
+                    </DialogActions>
+                    </Dialog>
+                    </>
+                );
+            }
+        }
+    };
 
     return (
         <>
@@ -289,6 +587,17 @@ function TicketsList() {
           }
         `}
             </style>
+            {loading ? (
+                <div style={{
+                    height: '100vh',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    background: '#f6f6f6'
+                }}>
+                    <ScaleLoader color="rgb(20 166 249)" />
+                </div>
+            ) : (
             <Container style={{ padding: '10px 40px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
                     <h3 className="mb-5" style={{ fontWeight: 'bold', color: '#00275c' }}>Tickets List</h3>
@@ -305,9 +614,61 @@ function TicketsList() {
                             onChange={(e) => setSearchTerm(e.target.value)}
                             style={myStyles1}
                         />    
-                        <Button variant="primary" >
+                        <Button variant="primary" onClick={() => setShowFilterModal(true)} >
                         <FontAwesomeIcon icon="fa-solid fa-filter" /> Filter
                         </Button>
+                        <Modal show={showFilterModal} onHide={cancelFilter} dialogClassName="custom-modal">
+                                <Modal.Header closeButton>
+                                    <Modal.Title>Filter</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                    <Form>
+                                        {(userrole === "1" || userrole === "2") && (
+                                            <>
+                                                <Form.Group controlId="formRole">
+                                                    <Form.Label style={{ fontWeight: 'bold' }}>Department</Form.Label>
+                                                    <Select
+                                                        options={formattedDepartmentDropdown}
+                                                        value={formattedDepartmentDropdown.find(option => option.value === selectedDepartment)}
+                                                        onChange={handleSelectDepartmentChange}
+                                                        isClearable
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group controlId="formEmployee">
+                                                    <Form.Label style={{ fontWeight: 'bold' }}>Issues Type</Form.Label>
+                                                    <Select
+                                                        options={formattedIssuesType}
+                                                        value={formattedIssuesType.find(option => option.value === selectedEmployee)}
+                                                        onChange={handleSelectEmployeeChange}
+                                                        isClearable
+                                                    />
+                                                </Form.Group>
+                                            </>
+                                        )}
+                                        <Form.Group controlId="fromDate">
+                                            <Form.Label>From Date</Form.Label>
+                                            <Form.Control type="date" value={fromDate} max="9999-12-31" onChange={(e) => setFromDate(e.target.value)} />
+                                        </Form.Group>
+                                        <Form.Group controlId="toDate">
+                                            <Form.Label>To Date</Form.Label>
+                                            <Form.Control type="date" value={toDate} max="9999-12-31" onChange={(e) => setToDate(e.target.value)} />
+                                        </Form.Group>
+                                        <Form.Group controlId="status">
+                                            <Form.Label>Status</Form.Label>
+                                            <Form.Control as="select" value={status} onChange={(e) => setStatus(e.target.value)}>
+                                                <option value="">Select Status</option>
+                                                <option value="1">Pending</option>
+                                                <option value="2">In-Progress</option>
+                                                <option value="3">Completed</option>
+                                            </Form.Control>
+                                        </Form.Group>
+                                    </Form>
+                                </Modal.Body>
+                                <Modal.Footer>
+                                    <Button variant="secondary" onClick={cancelFilter}>Cancel</Button>
+                                    <Button variant="primary" onClick={applyFilter}>Apply Filter</Button>
+                                </Modal.Footer>
+                            </Modal>
                     </div>
                     <div>
                         <button style={myStyles}>{handleExportCSV()}</button>
@@ -349,16 +710,19 @@ function TicketsList() {
                                                 <td>{row.hrms_emp_id}</td>
                                                 <td>{row.emp_name}</td>
                                                 <td>{row.department_name}</td>
-                                                <td>{row.issue_name}</td>
+                                                <td>{row.description}</td>
                                                 <td>{row.status_description}</td>
                                                 <td className='no-print'>
                                                     {row.attachment !== '-' ?
                                                         <button className="btn-view" onClick={() => { window.open(`https://epkgroup.in/crm/api/storage/app/${row.attachment}`, '_blank') }}>
-                                                            <FontAwesomeIcon icon={faEye} /> View
+                                                            <FontAwesomeIcon icon={faEye} />
                                                         </button>
 
-                                                        : <img src={emptyfolder} alt='empty' style={{ width: '40%' }} />}
+                                                        : 
+                                                        <FontAwesomeIcon  onClick={() => alert('No attachment available for this ticket')} className="btn-file"  icon={faFile} />}
                                                 </td>
+                                                
+                                                
                                                 {(userrole.includes('1') || userrole.includes('2')) && (
                                                     <>
                                                     <td className='no-print'>
@@ -366,11 +730,8 @@ function TicketsList() {
                                                             <FontAwesomeIcon icon={faPen} />
                                                         </button>
                                                     </td>
-                                                    <td  className='no-print'>
-                                                        <button className="btn-delete" onClick={() => handleDelete(row.id)}>
-                                                            <FontAwesomeIcon icon={faBell} />
-                                                        </button>
-                                                    </td>
+                                                   
+                                                 <td>{renderEscalationButton(row)}</td>
                                                     </>
                                                 )}
                                             </tr>
@@ -406,6 +767,7 @@ function TicketsList() {
                 </div>
                 {/* ------------------------------------------------------------------------------------------------ */}
             </Container>
+            )}
         </>
     )
 }

@@ -284,7 +284,7 @@ function IssueType() {
         const csvReport = {
             data: csvData,
             headers: headers,
-            filename: 'IssueTypeList.csv',
+            filename: 'AddIssue.csv',
         };
 
         return <CSVLink {...csvReport}><i className="fas fa-file-csv" style={{ fontSize: '25px', color: '#0d6efd' }}></i></CSVLink>;
@@ -315,7 +315,7 @@ function IssueType() {
             head: [['S.No', 'Department_Name','Role', 'Issue Type', 'Member_Name','Created_Name', 'Status']],
             body: data,
         });
-        doc.save('IssueTypeList.pdf');
+        doc.save('AddIssue.pdf');
     };
 
     // PDF End
@@ -498,7 +498,7 @@ function IssueType() {
                                                 <td>{row.teams_name}</td>
                                                 <td>{row.membername}</td>
                                                 <td>{row.created_name}</td>
-                                                <td className="no-print" style={{ display: 'flex', gap: '10px' }}>
+                                                <td className="no-print">
                                                     <button className="btn-edit" onClick={() => { GoToEditPage(row.id) }}>
                                                         <FontAwesomeIcon icon={faPen} />
                                                     </button>

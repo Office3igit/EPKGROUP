@@ -751,7 +751,7 @@ function Sidebar() {
                                     <Link onClick={HandleclickEmployeeManagement} className="nav-link collapsed" to="#" data-bs-toggle="collapse" data-bs-target="#Employee_Management" aria-expanded="false" aria-controls="Employee_Management">
                                         <div className="sb-nav-link-icon"><FontAwesomeIcon icon={faUser} /></div>
                                         Employee Management
-                                        <div className="sb-sidenav-collapse-arrow"><i className="fas fa-angle-down"></i></div>
+                                        <div className="sb-sidenav-collapse-arrow"><i className="fas fa-angle-down">fdsfsdf</i></div>
                                     </Link>
 
                                     <div className="collapse" id="Employee_Management" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
