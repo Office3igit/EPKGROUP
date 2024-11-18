@@ -17,7 +17,7 @@ import api from "../../../api";
 import './AttendanceDashboard.css'
 
 const AttendanceDashboardPowerBIReport = () => {
-  const embedUrl = "https://app.powerbi.com/view?r=eyJrIjoiOTU1MjQ2ZTQtYzZkYS00Mzk4LWJhOTEtMmExMTJjN2QyMTNjIiwidCI6IjAwY2I0OWZkLTcwN2YtNDU1Yi1hZGQxLTkyMmY5NDVhZGJhNSJ9";  // Use your actual embed URL
+  const embedUrl = "https://app.powerbi.com/view?r=eyJrIjoiYjBmNDcyMWQtYjg4Zi00M2Y1LTk0NTctYTQ4YTNhYTFmZDIzIiwidCI6IjAwY2I0OWZkLTcwN2YtNDU1Yi1hZGQxLTkyMmY5NDVhZGJhNSJ9";  // Use your actual embed URL
 
   //  Retrieve userData from local storage
   const userData = JSON.parse(localStorage.getItem('userData'));
