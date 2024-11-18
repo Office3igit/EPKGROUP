@@ -93,7 +93,7 @@ function EditIssueType() {
     ? selectedEmployee.join(',')
     : null;
     useEffect(() => {
-      const apiUrl = `https://epkgroup.in/crm/api/public/api/multipledepartmentbasedrole_list/${formattedSelectedDepartment || selectedRole}`;
+      const apiUrl = `https://epkgroup.in/crm/api/public/api/multipledepartmentbasedrole_list/${formattedSelectedDepartment || selectedDepartment }`;
       const fetchData = async () => {
           try {
               const response = await axios.get(apiUrl,
@@ -109,13 +109,13 @@ function EditIssueType() {
           }
       };
       fetchData();
-  }, [formattedSelectedDepartment,usertoken,selectedRole]);
+  }, [formattedSelectedDepartment,usertoken,selectedDepartment]);
 
     // ---------------------------------------------------------------------------------------------------------
 
     // --------------------------------------- Employee Dropdown ------------------------------------------------
     useEffect(() => {
-        const apiUrl = `https://epkgroup.in/crm/api/public/api/multiplesupervisorrole_list/${formattedSelectedRole || selectedRole}`;
+        const apiUrl = `https://epkgroup.in/crm/api/public/api/multiplesupervisorrole_list/${formattedSelectedRole||selectedRole}`;
         const fetchData = async () => {
             try {
                 const response = await axios.get(apiUrl,
@@ -134,6 +134,8 @@ function EditIssueType() {
     }, [formattedSelectedRole,usertoken,selectedRole]);
 
         const handleSubmit = (e) => {
+            console.log("edeeeee",e);
+            
         e.preventDefault();
         // Validate input fields
         const errors = {};
@@ -156,10 +158,10 @@ function EditIssueType() {
         setFormErrors({});
         const requestData = {
             id:id,
-            dep_id: selectedDepartment.join(','),
+            dep_id: selectedDepartment.join(', '),
+            teams:selectedRole.join(','),
             assign_members: formattedSelectedEmployees,
             issue_type:selectedIssueType,
-            teams:selectedRole.join(','),
             status: '1',
             updated_by: userempid
         };
@@ -211,7 +213,7 @@ function EditIssueType() {
     };
     const [data, setData] = useState([]);
     useEffect(() => {
-        axios.get(`http://epkgroup.in/crm/api/public/api/editnewview_raiselist/${id}`, {
+        axios.get(`http://epkgroup.in/crm/api/public/api/editview_newissuetype/${id}`, {
             headers: {
                 'Authorization': `Bearer ${usertoken}`
             }
@@ -219,11 +221,10 @@ function EditIssueType() {
             .then(res => {
                 if (res.status === 200) {
                     console.log("viewdata",res.data.data);
-                    
                     setData(res.data.data);
-                    setSelectedDepartment(res.data.data.assign_deps)
-                    setSelectedRole(res.data.data.assign_teams)
-                    setSelectedEmployee(res.data.data.assign_empid)
+                    setSelectedDepartment(res.data.data.dep_id)
+                    setSelectedRole(res.data.data.teams)
+                    setSelectedEmployee(res.data.data.assign_members)
                     setLoading(false);
                 }
             })
@@ -271,7 +272,7 @@ function EditIssueType() {
                                         type="text"
                                         // value={data.description}
                                         onChange={(e) => setSelectedIssueType(e.target.value)}
-                                        value={selectedIssueType?selectedIssueType:data.description}
+                                        value={selectedIssueType?selectedIssueType:data.issue_type}
                                         // value={selectedIssueType}
                                     />
                                     {formErrors.selectedIssueType && <span className="text-danger">{formErrors.selectedIssueType}</span>}
@@ -297,7 +298,7 @@ function EditIssueType() {
                                     <MultiSelect
                                         options={formattedEmployeesDropdown}
                                         onChange={handleSelectEmployeeChange}
-                                        value={formattedEmployeesDropdown.filter(option => selectedEmployee.includes(option.value))}
+                                        value={formattedEmployeesDropdown.filter(option => selectedEmployee.includes(option.value))  }
                                         labelledBy="Select"
                                     />
                                     {formErrors.selectedEmployee && <span className="text-danger">{formErrors.selectedEmployee}</span>}
