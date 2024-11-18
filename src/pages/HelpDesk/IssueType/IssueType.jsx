@@ -398,19 +398,6 @@ function IssueType() {
                                 </Form.Group>
                             </Col>
                             <Col>
-                                <Form.Group controlId="formTicketTitle">
-                                    <Form.Label  style={{ fontWeight: 'bold'  }}>Issue Type <sup><FontAwesomeIcon icon={faStarOfLife} style={{ color: '#fb1816', fontSize: '8px' }} /></sup></Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        value={selectedIssueType}
-                                        onChange={(e) => setSelectedIssueType(e.target.value)}
-                                    />
-                                    {formErrors.selectedIssueType && <span className="text-danger">{formErrors.selectedIssueType}</span>}
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                        <Row> 
-                            <Col>
                                 <Form.Group controlId="formRole">
                                     <Form.Label style={{ fontWeight: 'bold' }}>Role Name <sup><FontAwesomeIcon icon={faStarOfLife} style={{ color: '#fb1816', fontSize: '8px' }} /></sup></Form.Label>
                                     <MultiSelect
@@ -422,6 +409,8 @@ function IssueType() {
                                     {formErrors.selectedRole && <span className="text-danger">{formErrors.selectedRole}</span>}
                                 </Form.Group>
                             </Col>
+                        </Row>
+                        <Row> 
                             <Col>
                                 <Form.Group controlId="formEmployee">
                                     <Form.Label style={{ fontWeight: 'bold' }}>Select Member <sup><FontAwesomeIcon icon={faStarOfLife} style={{ color: '#fb1816', fontSize: '8px' }} /></sup></Form.Label>
@@ -432,6 +421,17 @@ function IssueType() {
                                         labelledBy="Select"
                                     />
                                     {formErrors.selectedEmployee && <span className="text-danger">{formErrors.selectedEmployee}</span>}
+                                </Form.Group>
+                            </Col>
+                            <Col>
+                                <Form.Group controlId="formTicketTitle">
+                                    <Form.Label  style={{ fontWeight: 'bold'  }}>Issue Type <sup><FontAwesomeIcon icon={faStarOfLife} style={{ color: '#fb1816', fontSize: '8px' }} /></sup></Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        value={selectedIssueType}
+                                        onChange={(e) => setSelectedIssueType(e.target.value)}
+                                    />
+                                    {formErrors.selectedIssueType && <span className="text-danger">{formErrors.selectedIssueType}</span>}
                                 </Form.Group>
                             </Col>
                         </Row>

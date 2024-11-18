@@ -69,7 +69,7 @@ const RaiseTicket = () => {
         formData.append('created_by', userempid);
         console.log("formData",formData);
         
-        axios.post('http://epkgroup.in/crm/api/public/api/addemployee_newraise_ticket', formData, {
+        axios.post('https://epkgroup.in/crm/api/public/api/addemployee_newraise_ticket', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': `Bearer ${usertoken}`

@@ -97,7 +97,7 @@ const Tenant_Command = ({ Commands_id }) => {
         console.log('Condiion Working', Commands_id);
         try {
             const response = await fetch(
-                `http://epkgroup.in/crm/api/public/api/tenant_status_command_list/${Commands_id}`,
+                `https://epkgroup.in/crm/api/public/api/tenant_status_command_list/${Commands_id}`,
                 {
                     method: "GET", // Specify the method as POST
                     headers: {
