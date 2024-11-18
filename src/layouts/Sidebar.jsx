@@ -31,6 +31,7 @@ function Sidebar() {
         navigate('/admin/attendancedashboard');
     }
 
+    
     const HandleclickEmployeeManagement = (e) => {
         e.preventDefault();
         navigate('/admin/employeedashboard');
@@ -748,10 +749,12 @@ function Sidebar() {
                         ) && (
                                 <>
                                     {/* ---------------------------------------------------------------------------------------- */}
-                                    <Link onClick={HandleclickEmployeeManagement} className="nav-link collapsed" to="#" data-bs-toggle="collapse" data-bs-target="#Employee_Management" aria-expanded="false" aria-controls="Employee_Management">
+                                    <Link 
+                                        onClick={userrole === "1" || userrole === "2" ? HandleclickEmployeeManagement : undefined}
+                                    className="nav-link collapsed" to="#" data-bs-toggle="collapse" data-bs-target="#Employee_Management" aria-expanded="false" aria-controls="Employee_Management">
                                         <div className="sb-nav-link-icon"><FontAwesomeIcon icon={faUser} /></div>
                                         Employee Management
-                                        <div className="sb-sidenav-collapse-arrow"><i className="fas fa-angle-down"></i></div>
+                                        <div className="sb-sidenav-collapse-arrow"><i className="fas fa-angle-down">fdsfsdf</i></div>
                                     </Link>
 
                                     <div className="collapse" id="Employee_Management" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
@@ -1112,7 +1115,9 @@ function Sidebar() {
 
                         {hasAccessToAttendance() && checkedNames.Attendance.length > 0 && (
                             <>
-                                <Link onClick={HandleclickAttendanceCalculation} className="nav-link collapsed" to="#" data-bs-toggle="collapse" data-bs-target="#Attendance" aria-expanded="false" aria-controls="Attendance">
+                                <Link
+                                        onClick={userrole === "1" || userrole === "2" ? HandleclickAttendanceCalculation : undefined}
+                                        className="nav-link collapsed" to="#" data-bs-toggle="collapse" data-bs-target="#Attendance" aria-expanded="false" aria-controls="Attendance">
                                     <div className="sb-nav-link-icon"><FontAwesomeIcon icon={faClipboardUser} /></div>
                                     Attendance Calculation
                                     <div className="sb-sidenav-collapse-arrow"><i className="fas fa-angle-down"></i></div>
@@ -1953,7 +1958,7 @@ function Sidebar() {
                             <>
                                 <Link className="nav-link collapsed" to="#" data-bs-toggle="collapse" data-bs-target="#HelpDesk" aria-expanded="false" aria-controls="HelpDesk">
                                     <div className="sb-nav-link-icon"><FontAwesomeIcon icon={faHandshakeAngle} /></div>
-                                    Employee Help Desk
+                                    Help Desk - Employee
                                     <div className="sb-sidenav-collapse-arrow"><i className="fas fa-angle-down"></i></div>
                                 </Link>
 
@@ -2015,7 +2020,6 @@ function Sidebar() {
 
                             <>
                                 <Link
-                                    // onClick={HandleclickAttendanceCalculation}
                                     className="nav-link collapsed"
                                     to="#"
                                     data-bs-toggle="collapse"
