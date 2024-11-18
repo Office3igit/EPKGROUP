@@ -1,7 +1,7 @@
 import React from 'react';
 
 const EmployeeDashboardPowerBIReport = () => {
-  const embedUrl = "https://app.powerbi.com/view?r=eyJrIjoiNDMyYjljNjEtNDk4ZC00YjVhLThmZWYtZGIyNGQ0NGJhZTBlIiwidCI6IjAwY2I0OWZkLTcwN2YtNDU1Yi1hZGQxLTkyMmY5NDVhZGJhNSJ9"; 
+  const embedUrl = "https://app.powerbi.com/view?r=eyJrIjoiMzVjZTk4OGEtY2JiOC00OTI4LThiNzgtYjU1NGFlM2YyNDhhIiwidCI6IjAwY2I0OWZkLTcwN2YtNDU1Yi1hZGQxLTkyMmY5NDVhZGJhNSJ9"; 
 
 
   return (

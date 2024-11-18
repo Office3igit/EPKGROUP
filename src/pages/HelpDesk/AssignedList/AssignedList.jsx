@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Container } from 'react-bootstrap';
 import { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faFile, faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { CSVLink } from 'react-csv';
 import jsPDF from 'jspdf';
 import { useReactToPrint } from 'react-to-print';
@@ -360,12 +360,14 @@ function AssignedList() {
                                                 <td className='no-print'>
                                                     {row.attachment !== '-' ?
                                                         <button className="btn-view" onClick={() => { window.open(`https://epkgroup.in/crm/api/storage/app/${row.attachment}`, '_blank') }}>
-                                                            <FontAwesomeIcon icon="fa-solid fa-eye" />View
+                                                            <FontAwesomeIcon icon="fa-solid fa-eye" />
                                                         </button>
-
-                                                        : <img src={emptyfolder} alt='empty' style={{ width: '30%' }} />}
+                                                        :  
+                                                            <FontAwesomeIcon 
+                                                            onClick={() => alert('No attachment available for this ticket')} className="btn-file" icon={faFile} />
+                                                            }
                                                 </td>
-                                                <td style={{ display: 'flex', gap: '10px' }} className='no-print'>
+                                                <td className='no-print'>
                                                     <button className="btn-edit" onClick={() => { GoToEditPage(row.id, row.ticket_id) }}>
                                                         <FontAwesomeIcon icon={faPen} />
                                                     </button>
