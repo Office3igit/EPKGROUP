@@ -73,14 +73,20 @@ function EditIssueType() {
     const handleSelectDepartmentChange = (selectedOptions) => {
         const selectedIds = selectedOptions.map(option => option.value);
         setSelectedDepartment(selectedIds);
+        setSelectedRole('')
+        setSelectedEmployee('')
     };
     const handleSelectRoleChange = (selectedOptions) => {
         const selectedIds = selectedOptions.map(option => option.value);
         setSelectedRole(selectedIds);
+        setSelectedDepartment(selectedDepartment)
+        setSelectedEmployee('')
     };
     const handleSelectEmployeeChange = (selectedOptions) => {
         const selectedIds = selectedOptions.map(option => option.value);
         setSelectedEmployee(selectedIds);
+        setSelectedDepartment(selectedDepartment)
+        setSelectedRole(selectedRole)
     };
     
     const formattedSelectedDepartment = Array.isArray(selectedDepartment) 
@@ -92,7 +98,12 @@ function EditIssueType() {
     const formattedSelectedEmployees = Array.isArray(selectedEmployee) 
     ? selectedEmployee.join(',')
     : null;
+    console.log("role",selectedRole);
+    console.log("dept",selectedDepartment);
+    
     useEffect(() => {
+        console.log("role",selectedRole);
+        console.log("dept",selectedDepartment);
       const apiUrl = `https://epkgroup.in/crm/api/public/api/multipledepartmentbasedrole_list/${formattedSelectedDepartment || selectedDepartment }`;
       const fetchData = async () => {
           try {
@@ -158,14 +169,14 @@ function EditIssueType() {
         setFormErrors({});
         const requestData = {
             id:id,
-            dep_id: selectedDepartment.join(', '),
-            teams:selectedRole.join(','),
-            assign_members: formattedSelectedEmployees,
+            dep_id:selectedDepartment|| formattedSelectedDepartment,
+            teams: selectedRole||formattedSelectedRole,
+            assign_members:selectedEmployee||formattedSelectedEmployees,
             issue_type:selectedIssueType,
             status: '1',
             updated_by: userempid
         };
-        axios.put(`http://epkgroup.in/crm/api/public/api/update_newissuetype`, requestData, {
+        axios.put(`https://epkgroup.in/crm/api/public/api/update_newissuetype`, requestData, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${usertoken}`
@@ -213,7 +224,7 @@ function EditIssueType() {
     };
     const [data, setData] = useState([]);
     useEffect(() => {
-        axios.get(`http://epkgroup.in/crm/api/public/api/editview_newissuetype/${id}`, {
+        axios.get(`https://epkgroup.in/crm/api/public/api/editview_newissuetype/${id}`, {
             headers: {
                 'Authorization': `Bearer ${usertoken}`
             }
@@ -225,7 +236,9 @@ function EditIssueType() {
                     setSelectedDepartment(res.data.data.dep_id)
                     setSelectedRole(res.data.data.teams)
                     setSelectedEmployee(res.data.data.assign_members)
+                    setSelectedIssueType(res.data.data.issue_type)
                     setLoading(false);
+               
                 }
             })
             .catch(error => {
@@ -272,7 +285,7 @@ function EditIssueType() {
                                         type="text"
                                         // value={data.description}
                                         onChange={(e) => setSelectedIssueType(e.target.value)}
-                                        value={selectedIssueType?selectedIssueType:data.issue_type}
+                                        value={selectedIssueType}
                                         // value={selectedIssueType}
                                     />
                                     {formErrors.selectedIssueType && <span className="text-danger">{formErrors.selectedIssueType}</span>}

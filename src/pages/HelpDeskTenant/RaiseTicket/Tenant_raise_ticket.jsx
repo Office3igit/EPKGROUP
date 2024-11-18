@@ -101,7 +101,7 @@ const Tenant_raise_ticket = () => {
         formData.append('status', 1);
         formData.append('created_by', userempid);
 
-        axios.post('http://epkgroup.in/crm/api/public/api/addtenant_newraise_ticket', formData, {
+        axios.post('https://epkgroup.in/crm/api/public/api/addtenant_newraise_ticket', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': `Bearer ${usertoken}`

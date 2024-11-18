@@ -165,7 +165,7 @@ function TicketsList() {
     
     useEffect(() => {
         const fetchData = async () => {
-            const apiUrl = 'http://epkgroup.in/crm/api/public/api/view_issuetypes';
+            const apiUrl = 'https://epkgroup.in/crm/api/public/api/view_issuetypes';
             try {
                 const response = await axios.get(apiUrl, {
                     headers: {
