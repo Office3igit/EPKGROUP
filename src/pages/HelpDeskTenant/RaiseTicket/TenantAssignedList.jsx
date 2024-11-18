@@ -96,7 +96,7 @@ function Tenant_assign_list() {
     setLoading(true);
     try {
       const response = await fetch(
-        "http://epkgroup.in/crm/api/public/api/tenant_view_newraiseassign_list",
+        "https://epkgroup.in/crm/api/public/api/tenant_view_newraiseassign_list",
         {
           method: "POST", // Set the method to POST
           headers: {
@@ -224,7 +224,7 @@ function Tenant_assign_list() {
 
     try {
       const response = await fetch(
-        "http://epkgroup.in/crm/api/public/api/tenant_raiseticket_filter",
+        "https://epkgroup.in/crm/api/public/api/tenant_raiseticket_filter",
         {
           method: "POST",
           body: formData,
@@ -490,7 +490,7 @@ function Tenant_assign_list() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const apiUrl = "http://epkgroup.in/crm/api/public/api/view_issuetypes";
+      const apiUrl = "https://epkgroup.in/crm/api/public/api/view_issuetypes";
       try {
         const response = await axios.get(apiUrl, {
           headers: {
