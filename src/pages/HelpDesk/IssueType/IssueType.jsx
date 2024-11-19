@@ -279,7 +279,7 @@ function IssueType() {
                 });
     
                 if (reason) {
-                    const response = await fetch('http://epkgroup.in/crm/api/public/api/delete_newissuetype', {
+                    const response = await fetch('https://epkgroup.in/crm/api/public/api/delete_newissuetype', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
