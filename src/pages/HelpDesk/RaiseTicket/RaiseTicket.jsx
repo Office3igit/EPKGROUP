@@ -67,7 +67,6 @@ const RaiseTicket = () => {
         formData.append('attachment', attachment); // Assuming attachment is a File object
         formData.append('status', '1');
         formData.append('created_by', userempid);
-        console.log("formData",formData);
         
         axios.post('https://epkgroup.in/crm/api/public/api/addemployee_newraise_ticket', formData, {
             headers: {
@@ -182,10 +181,7 @@ const RaiseTicket = () => {
     // Fetch department dropdown options
     useEffect(() => {
         if (!department) return;
-        console.log("department",department);
-        
         const fetchIssue= async () => {
-            console.log("depa",department,departmentDropdown)
             try {
                 const response = await axios.get(`https://epkgroup.in/crm/api/public/api/issuetype_dropdown/${department}`, {
                     headers: {

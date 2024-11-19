@@ -74,9 +74,6 @@ function TicketsList() {
         e.preventDefault();
 
         const formData = new FormData();
-
-        console.log('from date', fromDate);
-
         formData.append('department_id', selectedDepartment);
         formData.append('issue_type', selectedEmployee);
         formData.append('emp_id', (userrole === "1" || userrole === "2") ? selectedEmployee : userempid);
@@ -152,7 +149,6 @@ function TicketsList() {
             if (response.ok) {
                 const responseData = await response.json();
                 setTableData(responseData.data);
-                console.log('----------0-0->', responseData.data)
                 setLoading(false);
             } else {
                 throw new Error('Error fetching data');
@@ -415,8 +411,6 @@ function TicketsList() {
     };
 
     const Escalaltion_Mail = async (id) => {
-        console.log("esclation maiolid",id);
-        
         try {
             const response = await fetch(`https://epkgroup.in/crm/api/public/api/for_escalation_mail/${id}`, {
                 method: 'GET',
@@ -431,8 +425,6 @@ function TicketsList() {
             }
 
             const data = await response.json();
-            console.log("datajevvvvvvbbbbbaaaaaa",data);
-            
             const { status, message } = data;
 
             if (status === 'success') {
