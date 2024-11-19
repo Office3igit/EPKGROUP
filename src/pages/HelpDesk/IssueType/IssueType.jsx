@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen } from '@fortawesome/free-solid-svg-icons';
+import { faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { CSVLink } from 'react-csv';
 import jsPDF from 'jspdf';
 import { useReactToPrint } from 'react-to-print';
@@ -251,6 +251,58 @@ function IssueType() {
         }
     };
 
+        // delete the table list
+
+        const handleDelete = async (id) => {
+            try {
+                const { value: reason } = await Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You are about to delete this Issue Type. This action cannot be reversed.',
+                    icon: 'warning',
+                    input: 'text',
+                    inputPlaceholder: 'Enter reason for deletion',
+                    inputAttributes: {
+                        maxLength: 100, // Limit input to 100 characters
+                    },
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!',
+                    preConfirm: (value) => {
+                        if (!value) {
+                            Swal.showValidationMessage('Reason is required for deletion.');
+                        }
+                        return value;
+                    }
+                });
+    
+                if (reason) {
+                    const response = await fetch('http://epkgroup.in/crm/api/public/api/delete_newissuetype', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${usertoken}` // Assuming usertoken is defined somewhere
+                        },
+                        body: JSON.stringify({
+                            id: id,
+                            updated_by: userempid,
+                            reason: reason,
+                        }),
+                    });
+                    if (response.ok || response.type === 'opaqueredirect') {
+    
+                        setTableData(tableData.filter(row => row.id !== id));
+                        Swal.fire('Deleted!', 'Issue Type has been deleted.', 'success');
+                    } else {
+                        throw new Error('Error deleting Issue Type');
+                    }
+                }
+            } catch (error) {
+                console.error('Error deleting Issue Type:', error);
+                Swal.fire('Error', 'An error occurred while deleting the Issue Type. Please try again later.', 'error');
+            }
+        };
+
     // print start
     const handlePrint = useReactToPrint({
         content: () => componentRef.current,
@@ -478,7 +530,7 @@ function IssueType() {
                                 <th scope="col">Role</th>
                                 <th scope="col">Member</th>
                                 <th scope="col">Created By</th>
-                                <th scope="col" className="no-print">Action</th>
+                                <th scope="col" className="no-print" >Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -499,8 +551,11 @@ function IssueType() {
                                                 <td>{row.membername}</td>
                                                 <td>{row.created_name}</td>
                                                 <td className="no-print">
-                                                    <button className="btn-edit" onClick={() => { GoToEditPage(row.id) }}>
+                                                    <button className="btn-edit" style={{marginRight:'4px'}} onClick={() => { GoToEditPage(row.id) }}>
                                                         <FontAwesomeIcon icon={faPen} />
+                                                    </button>
+                                                    <button className="btn-delete" style={{marginLeft:'4px'}} onClick={() => handleDelete(row.id)}>
+                                                        <FontAwesomeIcon icon={faTrashCan} />
                                                     </button>
                                                 </td>
                                             </tr>

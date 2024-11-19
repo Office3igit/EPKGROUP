@@ -710,7 +710,7 @@ function TicketsList() {
                                                 <td>{row.hrms_emp_id}</td>
                                                 <td>{row.emp_name}</td>
                                                 <td>{row.department_name}</td>
-                                                <td>{row.description}</td>
+                                                <td>{row.issue_name}</td>
                                                 <td>{row.status_description}</td>
                                                 <td className='no-print'>
                                                     {row.attachment !== '-' ?
