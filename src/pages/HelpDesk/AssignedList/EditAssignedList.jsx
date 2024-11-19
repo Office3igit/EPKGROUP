@@ -59,7 +59,7 @@ const EditAssignedList = () => {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${usertoken}` // Assuming usertoken is defined somewhere
                     },
-                });
+                });   
                 if (response.data.status === 'success') {
 
                     setDepartment(response.data.data.assign_deps);
@@ -282,6 +282,12 @@ const EditAssignedList = () => {
         fetchData();
     }, [refreshKey]);
 
+        // Helper function to reformat the date
+const formatDate = (dateString) => {
+    const [year, month, day] = dateString.split('-'); // Split the date string
+    return `${day}-${month}-${year}`; // Return in dd-mm-yyyy format
+};
+
     const fetchData = async () => {
         try {
             const response = await fetch(`http://epkgroup.in/crm/api/public/api/status_command_list/${id}`, {
@@ -294,9 +300,16 @@ const EditAssignedList = () => {
             
             if (response.ok) {
                 const responseData = await response.json();
-                setTableData(responseData.data || []);
-                
-                setLoading(false);
+
+            // Transform the created_date for all items
+            const transformedData = responseData.data.map(item => ({
+                ...item,
+                start_date: formatDate(item.start_date), 
+                estimate_date:formatDate(item.estimate_date)
+            }));
+
+            setTableData(transformedData);
+            setLoading(false);
             } else {
                 throw new Error('Error fetching data');
             }
@@ -383,7 +396,7 @@ const EditAssignedList = () => {
                             <Form.Control as="select" disabled value={issueType} onChange={(e) => setIssueType(e.target.value)} >
                                 <option value="" disabled>Select Issue Type</option>
                                 {issueTypeDropdown.map(issue => (
-                                    <option key={issue.id} value={issue.id}>{issue.issue_name}</option>
+                                    <option key={issue.id} value={issue.id}>{issue.issue_type}</option>
                                 ))}
                             </Form.Control>
                         </Form.Group>
@@ -433,7 +446,7 @@ const EditAssignedList = () => {
                                     onChange={(e) => setStatus(e.target.value)}
                                 >
                                     <option value="" disabled>Select Status</option>
-                                    <option value="1">Pending</option>
+                                    <option value="1" disabled>Pending</option>
                                     <option value="2">In-Progress</option>
                                     <option value="3">Completed</option>
                                 </Form.Control>

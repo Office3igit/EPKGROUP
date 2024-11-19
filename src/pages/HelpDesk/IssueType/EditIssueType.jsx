@@ -42,7 +42,9 @@ function EditIssueType() {
                     }
                 });
                 const data = response.data.data || [];
-                setDepartmentDropdown(data);
+                // Filter out the department with id 1
+                const filteredData = data.filter(department => department.id !== 1);
+                setDepartmentDropdown(filteredData);
             } catch (error) {
                 console.error('Error fetching department options:', error);
             }

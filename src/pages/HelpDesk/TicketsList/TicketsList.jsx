@@ -66,13 +66,10 @@ function TicketsList() {
     const [isOpen, setIsOpen] = useState(false);
     const [isNotActive, setIsNotActive] = useState(false);
 
-    useEffect(() => {
-        fetchData();
-    }, []); 
 
        const applyFilter = async (e) => {
         e.preventDefault();
-
+        
         const formData = new FormData();
         formData.append('department_id', selectedDepartment);
         formData.append('issue_type', selectedEmployee);
@@ -123,7 +120,9 @@ function TicketsList() {
                     }
                 });
                 const data = response.data.data || [];
-                setDepartmentDropdown(data);
+                // Filter out the department with id 1
+                const filteredData = data.filter(department => department.id !== 1);
+                setDepartmentDropdown(filteredData);
             } catch (error) {
                 console.error('Error fetching department options:', error);
             }
@@ -131,32 +130,45 @@ function TicketsList() {
 
         fetchrole();
     }, [usertoken]);
+    // Helper function to reformat the date
+const formatDate = (dateString) => {
+    const [year, month, day] = dateString.split('-'); // Split the date string
+    return `${day}-${month}-${year}`; // Return in dd-mm-yyyy format
+};
 
-    const fetchData = async () => {
-        const requestData = {
-            user_roleid: userrole,
-            emp_id: userempid
-        };
-        try {
-            const response = await fetch('https://epkgroup.in/crm/api/public/api/view_newraiseticket_list', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${usertoken}`
-                },
-                body: JSON.stringify(requestData)
-            });
-            if (response.ok) {
-                const responseData = await response.json();
-                setTableData(responseData.data);
-                setLoading(false);
-            } else {
-                throw new Error('Error fetching data');
-            }
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
+const fetchData = async () => {
+    const requestData = {
+        user_roleid: userrole,
+        emp_id: userempid
     };
+    try {
+        const response = await fetch('https://epkgroup.in/crm/api/public/api/view_newraiseticket_list', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${usertoken}`
+            },
+            body: JSON.stringify(requestData)
+        });
+
+        if (response.ok) {
+            const responseData = await response.json();
+
+            // Transform the created_date for all items
+            const transformedData = responseData.data.map(item => ({
+                ...item,
+                created_date: formatDate(item.created_date) // Reformat the date
+            }));
+
+            setTableData(transformedData);
+            setLoading(false);
+        } else {
+            throw new Error('Error fetching data');
+        }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+};
 
     
     useEffect(() => {
@@ -184,7 +196,7 @@ function TicketsList() {
     }));
 
     const handleSelectDepartmentChange = (selectedOption) => {
-        setSelectedDepartment(selectedOption ? selectedOption.value : null);
+        setSelectedDepartment(selectedOption ? selectedOption.value : '');
     };
     const cancelFilter = () => {
         setSelectedDepartment('');
@@ -201,7 +213,7 @@ function TicketsList() {
     }));
 
     const handleSelectEmployeeChange = (selectedOption) => {
-        setSelectedEmployee(selectedOption ? selectedOption.value : null);
+        setSelectedEmployee(selectedOption ? selectedOption.value : '');
     };
 
     // ------------------------------------------------------------------------------------------------
@@ -402,6 +414,9 @@ function TicketsList() {
         boxShadow: 'rgba(13, 110, 253, 0.5) 0px 0px 10px 1px'
     };
 
+    useEffect(() => {
+        fetchData();
+    }, []); 
     // ===============================================
     const getHoursDifference = (createdDate, createdTime) => {
         const createdDateTime = new Date(`${createdDate}T${createdTime}`);
@@ -682,7 +697,7 @@ function TicketsList() {
                                 <th style={{ width: '200px' }}>Status</th>
                                 <th style={{ width: '100px' }} className='no-print'>Attachment</th>
                                 {(userrole.includes('1') || userrole.includes('2')) && (<th style={{ width: '100px' }} className='no-print'>Action</th>)}
-                                <th style={{ width: '100px' }} className='no-print'>Esclation</th>
+                                <th style={{ width: '100px' }} className='no-print'>Escalation</th>
                             </tr>
                         </thead>
                         <tbody>
