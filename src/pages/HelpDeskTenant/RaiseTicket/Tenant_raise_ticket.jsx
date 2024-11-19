@@ -249,7 +249,7 @@ const Tenant_raise_ticket = () => {
     useEffect(() => {
         const fetchDepartments = async () => {
             try {
-                const response = await axios.get(`http://epkgroup.in/crm/api/public/api/issuetype_dropdown/${department}`, {
+                const response = await axios.get(`https://epkgroup.in/crm/api/public/api/issuetype_dropdown/${department}`, {
                     headers: {
                         Authorization: `Bearer ${usertoken}`
                     }

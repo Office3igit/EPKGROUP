@@ -85,7 +85,7 @@ function TicketsList() {
         formData.append('status', status);
 
         try {
-            const response = await fetch('http://epkgroup.in/crm/api/public/api/raiseticket_filter', {
+            const response = await fetch('https://epkgroup.in/crm/api/public/api/raiseticket_filter', {
                 method: 'POST',
                 body: formData,
                 headers: {
@@ -141,7 +141,7 @@ function TicketsList() {
             emp_id: userempid
         };
         try {
-            const response = await fetch('http://epkgroup.in/crm/api/public/api/view_newraiseticket_list', {
+            const response = await fetch('https://epkgroup.in/crm/api/public/api/view_newraiseticket_list', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -197,7 +197,7 @@ function Tenant_ticket_list() {
         formData.append('status', status);
 
         try {
-            const response = await fetch('http://epkgroup.in/crm/api/public/api/tenant_raiseticket_filter', {
+            const response = await fetch('https://epkgroup.in/crm/api/public/api/tenant_raiseticket_filter', {
                 method: 'POST',
                 body: formData,
                 headers: {

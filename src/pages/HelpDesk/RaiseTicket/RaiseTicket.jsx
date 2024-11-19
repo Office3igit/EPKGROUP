@@ -155,7 +155,7 @@ const RaiseTicket = () => {
     useEffect(() => {
         const fetchAssetId = async () => {
             try {
-                const response = await axios.get('http://epkgroup.in/crm/api/public/api/newticket_id', {
+                const response = await axios.get('https://epkgroup.in/crm/api/public/api/newticket_id', {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${usertoken}` // Assuming usertoken is defined somewhere
@@ -187,7 +187,7 @@ const RaiseTicket = () => {
         const fetchIssue= async () => {
             console.log("depa",department,departmentDropdown)
             try {
-                const response = await axios.get(`http://epkgroup.in/crm/api/public/api/issuetype_dropdown/${department}`, {
+                const response = await axios.get(`https://epkgroup.in/crm/api/public/api/issuetype_dropdown/${department}`, {
                     headers: {
                         Authorization: `Bearer ${usertoken}`
                     }

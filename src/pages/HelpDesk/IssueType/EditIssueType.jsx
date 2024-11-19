@@ -98,12 +98,8 @@ function EditIssueType() {
     const formattedSelectedEmployees = Array.isArray(selectedEmployee) 
     ? selectedEmployee.join(',')
     : null;
-    console.log("role",selectedRole);
-    console.log("dept",selectedDepartment);
     
     useEffect(() => {
-        console.log("role",selectedRole);
-        console.log("dept",selectedDepartment);
       const apiUrl = `https://epkgroup.in/crm/api/public/api/multipledepartmentbasedrole_list/${formattedSelectedDepartment || selectedDepartment }`;
       const fetchData = async () => {
           try {
@@ -145,8 +141,6 @@ function EditIssueType() {
     }, [formattedSelectedRole,usertoken,selectedRole]);
 
         const handleSubmit = (e) => {
-            console.log("edeeeee",e);
-            
         e.preventDefault();
         // Validate input fields
         const errors = {};
@@ -169,41 +163,44 @@ function EditIssueType() {
         setFormErrors({});
         const requestData = {
             id:id,
-            dep_id:selectedDepartment|| formattedSelectedDepartment,
-            teams: selectedRole||formattedSelectedRole,
-            assign_members:selectedEmployee||formattedSelectedEmployees,
+            dep_id:formattedSelectedDepartment || selectedDepartment,
+            teams:formattedSelectedRole || selectedRole,
+            assign_members:formattedSelectedEmployees || selectedEmployee,
             issue_type:selectedIssueType,
             status: '1',
             updated_by: userempid
         };
-        axios.put(`https://epkgroup.in/crm/api/public/api/update_newissuetype`, requestData, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${usertoken}`
-            }
-        })
-            .then(response => {
-                if (response.status === 200) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: 'Issue Type has been updated successfully!',
-                    });
-                    handleVisitaddshiftslot()
-                } else {
-                    throw new Error('Network response was not ok');
-                }
-            })
-            .catch(error => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'There was an error updating the Issue Type. Please try again later.',
-                });
 
-                console.error('There was an error with the API:', error);
+// Send the request
+axios.put(`https://epkgroup.in/crm/api/public/api/update_newissuetype`, requestData, {
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${usertoken}`
+    }
+})
+    .then(response => {
+        if (response.status === 200) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'Issue Type has been updated successfully!',
             });
-    };
+            handleVisitaddshiftslot();
+        } else {
+            throw new Error('Network response was not ok');
+        }
+    })
+    .catch(error => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'There was an error updating the Issue Type. Please try again later.',
+        });
+
+        console.error('There was an error with the API:', error);
+    });
+};
+
 
     const handleCancel = () => {
         handleVisitaddshiftslot();
@@ -231,7 +228,6 @@ function EditIssueType() {
         })
             .then(res => {
                 if (res.status === 200) {
-                    console.log("viewdata",res.data.data);
                     setData(res.data.data);
                     setSelectedDepartment(res.data.data.dep_id)
                     setSelectedRole(res.data.data.teams)

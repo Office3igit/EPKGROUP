@@ -55,7 +55,7 @@ function IssueType() {
     useEffect(() => {
         const fetchrole = async () => {
             try {
-                const response = await axios.get('http://epkgroup.in/crm/api/public/api/department_list', {
+                const response = await axios.get('https://epkgroup.in/crm/api/public/api/department_list', {
                     headers: {
                         'Authorization': `Bearer ${usertoken}`
                     }

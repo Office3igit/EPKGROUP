@@ -11,12 +11,13 @@ export default function MainDashboard() {
     
     const userrole = userData.userrole || '';
     const usertoken = userData?.token || '';
-    const requestData={
-        auth:usertoken
-    }
+
 
     useEffect(() => {
-        axios.post('https://epkgroup.in/crm/api/public/api/login_test',requestData, {
+        axios.get('https://epkgroup.in/crm/api/public/api/login_test',{
+            headers: {
+                Authorization: `Bearer ${usertoken}`
+            }
         })
             .then(response => {
                 console.log("res",response);
