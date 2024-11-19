@@ -240,7 +240,7 @@ const EditRaiseTicket = () => {
     useEffect(() => {
         const fetchDepartments = async () => {
             try {
-                const response = await axios.get(`http://epkgroup.in/crm/api/public/api/issuetype_dropdown/${id}`, {
+                const response = await axios.get(`https://epkgroup.in/crm/api/public/api/issuetype_dropdown/${id}`, {
                     headers: {
                         Authorization: `Bearer ${usertoken}`
                     }
@@ -282,7 +282,7 @@ const formatDate = (dateString) => {
 
     const fetchData = async () => {
         try {
-            const response = await fetch(`http://epkgroup.in/crm/api/public/api/status_command_list/${id}`, {
+            const response = await fetch(`https://epkgroup.in/crm/api/public/api/status_command_list/${id}`, {
                 method: 'GET',
                 headers: {
                     

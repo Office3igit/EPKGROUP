@@ -108,7 +108,9 @@ const applyFilter = async (e) => {
     const formData = new FormData();
     formData.append('department_id', selectedDepartment);
     formData.append('issue_type', selectedEmployee);
-    formData.append('emp_id', (userrole === "1" || userrole === "2") ? selectedEmployee : userempid);
+    if(!userrole === "1" || !userrole === "2") {
+    formData.append('emp_id', userempid);
+    }
     formData.append('from_date', fromDate);
     formData.append('to_date', toDate);
     formData.append('status', status);
