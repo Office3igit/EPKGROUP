@@ -110,7 +110,7 @@ const TenantEditTicketList = () => {
     formData.append("updated_by", userempid);
     
     axios
-      .post("http://epkgroup.in/crm/api/public/api/tenant_update_newraiseticket",formData,
+      .post("https://epkgroup.in/crm/api/public/api/tenant_update_newraiseticket",formData,
         {
           headers: {
             Authorization: `Bearer ${usertoken}`,
@@ -160,7 +160,7 @@ const TenantEditTicketList = () => {
 
   // --------------------------------------- Getting Issues Type ------------------------------------------------
   useEffect(() => {
-    const apiUrl = `http://epkgroup.in/crm/api/public/api/editview_newissuetype/${issues_type}`;
+    const apiUrl = `https://epkgroup.in/crm/api/public/api/editview_newissuetype/${issues_type}`;
     const fetchData = async () => {
       try {
         const response = await axios.get(
@@ -214,7 +214,7 @@ const TenantEditTicketList = () => {
     const fetchSelectedDepartments = async () => {
       try {
         const response = await axios.get(
-          `http://epkgroup.in/crm/api/public/api/tenant_editnewview_raiselist/${id}`,
+          `https://epkgroup.in/crm/api/public/api/tenant_editnewview_raiselist/${id}`,
           {
             headers: { Authorization: `Bearer ${usertoken}` },
           }

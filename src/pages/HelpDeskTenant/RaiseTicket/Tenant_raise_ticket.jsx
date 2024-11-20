@@ -101,7 +101,7 @@ const Tenant_raise_ticket = () => {
         formData.append('status', 1);
         formData.append('created_by', userempid);
 
-        axios.post('http://epkgroup.in/crm/api/public/api/addtenant_newraise_ticket', formData, {
+        axios.post('https://epkgroup.in/crm/api/public/api/addtenant_newraise_ticket', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': `Bearer ${usertoken}`
@@ -249,7 +249,7 @@ const Tenant_raise_ticket = () => {
     useEffect(() => {
         const fetchDepartments = async () => {
             try {
-                const response = await axios.get(`http://epkgroup.in/crm/api/public/api/issuetype_dropdown/${department}`, {
+                const response = await axios.get(`https://epkgroup.in/crm/api/public/api/issuetype_dropdown/${department}`, {
                     headers: {
                         Authorization: `Bearer ${usertoken}`
                     }

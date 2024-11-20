@@ -1,13 +1,31 @@
 import React, { useEffect } from 'react';
 import AdminDashboard from './AdminDashboard';
 import UserDashboard from './UserDashboard';
+import axios from 'axios';
 
 
 export default function MainDashboard() {
+
     // Retrieve userData from local storage
     const userData = JSON.parse(localStorage.getItem('userData')) || {};
-
+    
     const userrole = userData.userrole || '';
+    const usertoken = userData?.token || '';
+
+
+    useEffect(() => {
+        axios.get('https://epkgroup.in/crm/api/public/api/login_test',{
+            headers: {
+                Authorization: `Bearer ${usertoken}`
+            }
+        })
+            .then(response => {
+                console.log("res",response);
+            })
+            .catch(error => {
+                console.error('Error fetching countries:', error);
+            });
+    }, []);
 
 
     return (

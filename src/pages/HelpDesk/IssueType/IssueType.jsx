@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen } from '@fortawesome/free-solid-svg-icons';
+import { faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { CSVLink } from 'react-csv';
 import jsPDF from 'jspdf';
 import { useReactToPrint } from 'react-to-print';
@@ -55,13 +55,15 @@ function IssueType() {
     useEffect(() => {
         const fetchrole = async () => {
             try {
-                const response = await axios.get('http://epkgroup.in/crm/api/public/api/department_list', {
+                const response = await axios.get('https://epkgroup.in/crm/api/public/api/department_list', {
                     headers: {
                         'Authorization': `Bearer ${usertoken}`
                     }
                 });
                 const data = response.data.data || [];
-                setDepartmentDropdown(data);
+                // Filter out the department with id 1
+                const filteredData = data.filter(department => department.id !== 1);
+                setDepartmentDropdown(filteredData);
             } catch (error) {
                 console.error('Error fetching department options:', error);
             }
@@ -251,6 +253,58 @@ function IssueType() {
         }
     };
 
+        // delete the table list
+
+        const handleDelete = async (id) => {
+            try {
+                const { value: reason } = await Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You are about to delete this Issue Type. This action cannot be reversed.',
+                    icon: 'warning',
+                    input: 'text',
+                    inputPlaceholder: 'Enter reason for deletion',
+                    inputAttributes: {
+                        maxLength: 100, // Limit input to 100 characters
+                    },
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!',
+                    preConfirm: (value) => {
+                        if (!value) {
+                            Swal.showValidationMessage('Reason is required for deletion.');
+                        }
+                        return value;
+                    }
+                });
+    
+                if (reason) {
+                    const response = await fetch('https://epkgroup.in/crm/api/public/api/delete_newissuetype', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${usertoken}` // Assuming usertoken is defined somewhere
+                        },
+                        body: JSON.stringify({
+                            id: id,
+                            updated_by: userempid,
+                            reason: reason,
+                        }),
+                    });
+                    if (response.ok || response.type === 'opaqueredirect') {
+    
+                        setTableData(tableData.filter(row => row.id !== id));
+                        Swal.fire('Deleted!', 'Issue Type has been deleted.', 'success');
+                    } else {
+                        throw new Error('Error deleting Issue Type');
+                    }
+                }
+            } catch (error) {
+                console.error('Error deleting Issue Type:', error);
+                Swal.fire('Error', 'An error occurred while deleting the Issue Type. Please try again later.', 'error');
+            }
+        };
+
     // print start
     const handlePrint = useReactToPrint({
         content: () => componentRef.current,
@@ -284,7 +338,7 @@ function IssueType() {
         const csvReport = {
             data: csvData,
             headers: headers,
-            filename: 'IssueTypeList.csv',
+            filename: 'AddIssue.csv',
         };
 
         return <CSVLink {...csvReport}><i className="fas fa-file-csv" style={{ fontSize: '25px', color: '#0d6efd' }}></i></CSVLink>;
@@ -315,7 +369,7 @@ function IssueType() {
             head: [['S.No', 'Department_Name','Role', 'Issue Type', 'Member_Name','Created_Name', 'Status']],
             body: data,
         });
-        doc.save('IssueTypeList.pdf');
+        doc.save('AddIssue.pdf');
     };
 
     // PDF End
@@ -398,19 +452,6 @@ function IssueType() {
                                 </Form.Group>
                             </Col>
                             <Col>
-                                <Form.Group controlId="formTicketTitle">
-                                    <Form.Label  style={{ fontWeight: 'bold'  }}>Issue Type <sup><FontAwesomeIcon icon={faStarOfLife} style={{ color: '#fb1816', fontSize: '8px' }} /></sup></Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        value={selectedIssueType}
-                                        onChange={(e) => setSelectedIssueType(e.target.value)}
-                                    />
-                                    {formErrors.selectedIssueType && <span className="text-danger">{formErrors.selectedIssueType}</span>}
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                        <Row> 
-                            <Col>
                                 <Form.Group controlId="formRole">
                                     <Form.Label style={{ fontWeight: 'bold' }}>Role Name <sup><FontAwesomeIcon icon={faStarOfLife} style={{ color: '#fb1816', fontSize: '8px' }} /></sup></Form.Label>
                                     <MultiSelect
@@ -422,6 +463,8 @@ function IssueType() {
                                     {formErrors.selectedRole && <span className="text-danger">{formErrors.selectedRole}</span>}
                                 </Form.Group>
                             </Col>
+                        </Row>
+                        <Row> 
                             <Col>
                                 <Form.Group controlId="formEmployee">
                                     <Form.Label style={{ fontWeight: 'bold' }}>Select Member <sup><FontAwesomeIcon icon={faStarOfLife} style={{ color: '#fb1816', fontSize: '8px' }} /></sup></Form.Label>
@@ -432,6 +475,17 @@ function IssueType() {
                                         labelledBy="Select"
                                     />
                                     {formErrors.selectedEmployee && <span className="text-danger">{formErrors.selectedEmployee}</span>}
+                                </Form.Group>
+                            </Col>
+                            <Col>
+                                <Form.Group controlId="formTicketTitle">
+                                    <Form.Label  style={{ fontWeight: 'bold'  }}>Issue Type <sup><FontAwesomeIcon icon={faStarOfLife} style={{ color: '#fb1816', fontSize: '8px' }} /></sup></Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        value={selectedIssueType}
+                                        onChange={(e) => setSelectedIssueType(e.target.value)}
+                                    />
+                                    {formErrors.selectedIssueType && <span className="text-danger">{formErrors.selectedIssueType}</span>}
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -478,7 +532,7 @@ function IssueType() {
                                 <th scope="col">Role</th>
                                 <th scope="col">Member</th>
                                 <th scope="col">Created By</th>
-                                <th scope="col" className="no-print">Action</th>
+                                <th scope="col" className="no-print" >Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -498,9 +552,12 @@ function IssueType() {
                                                 <td>{row.teams_name}</td>
                                                 <td>{row.membername}</td>
                                                 <td>{row.created_name}</td>
-                                                <td className="no-print" style={{ display: 'flex', gap: '10px' }}>
-                                                    <button className="btn-edit" onClick={() => { GoToEditPage(row.id) }}>
+                                                <td className="no-print">
+                                                    <button className="btn-edit" style={{marginRight:'4px'}} onClick={() => { GoToEditPage(row.id) }}>
                                                         <FontAwesomeIcon icon={faPen} />
+                                                    </button>
+                                                    <button className="btn-delete" style={{marginLeft:'4px'}} onClick={() => handleDelete(row.id)}>
+                                                        <FontAwesomeIcon icon={faTrashCan} />
                                                     </button>
                                                 </td>
                                             </tr>

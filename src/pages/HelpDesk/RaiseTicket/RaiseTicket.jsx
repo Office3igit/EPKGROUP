@@ -67,9 +67,8 @@ const RaiseTicket = () => {
         formData.append('attachment', attachment); // Assuming attachment is a File object
         formData.append('status', '1');
         formData.append('created_by', userempid);
-        console.log("formData",formData);
         
-        axios.post('http://epkgroup.in/crm/api/public/api/addemployee_newraise_ticket', formData, {
+        axios.post('https://epkgroup.in/crm/api/public/api/addemployee_newraise_ticket', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': `Bearer ${usertoken}`
@@ -139,7 +138,9 @@ const RaiseTicket = () => {
                     }
                 });
                 const data = response.data.data || [];
-                setDepartmentDropdown(data);
+                // Filter out the department with id 1
+                const filteredData = data.filter(department => department.id !== 1);
+                setDepartmentDropdown(filteredData);
             } catch (error) {
                 console.error('Error fetching department options:', error);
             }
@@ -155,7 +156,7 @@ const RaiseTicket = () => {
     useEffect(() => {
         const fetchAssetId = async () => {
             try {
-                const response = await axios.get('http://epkgroup.in/crm/api/public/api/newticket_id', {
+                const response = await axios.get('https://epkgroup.in/crm/api/public/api/newticket_id', {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${usertoken}` // Assuming usertoken is defined somewhere
@@ -182,12 +183,9 @@ const RaiseTicket = () => {
     // Fetch department dropdown options
     useEffect(() => {
         if (!department) return;
-        console.log("department",department);
-        
         const fetchIssue= async () => {
-            console.log("depa",department,departmentDropdown)
             try {
-                const response = await axios.get(`http://epkgroup.in/crm/api/public/api/issuetype_dropdown/${department}`, {
+                const response = await axios.get(`https://epkgroup.in/crm/api/public/api/issuetype_dropdown/${department}`, {
                     headers: {
                         Authorization: `Bearer ${usertoken}`
                     }

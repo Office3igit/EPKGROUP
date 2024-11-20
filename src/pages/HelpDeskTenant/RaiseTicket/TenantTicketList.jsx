@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Container, Modal, Form, InputGroup, FormControl } from 'react-bootstrap';
-// import './css/addshiftslotstyle.css'
+import { Button, Container, Modal, Form, FormControl } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import { useEffect } from 'react';
 import { CSVLink } from 'react-csv';
@@ -198,7 +197,7 @@ function Tenant_ticket_list() {
         formData.append('status', status);
 
         try {
-            const response = await fetch('http://epkgroup.in/crm/api/public/api/tenant_raiseticket_filter', {
+            const response = await fetch('https://epkgroup.in/crm/api/public/api/tenant_raiseticket_filter', {
                 method: 'POST',
                 body: formData,
                 headers: {
@@ -357,43 +356,6 @@ function Tenant_ticket_list() {
         const date = new Date(dateString);
         return `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
     };
-
-    // csv end
-    // ========================================
-
-
-    // ========================================
-    // PDF start
-
-    // const handleExportPDF = () => {
-    //     const unit = 'pt';
-    //     const size = 'A4'; // You can change to 'letter' or other sizes as needed
-    //     const doc = new jsPDF('landscape', unit, size);
-
-    //     const data = tableData.map(({ ticket_id, task_name, project_name, project_worktype, description, department, assign_to, created_by, start_date, end_date, task_status, priority }, index) => [
-    //         index + 1,
-    //         ticket_id,
-    //         task_name,
-    //         project_name,
-    //         project_worktype,
-    //         department,
-    //         assign_to,
-    //         created_by,
-    //         start_date,
-    //         end_date,
-    //         task_status,
-    //         priority,
-    //     ]);
-
-    //     doc.autoTable({
-    //         head: [['S.No', 'Ticket ID', 'Task Name', 'Project Name', 'Project worktype', 'Department', 'Assign to', 'Created by', 'Start Date', 'End Date', 'Task Status', 'Priority']],
-    //         body: data,
-    //         // styles: { fontSize: 10 },
-    //         // columnStyles: { 0: { halign: 'center', fillColor: [100, 100, 100] } }, 
-    //     });
-
-    //     doc.save('Total_Ticket_List.pdf');
-
     // };
     const handleExportPDF = () => {
         const unit = 'pt';
@@ -481,8 +443,6 @@ function Tenant_ticket_list() {
 
     // ===============================================
 
-
-
     // -------------------------------------- Role Dropdown ----------------------------------------------------
 
     useEffect(() => {
@@ -512,16 +472,13 @@ function Tenant_ticket_list() {
     const handleSelectDepartmentChange = (selectedOption) => {
         setSelectedDepartment(selectedOption ? selectedOption.value : null);
     };
-
-    const formattedSelectedDepartment = selectedDepartment ? selectedDepartment : null;
-
     // ---------------------------------------------------------------------------------------------------------
 
     // --------------------------------------- Employee Dropdown ------------------------------------------------
 
     useEffect(() => {
         const fetchData = async () => {
-            const apiUrl = 'http://epkgroup.in/crm/api/public/api/view_issuetypes';
+            const apiUrl = 'https://epkgroup.in/crm/api/public/api/view_issuetypes';
             try {
                 const response = await axios.get(apiUrl, {
                     headers: {
@@ -530,7 +487,6 @@ function Tenant_ticket_list() {
                 });
                 const data = response.data.data;
                 setIssuesType(data);
-                // console.log("setIssuesType", data)
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -685,8 +641,7 @@ function Tenant_ticket_list() {
     const handleCloseModal = () => {
         setShowModal(false);
         setModalContent('');
-    };
-
+    };  
     const getHoursDifference = (createdDate, createdTime) => {
         const createdDateTime = new Date(`${createdDate}T${createdTime}`);
         const currentTime = new Date();
@@ -804,7 +759,6 @@ function Tenant_ticket_list() {
                                                 </Form.Group>
                                             </>
                                         )}
-
                                         <Form.Group controlId="fromDate">
                                             <Form.Label>From Date</Form.Label>
                                             <Form.Control type="date" value={fromDate} max="9999-12-31" onChange={(e) => setFromDate(e.target.value)} />

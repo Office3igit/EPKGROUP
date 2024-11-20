@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { Container } from 'react-bootstrap';
+import { Button, Container, Modal,Form } from 'react-bootstrap';
 import { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faFile, faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { CSVLink } from 'react-csv';
 import jsPDF from 'jspdf';
 import { useReactToPrint } from 'react-to-print';
@@ -11,7 +11,9 @@ import ReactPaginate from 'react-paginate';
 import { ScaleLoader } from 'react-spinners';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import Select from 'react-select';
 import emptyfolder from '../../../assets/admin/assets/img/empty-folder.png'
+import axios from 'axios';
 
 function AssignedList() {
 
@@ -39,15 +41,115 @@ function AssignedList() {
     // Table list view api
 
     const [tableData, setTableData] = useState([]);
+    const [fromDate, setFromDate] = useState('');
+    const [toDate, setToDate] = useState('');
+    const [status, setStatus] = useState('');
+    const [selectedEmployee, setSelectedEmployee] = useState('');
+    const [selectedDepartment, setSelectedDepartment] = useState('');
+    const [showFilterModal, setShowFilterModal] = useState(false);
+    const [departmentDropdown, setDepartmentDropdown] = useState([]);
+    const [IssuesType, setIssuesType] = useState([]);
+    const [refreshKey, setRefreshKey] = useState(0);
     
     const GoToEditPage = (id) => {
         navigate(`/admin/editassignedlist/${id}`);
     };
     useEffect(() => {
+        const fetchData = async () => {
+            const apiUrl = 'https://epkgroup.in/crm/api/public/api/view_issuetypes';
+            try {
+                const response = await axios.get(apiUrl, {
+                    headers: {
+                        'Authorization': `Bearer ${usertoken}`
+                    }
+                });
+                const data = response.data.data;
+                setIssuesType(data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
         fetchData();
+    }, [usertoken]);
+    
+    useEffect(() => {
+        fetchDataAssign();
     }, []);
 
-    const fetchData = async () => {
+    useEffect(() => {
+        const fetchrole = async () => {
+            try {
+                const response = await axios.get('https://epkgroup.in/crm/api/public/api/department_list', {
+                    headers: {
+                        'Authorization': `Bearer ${usertoken}`
+                    }
+                });
+                const data = response.data.data || [];
+                // Filter out the department with id 1
+                const filteredData = data.filter(department => department.id !== 1);
+                setDepartmentDropdown(filteredData);
+            } catch (error) {
+                console.error('Error fetching department options:', error);
+            }
+        };
+
+        fetchrole();
+    }, [usertoken]);
+
+        // Helper function to reformat the date
+const formatDate = (dateString) => {
+    const [year, month, day] = dateString.split('-'); // Split the date string
+    return `${day}-${month}-${year}`; // Return in dd-mm-yyyy format
+};
+
+const applyFilter = async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData();
+    formData.append('department_id', selectedDepartment);
+    formData.append('issue_type', selectedEmployee);
+    if(!userrole === "1" || !userrole === "2") {
+    formData.append('emp_id', userempid);
+    }
+    formData.append('from_date', fromDate);
+    formData.append('to_date', toDate);
+    formData.append('status', status);
+
+    try {
+        const response = await fetch('https://epkgroup.in/crm/api/public/api/raiseticket_filter', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Authorization': `Bearer ${usertoken}`
+            }
+        });
+
+        const data = await response.json();
+
+        const { status, message } = data;
+
+        if (status === 'success') {
+            setTableData(data.data);
+            setShowFilterModal(false);
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: message,
+
+            });
+        }
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: `Error: ${error.message}`,
+        });
+    }
+};
+
+
+    const fetchDataAssign = async () => {
         const requestData = {
             user_roleid: userrole,
             assign_empid: userempid
@@ -63,8 +165,15 @@ function AssignedList() {
             });
             if (response.ok) {
                 const responseData = await response.json();
-                setTableData(responseData.data);
-                setLoading(false);
+
+            // Transform the created_date for all items
+            const transformedData = responseData.data.map(item => ({
+                ...item,
+                created_date: formatDate(item.created_date) // Reformat the date
+            }));
+
+            setTableData(transformedData);
+            setLoading(false);
             } else {
                 throw new Error('Error fetching data');
             }
@@ -252,6 +361,33 @@ function AssignedList() {
         setCurrentPage(selected);
     };
 
+    
+    const formattedDepartmentDropdown = departmentDropdown.map(department => ({
+        label: department.depart_name,
+        value: department.id
+    }));
+    const handleSelectDepartmentChange = (selectedOption) => {
+        setSelectedDepartment(selectedOption ? selectedOption.value : '');
+    };
+    
+    const formattedIssuesType = IssuesType.map(employee => ({
+        label: employee.issue_type,
+        value: employee.id
+    }));
+    const handleSelectEmployeeChange = (selectedOption) => {
+        setSelectedEmployee(selectedOption ? selectedOption.value : '');
+    };
+
+    const cancelFilter = () => {
+        setSelectedDepartment('');
+        setSelectedEmployee('');
+        setFromDate('');
+        setToDate('');
+        setStatus('');
+        setShowFilterModal(false);
+        setRefreshKey()
+    };
+
     // ============================================
 
     const myStyles = {
@@ -305,14 +441,69 @@ function AssignedList() {
                 {/* List table */}
 
                 <div style={{ display: 'flex', alignItems: 'center', paddingBottom: '10px', justifyContent: 'space-between', flexWrap:'wrap', gap:'17px' }}>
-                    <div>
+                <div>
                         <input
                             type="text"
                             placeholder="Search..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             style={myStyles1}
-                        />
+                        />    
+                        <Button variant="primary" onClick={() => setShowFilterModal(true)} >
+                        <FontAwesomeIcon icon="fa-solid fa-filter" /> Filter
+                        </Button>
+                        <Modal show={showFilterModal} onHide={cancelFilter} dialogClassName="custom-modal">
+                                <Modal.Header closeButton>
+                                    <Modal.Title>Filter</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                    <Form>
+                                        {(userrole === "1" || userrole === "2") && (
+                                            <>
+                                                <Form.Group controlId="formRole">
+                                                    <Form.Label style={{ fontWeight: 'bold' }}>Department</Form.Label>
+                                                    <Select
+                                                        options={formattedDepartmentDropdown}
+                                                        value={formattedDepartmentDropdown.find(option => option.value === selectedDepartment)}
+                                                        onChange={handleSelectDepartmentChange}
+                                                        isClearable
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group controlId="formEmployee">
+                                                    <Form.Label style={{ fontWeight: 'bold' }}>Issues Type</Form.Label>
+                                                    <Select
+                                                        options={formattedIssuesType}
+                                                        value={formattedIssuesType.find(option => option.value === selectedEmployee)}
+                                                        onChange={handleSelectEmployeeChange}
+                                                        isClearable
+                                                    />
+                                                </Form.Group>
+                                            </>
+                                        )}
+                                        <Form.Group controlId="fromDate">
+                                            <Form.Label>From Date</Form.Label>
+                                            <Form.Control type="date" value={fromDate} max="9999-12-31" onChange={(e) => setFromDate(e.target.value)} />
+                                        </Form.Group>
+                                        <Form.Group controlId="toDate">
+                                            <Form.Label>To Date</Form.Label>
+                                            <Form.Control type="date" value={toDate} max="9999-12-31" onChange={(e) => setToDate(e.target.value)} />
+                                        </Form.Group>
+                                        <Form.Group controlId="status">
+                                            <Form.Label>Status</Form.Label>
+                                            <Form.Control as="select" value={status} onChange={(e) => setStatus(e.target.value)}>
+                                                <option value="">Select Status</option>
+                                                <option value="1">Pending</option>
+                                                <option value="2">In-Progress</option>
+                                                <option value="3">Completed</option>
+                                            </Form.Control>
+                                        </Form.Group>
+                                    </Form>
+                                </Modal.Body>
+                                <Modal.Footer>
+                                    <Button variant="secondary" onClick={cancelFilter}>Cancel</Button>
+                                    <Button variant="primary" onClick={applyFilter}>Apply Filter</Button>
+                                </Modal.Footer>
+                            </Modal>
                     </div>
                     <div>
                         <button style={myStyles}>{handleExportCSV()}</button>
@@ -360,12 +551,14 @@ function AssignedList() {
                                                 <td className='no-print'>
                                                     {row.attachment !== '-' ?
                                                         <button className="btn-view" onClick={() => { window.open(`https://epkgroup.in/crm/api/storage/app/${row.attachment}`, '_blank') }}>
-                                                            <FontAwesomeIcon icon="fa-solid fa-eye" />View
+                                                            <FontAwesomeIcon icon="fa-solid fa-eye" />
                                                         </button>
-
-                                                        : <img src={emptyfolder} alt='empty' style={{ width: '30%' }} />}
+                                                        :  
+                                                            <FontAwesomeIcon 
+                                                            onClick={() => alert('No attachment available for this ticket')} className="btn-file" icon={faFile} />
+                                                            }
                                                 </td>
-                                                <td style={{ display: 'flex', gap: '10px' }} className='no-print'>
+                                                <td className='no-print'>
                                                     <button className="btn-edit" onClick={() => { GoToEditPage(row.id, row.ticket_id) }}>
                                                         <FontAwesomeIcon icon={faPen} />
                                                     </button>

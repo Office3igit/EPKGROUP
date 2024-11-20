@@ -240,7 +240,7 @@ const EditRaiseTicket = () => {
     useEffect(() => {
         const fetchDepartments = async () => {
             try {
-                const response = await axios.get(`http://epkgroup.in/crm/api/public/api/issuetype_dropdown/${id}`, {
+                const response = await axios.get(`https://epkgroup.in/crm/api/public/api/issuetype_dropdown/${id}`, {
                     headers: {
                         Authorization: `Bearer ${usertoken}`
                     }
@@ -274,10 +274,15 @@ const EditRaiseTicket = () => {
     useEffect(() => {
         fetchData();
     }, [refreshKey]);
+        // Helper function to reformat the date
+const formatDate = (dateString) => {
+    const [year, month, day] = dateString.split('-'); // Split the date string
+    return `${day}-${month}-${year}`; // Return in dd-mm-yyyy format
+};
 
     const fetchData = async () => {
         try {
-            const response = await fetch(`http://epkgroup.in/crm/api/public/api/status_command_list/${id}`, {
+            const response = await fetch(`https://epkgroup.in/crm/api/public/api/status_command_list/${id}`, {
                 method: 'GET',
                 headers: {
                     
@@ -287,9 +292,15 @@ const EditRaiseTicket = () => {
             
             if (response.ok) {
                 const responseData = await response.json();
-                setTableData(responseData.data || []);
-                
-                setLoading(false);
+
+                            // Transform the created_date for all items
+            const transformedData = responseData.data.map(item => ({
+                ...item,
+                start_date: formatDate(item.start_date), // Reformat the date
+                estimate_date: formatDate(item.estimate_date) // Reformat the date
+            }));
+            setTableData(transformedData);
+            setLoading(false);
             } else {
                 throw new Error('Error fetching data');
             }
@@ -426,7 +437,7 @@ const EditRaiseTicket = () => {
                                     onChange={(e) => setStatus(e.target.value)}
                                 >
                                     <option value="" disabled>Select Status</option>
-                                    <option value="1">Pending</option>
+                                    <option value="1"disabled>Pending</option>
                                     <option value="2">In-Progress</option>
                                     <option value="3">Completed</option>
                                 </Form.Control>

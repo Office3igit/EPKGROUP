@@ -139,58 +139,58 @@ function Navbar() {
 
     // ===========================================================================================================
 
-    const [isSession, setIsSession] = useState('')
+    // const [isSession, setIsSession] = useState('')
 
-    const validateToken = async () => {
-        const data = {
-            login_id: token_user_id,
-            token: token
-        };
+    // const validateToken = async () => {
+    //     const data = {
+    //         login_id: token_user_id,
+    //         token: token
+    //     };
 
-        try {
-            const response = await axios.post(`https://epkgroup.in/crm/api/public/api/auth_valid_checking`, data,
-                {
-                    headers: {
-                        'Authorization': `Bearer ${usertoken}`
-                    }
-                });
-            console.log(response.data);
+    //     try {
+    //         const response = await axios.post(`https://epkgroup.in/crm/api/public/api/auth_valid_checking`, data,
+    //             {
+    //                 headers: {
+    //                     'Authorization': `Bearer ${usertoken}`
+    //                 }
+    //             });
+    //         console.log(response.data);
 
 
-            if (response.data.status === 'success') {
-                console.log(response.data.message);
-                setIsSession(true)
-            } else if (response.data.status === 'error' && response.data.message === 'Your token has expired.') {
-                setIsSession(false)
-                Swal.fire({
-                    title: 'Session Expireddddd',
-                    text: 'Your session has expired. Please log in again.',
-                    icon: 'warning',
-                    confirmButtonText: 'OK'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Redirect to login page after user confirmation
-                        window.location.href = '/crm/login';
-                    }
-                });
-            } else {
-                console.log('Unexpected response:', response.data.message);
-            }
-        } catch (error) {
-            console.error('Error validating token:', error);
-            // Handle error
-            Swal.fire({
-                title: 'Error',
-                text: 'An error occurred while validating your token. Please try again.',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-        }
-    };
+    //         if (response.data.status === 'success') {
+    //             console.log(response.data.message);
+    //             setIsSession(true)
+    //         } else if (response.data.status === 'error' && response.data.message === 'Your token has expired.') {
+    //             setIsSession(false)
+    //             Swal.fire({
+    //                 title: 'Session Expireddddd',
+    //                 text: 'Your session has expired. Please log in again.',
+    //                 icon: 'warning',
+    //                 confirmButtonText: 'OK'
+    //             }).then((result) => {
+    //                 if (result.isConfirmed) {
+    //                     // Redirect to login page after user confirmation
+    //                     window.location.href = '/crm/login';
+    //                 }
+    //             });
+    //         } else {
+    //             console.log('Unexpected response:', response.data.message);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error validating token:', error);
+    //         // Handle error
+    //         Swal.fire({
+    //             title: 'Error',
+    //             text: 'An error occurred while validating your token. Please try again.',
+    //             icon: 'error',
+    //             confirmButtonText: 'OK'
+    //         });
+    //     }
+    // };
 
-    useEffect(() => {
-        validateToken();
-    }, [isSession]);
+    // useEffect(() => {
+    //     validateToken();
+    // }, [isSession]);
 
 
 
