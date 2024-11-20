@@ -9,6 +9,7 @@ import ReactPaginate from 'react-paginate';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ScaleLoader } from 'react-spinners';
 import { useReactToPrint } from 'react-to-print';
+import { MultiSelect } from "react-multi-select-component";
 import Swal from 'sweetalert2';
 
 const EditRaiseTicket = () => {
@@ -30,14 +31,17 @@ const EditRaiseTicket = () => {
     const userData = JSON.parse(localStorage.getItem('userData'));
     const usertoken = userData?.token || '';
     const userempid = userData?.userempid || '';
-    const username = userData?.username || '';
-    const userrole = userData?.userrole || '';
     // ----------------------------------------------------------------------------------------------------
 
     // ----------------------------------------------------------------------------------------------------
-    const [department, setDepartment] = useState('');
-    const [ticketID, setTicketID] = useState('');
+
+    const [departmentDropdown, setDepartmentDropdown] = useState([]);
+    const [departmentDropdownFromResponce, setDepartmentDropdownFromResponce] =
+      useState([]);
+    const [selectedDepartment, setSelectedDepartment] = useState("");
+    // const [ticketID, setTicketID] = useState('');
     const [issueType, setIssueType] = useState('');
+    const [issues_type, setIssuesType] = useState("");
     const [description, setDescription] = useState('');
     const [comments, setComments] = useState('');
     const [status, setStatus] = useState('');
@@ -45,6 +49,7 @@ const EditRaiseTicket = () => {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [tableData, setTableData] = useState([]);
+    const [attachment, setAttachment] = useState(null);
     const itemsPerPage = 10;
     const [currentPage, setCurrentPage] = useState(0);
     const [searchTerm, setSearchTerm] = useState('');
@@ -61,15 +66,18 @@ const EditRaiseTicket = () => {
                     },
                 });
                 if (response.data.status === 'success') {
-
-                    setDepartment(response.data.data.assign_deps);
-                    setTicketID(response.data.data.ticket_id);
-                    setIssueType(response.data.data.issue_type);
+                    const DepartmentNameArray = response.data.data.assign_deps
+                    ? response.data.data.assign_deps.split(",").map((dep) => dep.trim())
+                    : [];
+                  setDepartmentDropdownFromResponce(DepartmentNameArray);
+                    setIssuesType(response.data.data.issue_type);
                     setDescription(response.data.data.description);
                     setStartDate(response.data.data.start_date);
                     setEndDate(response.data.data.estimate_date);
                     setStatus(response.data.data.status);
-                    setComments(response.data.data.reason);
+                    if(response.data.data.attachment != '-'){
+                      setAttachment(`https://epkgroup.in/crm/api/storage/app/${response.data.data.attachment}`);
+                    }
                     setLoading(false)
                 } else {
                     throw new Error('Failed to fetch asset ID');
@@ -84,6 +92,29 @@ const EditRaiseTicket = () => {
     }, []);
     // ------------------------------------------------------------------------------------------------
 
+      // --------------------------------------- Getting Issues Type ------------------------------------------------
+      useEffect(() => {
+        const apiUrl = `https://epkgroup.in/crm/api/public/api/editview_newissuetype/${issues_type}`;
+        const fetchData = async () => {
+          try {
+            const response = await axios.get(
+              apiUrl,
+    
+              {
+                headers: {
+                  Authorization: `Bearer ${usertoken}`,
+                },
+              }
+            );
+            const data = response.data.data;
+            setIssueType(data.issue_type);
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        };
+        fetchData();
+      }, [issues_type]);
+
     // ------------------------------------------------------------------------------------------------
     // HANDLE SUBMIT 
 
@@ -94,7 +125,7 @@ const EditRaiseTicket = () => {
             errors.status = 'Status is required.';
         }
         if (comments == '') {
-            errors.comments = 'Description is required.';
+            errors.comments = 'Comments is required.';
         }
 
         if (Object.keys(errors).length > 0) {
@@ -177,7 +208,7 @@ const EditRaiseTicket = () => {
 
         return <CSVLink {...csvReport}><i className="fas fa-file-csv" style={{ fontSize: '25px', color: '#0d6efd' }}></i></CSVLink>;
     };
-
+ 
     // csv end
     // ========================================
 
@@ -211,49 +242,29 @@ const EditRaiseTicket = () => {
     };
     // ------------------------------------------------------------------------------------------------
     // -------------------------------------- Department ---------------------------------------------------
-    const [departmentDropdown, setDepartmentDropdown] = useState([]);
-
     // Fetch department dropdown options
     useEffect(() => {
-        const fetchDepartments = async () => {
-            try {
-                const response = await axios.get('https://epkgroup.in/crm/api/public/api/userrolelist', {
-                    headers: {
-                        Authorization: `Bearer ${usertoken}`
-                    }
-                });
-                const data = response.data.data || [];
-                setDepartmentDropdown(data);
-                
-            } catch (error) {
-                console.error('Error fetching department options:', error);
-            }
+        const fetchDepartmentList = async () => {
+          try {
+            const response = await axios.get(
+              "https://epkgroup.in/crm/api/public/api/department_list",
+              {
+                headers: { Authorization: `Bearer ${usertoken}` },
+              }
+            );
+            const data = response.data.data || [];
+            const formattedDepartments = data.map((department) => ({
+              label: department.depart_name, // Assuming 'name' is the department name
+              value: department.id, // Assuming 'id' is the department ID
+            }));
+            setDepartmentDropdown(formattedDepartments);
+          } catch (error) {
+            console.error("Error fetching department options:", error);
+          }
         };
-
-        fetchDepartments();
-    }, [usertoken]);
-
-    // -------------------------------------- Issue Type ---------------------------------------------------
-    const [issueTypeDropdown, setIssueTypeDropdown] = useState([]);
-
-    // Fetch department dropdown options
-    useEffect(() => {
-        const fetchDepartments = async () => {
-            try {
-                const response = await axios.get(`https://epkgroup.in/crm/api/public/api/issuetype_dropdown/${id}`, {
-                    headers: {
-                        Authorization: `Bearer ${usertoken}`
-                    }
-                });
-                const data = response.data.data || [];
-                setIssueTypeDropdown(data);
-            } catch (error) {
-                console.error('Error fetching department options:', error);
-            }
-        };
-
-        fetchDepartments();
-    }, [usertoken]);
+    
+        fetchDepartmentList();
+      }, [usertoken]);
 
         // Fillter start
 
@@ -292,7 +303,6 @@ const formatDate = (dateString) => {
             
             if (response.ok) {
                 const responseData = await response.json();
-
                             // Transform the created_date for all items
             const transformedData = responseData.data.map(item => ({
                 ...item,
@@ -344,8 +354,25 @@ const formatDate = (dateString) => {
         padding: '5px 7px',
         boxShadow: 'rgba(13, 110, 253, 0.5) 0px 0px 10px 1px'
     };
-    
 
+    useEffect(() => {
+        if (
+          departmentDropdown.length > 0 &&
+          departmentDropdownFromResponce.length > 0
+        ) {
+          // Filter only if departmentDropdownFromResponce includes option.value
+          const initialSelection = departmentDropdown.filter(
+            (option) =>
+              departmentDropdownFromResponce.includes(option.value.toString()) // Ensuring type match
+          );
+          setSelectedDepartment(initialSelection);
+        }
+      }, [departmentDropdown, departmentDropdownFromResponce]);
+    
+  // Handle department selection
+  const handleSelectDepartmentChange = (selected) => {
+    setSelectedDepartment(selected);
+  };
     // ---------------------------------------------------------------------------------------------------
 
     return (
@@ -366,29 +393,31 @@ const formatDate = (dateString) => {
             <h3 className='mb-5' style={{ fontWeight: 'bold', color: '#00275c' }}>Edit Ticket</h3>
             <div className='form__area' style={{ background: '#ffffff', padding: '60px 40px', boxShadow: '0px 0px 10px rgb(0 0 0 / 43%)', margin: '2px' }}>
                 <Form onSubmit={handleSave}>
-                    <div style={{fontWeight: 600,marginBottom:"10px"}}>Ticket ID : {ticketID}</div>
-
+                    {/* <div style={{fontWeight: 600,marginBottom:"10px"}}>Ticket ID : {ticketID}</div> */}
                     <Row className="mb-3">
-                        <Form.Group controlId="formDepartment">
-                            <Form.Label>Department</Form.Label>
-                            <Form.Control as="select" value={department} onChange={(e) => setDepartment(e.target.value)} disabled>
-                            <option value="" disabled>Select Department</option>
-                                    {departmentDropdown.map(dept => (
-                                <option key={dept.id} value={dept.id}>
-                                    {dept.role_name}
-                                </option>
-                                ))}
-                            </Form.Control>
-                        </Form.Group>
+                    <Form.Group controlId="formRole">
+                        <Form.Label style={{ fontWeight: "bold" }}>
+                        Department Name
+                        </Form.Label>
+                        <MultiSelect
+                        options={departmentDropdown}
+                        value={selectedDepartment}
+                        onChange={handleSelectDepartmentChange}
+                        labelledBy="Select"
+                        readOnly
+                        disabled
+                        />
+                        {formErrors.selectedDepartment && (
+                        <span className="text-danger">
+                            {formErrors.selectedDepartment}
+                        </span>
+                        )}
+                    </Form.Group>
                     </Row>
                     <Row className='mb-3'>
                         <Form.Group controlId="formIssueType">
                             <Form.Label>Issue Type</Form.Label>
-                            <Form.Control as="select" disabled value={issueType} onChange={(e) => setIssueType(e.target.value)} >
-                                <option value="" disabled>Select Issue Type</option>
-                                {issueTypeDropdown.map(issue => (
-                                    <option key={issue.id} value={issue.id}>{issue.issue_name}</option>
-                                ))}
+                            <Form.Control as="textarea" disabled value={issueType} >
                             </Form.Control>
                         </Form.Group>
                     </Row>
@@ -402,6 +431,46 @@ const formatDate = (dateString) => {
                                 disabled
                             />
                         </Form.Group>
+                    </Row>
+                    <Row style={{display:"flex",alignItems:"center"}}>
+                        <Col md={10}>
+                        <Form.Group controlId="attachment">
+                            <Form.Label>Attachment</Form.Label>
+                            <Form.Control
+                            type="file"
+                            accept="image/*"
+                            className="form-control"
+                            readOnly
+                            disabled
+                            />
+                            {/* Conditional rendering for attachment preview or 'No Attachment' */} 
+                        </Form.Group>
+                        </Col>
+
+                        <Col md={2}>
+                        {attachment ? (
+                            <div style={{marginTop:'30px'}}>
+                                <Button
+                                variant="primary"
+                                href={attachment}
+                                target="_blank"
+                                style={{display:"flex",alignItems:"center", height: "43px", fontSize: "13px",justifyContent:"center"}}
+                                >
+                                View Attachment
+                                </Button>
+                            </div>
+                            ) : (
+                            <span
+                                style={{
+                                marginTop: "10px",
+                                fontStyle: "italic",
+                                color: "#888",
+                                }}
+                            >
+                                No Attachment
+                            </span>
+                            )}
+                        </Col>
                     </Row>
                     <Row  className='mb-3' >            
                             <Col>

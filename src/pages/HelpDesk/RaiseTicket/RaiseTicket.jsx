@@ -21,7 +21,6 @@ const RaiseTicket = () => {
 
     // ----------------------------------------------------------------------------------------------------
     const [department, setDepartment] = useState('');
-    const [ticketID, setTicketID] = useState('');
     const [issueType, setIssueType] = useState('');
     const [description, setDescription] = useState('');
     const [attachment, setAttachment] = useState(null);
@@ -61,7 +60,6 @@ const RaiseTicket = () => {
 
         const formData = new FormData();
         formData.append('emp_id', userempid);
-        formData.append('ticket_id', ticketID);
         formData.append('issue_type', issueType);
         formData.append('description', description);
         formData.append('attachment', attachment); // Assuming attachment is a File object
@@ -153,28 +151,28 @@ const RaiseTicket = () => {
 
     // ------------------------------------------------------------------------------------------------
     // TICKET ID FETCH FROM API
-    useEffect(() => {
-        const fetchAssetId = async () => {
-            try {
-                const response = await axios.get('https://epkgroup.in/crm/api/public/api/newticket_id', {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${usertoken}` // Assuming usertoken is defined somewhere
-                    },
-                });
-                if (response.data.status === 'success') {
-                    setTicketID(response.data.data);
-                } else {
-                    throw new Error('Failed to fetch asset ID');
-                }
-            } catch (err) {
-                console.log(err.message);
+    // useEffect(() => {
+    //     const fetchAssetId = async () => {
+    //         try {
+    //             const response = await axios.get('https://epkgroup.in/crm/api/public/api/newticket_id', {
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                     'Authorization': `Bearer ${usertoken}` // Assuming usertoken is defined somewhere
+    //                 },
+    //             });
+    //             if (response.data.status === 'success') {
+    //                 setTicketID(response.data.data);
+    //             } else {
+    //                 throw new Error('Failed to fetch asset ID');
+    //             }
+    //         } catch (err) {
+    //             console.log(err.message);
 
-            }
-        };
+    //         }
+    //     };
 
-        fetchAssetId();
-    }, []);
+    //     fetchAssetId();
+    // }, []);
     // ------------------------------------------------------------------------------------------------
 
     // -------------------------------------- Issue Type ---------------------------------------------------
@@ -206,7 +204,7 @@ const RaiseTicket = () => {
             <h3 className='mb-5' style={{ fontWeight: 'bold', color: '#00275c' }}>Raise Ticket</h3>
             <div className='form__area' style={{ background: '#ffffff', padding: '40px 40px', boxShadow: '0px 0px 10px rgb(0 0 0 / 43%)', margin: '2px' }}>
                 <Form onSubmit={handleSubmit}>
-                    <div style={{fontWeight: 600,marginBottom:"10px"}}>Ticket ID : {ticketID}</div>
+                    {/* <div style={{fontWeight: 600,marginBottom:"10px"}}>Ticket ID : {ticketID}</div> */}
                     <Row className="mb-3">
                         <Col md={6}>
                             <Form.Group controlId="formDepartment">

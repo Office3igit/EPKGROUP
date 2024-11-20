@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Button, Container, Modal,Form } from 'react-bootstrap';
 import { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faFile, faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faFile, faPen } from '@fortawesome/free-solid-svg-icons';
 import { CSVLink } from 'react-csv';
 import jsPDF from 'jspdf';
 import { useReactToPrint } from 'react-to-print';
@@ -12,7 +12,6 @@ import { ScaleLoader } from 'react-spinners';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import Select from 'react-select';
-import emptyfolder from '../../../assets/admin/assets/img/empty-folder.png'
 import axios from 'axios';
 
 function AssignedList() {
@@ -150,10 +149,9 @@ const applyFilter = async (e) => {
 
 
     const fetchDataAssign = async () => {
-        const requestData = {
-            user_roleid: userrole,
-            assign_empid: userempid
-        };
+        const requestData = (userrole === "1" || userrole === "2") ? 
+        { user_roleid: userrole, assign_empid: userempid } : {assign_empid: userempid} ;
+    
         try {
             const response = await fetch('https://epkgroup.in/crm/api/public/api/view_newraiseassign_list', {
                 method: 'POST',
@@ -458,7 +456,7 @@ const applyFilter = async (e) => {
                                 </Modal.Header>
                                 <Modal.Body>
                                     <Form>
-                                        {(userrole === "1" || userrole === "2") && (
+                                        {/* {(userrole === "1" || userrole === "2") && ( */}
                                             <>
                                                 <Form.Group controlId="formRole">
                                                     <Form.Label style={{ fontWeight: 'bold' }}>Department</Form.Label>
@@ -479,7 +477,7 @@ const applyFilter = async (e) => {
                                                     />
                                                 </Form.Group>
                                             </>
-                                        )}
+                                        {/* )}*/}
                                         <Form.Group controlId="fromDate">
                                             <Form.Label>From Date</Form.Label>
                                             <Form.Control type="date" value={fromDate} max="9999-12-31" onChange={(e) => setFromDate(e.target.value)} />
@@ -542,11 +540,12 @@ const applyFilter = async (e) => {
                                                 <th scope="row">{serialNumber}</th>
                                                 <td>{row.ticket_id}</td>
                                                 <td>{row.created_date}</td>
-                                                <td>{row.created_by}</td>
+                                                {(userrole === '1' || userrole === '2') ? 
+                                                <td>{row.created_by}</td> :   <td>{row.emp_name}</td>}
                                                 <td>{row.department_name}</td>
                                                 <td>{row.issue_name}</td>
-                                                <td>{row.hrms_emp_id}</td>
-                                                <td>{row.emp_name}</td>
+                                                {(userrole === '1' || userrole === '2') ? <td>{row.employee_ids}</td> : <td>{row.hrms_emp_id}</td>}
+                                                <td>{row.membername}</td>
                                                 <td>{row.status_description}</td>
                                                 <td className='no-print'>
                                                     {row.attachment !== '-' ?
