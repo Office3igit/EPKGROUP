@@ -44,6 +44,8 @@ function TicketsList() {
     const usertoken = userData?.token || '';
     const userempid = userData?.userempid || '';
     const userrole = userData?.userrole || '';
+    const user_loginid = userData?.user_loginid || '';
+    
 
     // ------------------------------------------------------------------------------------------------
 
@@ -61,6 +63,7 @@ function TicketsList() {
     const [fromDate, setFromDate] = useState('');
     const [toDate, setToDate] = useState('');
     const [status, setStatus] = useState('');
+    const [isDate,setIsDate] = useState(false)
     const [refreshKey, setRefreshKey] = useState(0);
     const [open, setOpen] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
@@ -72,8 +75,10 @@ function TicketsList() {
         
         const formData = new FormData();
         formData.append('department_id', selectedDepartment);
-        formData.append('issue_type', selectedEmployee);
-        formData.append('emp_id', (userrole === "1" || userrole === "2") ? selectedEmployee : userempid);
+        formData.append('issue_type', selectedEmployee);   
+        if(!userrole === "1" || !userrole === "2") {
+            formData.append('emp_id', userempid);
+            }
         formData.append('from_date', fromDate);
         formData.append('to_date', toDate);
         formData.append('status', status);
@@ -371,7 +376,6 @@ const fetchData = async () => {
 
     // ========================================
     // Fillter start
-
     const filteredData = tableData.filter((row) =>
         Object.values(row).some(
             (value) =>
@@ -488,6 +492,7 @@ const fetchData = async () => {
 
     // For Escalaltion
     const renderEscalationButton = (row) => {
+        console.log("esclation renddered");
         const hoursDifference = getHoursDifference(row.created_date, row.created_time);
 
         if (row.escalation_status === 1) {
@@ -521,6 +526,7 @@ const fetchData = async () => {
             );
         } else if (row.escalation_status === 0) {
             if (hoursDifference >= 24) {
+                
                 return (
                     <>
                     <button
@@ -630,8 +636,7 @@ const fetchData = async () => {
                                 </Modal.Header>
                                 <Modal.Body>
                                     <Form>
-                                        {(userrole === "1" || userrole === "2") && (
-                                            <>
+                                        {/* {(userrole === "1" || userrole === "2") && ( */}
                                                 <Form.Group controlId="formRole">
                                                     <Form.Label style={{ fontWeight: 'bold' }}>Department</Form.Label>
                                                     <Select
@@ -650,16 +655,16 @@ const fetchData = async () => {
                                                         isClearable
                                                     />
                                                 </Form.Group>
-                                            </>
-                                        )}
+                                        {/* )} */}
                                         <Form.Group controlId="fromDate">
                                             <Form.Label>From Date</Form.Label>
-                                            <Form.Control type="date" value={fromDate} max="9999-12-31" onChange={(e) => setFromDate(e.target.value)} />
+                                            <Form.Control type="date" value={fromDate} max="9999-12-31" onChange={(e) => {setFromDate(e.target.value);setIsDate(true)}} />
                                         </Form.Group>
+                                        {isDate && 
                                         <Form.Group controlId="toDate">
                                             <Form.Label>To Date</Form.Label>
                                             <Form.Control type="date" value={toDate} max="9999-12-31" onChange={(e) => setToDate(e.target.value)} />
-                                        </Form.Group>
+                                        </Form.Group>}
                                         <Form.Group controlId="status">
                                             <Form.Label>Status</Form.Label>
                                             <Form.Control as="select" value={status} onChange={(e) => setStatus(e.target.value)}>
@@ -711,11 +716,11 @@ const fetchData = async () => {
                                         const serialNumber = currentPage * itemsPerPage + index + 1;
                                         return (
                                             <tr key={row.id}>
-                                                <th scope="row">{serialNumber}</th>
+                                                <th scope="row">{serialNumber}</th> 
                                                 <td>{row.ticket_id}</td>
                                                 <td>{row.created_date}</td>
-                                                <td>{row.hrms_emp_id}</td>
-                                                <td>{row.emp_name}</td>
+                                                <td>{(userrole === "1" || userrole === "2")?row.hrms_emp_id : user_loginid}</td>
+                                                <td>{(userrole === "1" || userrole === "2") ? row.emp_name :row.membername}</td>
                                                 <td>{row.department_name}</td>
                                                 <td>{row.issue_name}</td>
                                                 <td>{row.status_description}</td>
@@ -737,10 +742,9 @@ const fetchData = async () => {
                                                             <FontAwesomeIcon icon={faPen} />
                                                         </button>
                                                     </td>
-                                                   
-                                                 <td>{renderEscalationButton(row)}</td>
                                                     </>
                                                 )}
+                                                <td>{renderEscalationButton(row)}</td>
                                             </tr>
                                         );
                                     })

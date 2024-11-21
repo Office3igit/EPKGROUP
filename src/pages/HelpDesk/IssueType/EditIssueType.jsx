@@ -212,15 +212,6 @@ axios.put(`https://epkgroup.in/crm/api/public/api/update_newissuetype`, requestD
         setSelectedIssueType('');
         setFormErrors({});
     };
-
-    const [issueType, setIssueType] = useState();
-    const handleInputChange = (setter) => (e) => {
-        let value = e.target.value;
-        if (value.startsWith(' ')) {
-            value = value.trimStart();
-        }
-        setter(value);
-    };
     const [data, setData] = useState([]);
     useEffect(() => {
         axios.get(`https://epkgroup.in/crm/api/public/api/editview_newissuetype/${id}`, {
@@ -277,21 +268,6 @@ axios.put(`https://epkgroup.in/crm/api/public/api/update_newissuetype`, requestD
                                 </Form.Group>
                             </Col>
                             <Col>
-                                <Form.Group controlId="formTicketTitle">
-                                    <Form.Label  style={{ fontWeight: 'bold'  }}>Issue Type <sup><FontAwesomeIcon icon={faStarOfLife} style={{ color: '#fb1816', fontSize: '8px' }} /></sup></Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        // value={data.description}
-                                        onChange={(e) => setSelectedIssueType(e.target.value)}
-                                        value={selectedIssueType}
-                                        // value={selectedIssueType}
-                                    />
-                                    {formErrors.selectedIssueType && <span className="text-danger">{formErrors.selectedIssueType}</span>}
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                        <Row> 
-                            <Col>
                                 <Form.Group controlId="formRole">
                                     <Form.Label style={{ fontWeight: 'bold' }}>Role Name <sup><FontAwesomeIcon icon={faStarOfLife} style={{ color: '#fb1816', fontSize: '8px' }} /></sup></Form.Label>
                                     <MultiSelect
@@ -303,6 +279,8 @@ axios.put(`https://epkgroup.in/crm/api/public/api/update_newissuetype`, requestD
                                     {formErrors.selectedRole && <span className="text-danger">{formErrors.selectedRole}</span>}
                                 </Form.Group>
                             </Col>
+                        </Row>
+                        <Row> 
                             <Col>
                                 <Form.Group controlId="formEmployee">
                                     <Form.Label style={{ fontWeight: 'bold' }}>Select Member <sup><FontAwesomeIcon icon={faStarOfLife} style={{ color: '#fb1816', fontSize: '8px' }} /></sup></Form.Label>
@@ -313,6 +291,17 @@ axios.put(`https://epkgroup.in/crm/api/public/api/update_newissuetype`, requestD
                                         labelledBy="Select"
                                     />
                                     {formErrors.selectedEmployee && <span className="text-danger">{formErrors.selectedEmployee}</span>}
+                                </Form.Group>
+                            </Col>
+                            <Col>
+                                <Form.Group controlId="formTicketTitle">
+                                    <Form.Label  style={{ fontWeight: 'bold'  }}>Issue Type <sup><FontAwesomeIcon icon={faStarOfLife} style={{ color: '#fb1816', fontSize: '8px' }} /></sup></Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        onChange={(e) => setSelectedIssueType(e.target.value)}
+                                        value={selectedIssueType}
+                                    />
+                                    {formErrors.selectedIssueType && <span className="text-danger">{formErrors.selectedIssueType}</span>}
                                 </Form.Group>
                             </Col>
                         </Row>
