@@ -46,6 +46,7 @@ function AssignedList() {
     const [selectedEmployee, setSelectedEmployee] = useState('');
     const [selectedDepartment, setSelectedDepartment] = useState('');
     const [showFilterModal, setShowFilterModal] = useState(false);
+    const [isDate,setIsDate] = useState(false)
     const [departmentDropdown, setDepartmentDropdown] = useState([]);
     const [IssuesType, setIssuesType] = useState([]);
     const [refreshKey, setRefreshKey] = useState(0);
@@ -480,12 +481,13 @@ const applyFilter = async (e) => {
                                         {/* )}*/}
                                         <Form.Group controlId="fromDate">
                                             <Form.Label>From Date</Form.Label>
-                                            <Form.Control type="date" value={fromDate} max="9999-12-31" onChange={(e) => setFromDate(e.target.value)} />
+                                            <Form.Control type="date" value={fromDate} max="9999-12-31" onChange={(e) => {setFromDate(e.target.value); setIsDate(true)}} />
                                         </Form.Group>
+                                        {isDate &&
                                         <Form.Group controlId="toDate">
                                             <Form.Label>To Date</Form.Label>
                                             <Form.Control type="date" value={toDate} max="9999-12-31" onChange={(e) => setToDate(e.target.value)} />
-                                        </Form.Group>
+                                        </Form.Group>}
                                         <Form.Group controlId="status">
                                             <Form.Label>Status</Form.Label>
                                             <Form.Control as="select" value={status} onChange={(e) => setStatus(e.target.value)}>

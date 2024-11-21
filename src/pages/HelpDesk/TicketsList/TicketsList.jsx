@@ -63,6 +63,7 @@ function TicketsList() {
     const [fromDate, setFromDate] = useState('');
     const [toDate, setToDate] = useState('');
     const [status, setStatus] = useState('');
+    const [isDate,setIsDate] = useState(false)
     const [refreshKey, setRefreshKey] = useState(0);
     const [open, setOpen] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
@@ -74,8 +75,10 @@ function TicketsList() {
         
         const formData = new FormData();
         formData.append('department_id', selectedDepartment);
-        formData.append('issue_type', selectedEmployee);
-        formData.append('emp_id', (userrole === "1" || userrole === "2") ? selectedEmployee : userempid);
+        formData.append('issue_type', selectedEmployee);   
+        if(!userrole === "1" || !userrole === "2") {
+            formData.append('emp_id', userempid);
+            }
         formData.append('from_date', fromDate);
         formData.append('to_date', toDate);
         formData.append('status', status);
@@ -373,7 +376,6 @@ const fetchData = async () => {
 
     // ========================================
     // Fillter start
-
     const filteredData = tableData.filter((row) =>
         Object.values(row).some(
             (value) =>
@@ -656,12 +658,13 @@ const fetchData = async () => {
                                         {/* )} */}
                                         <Form.Group controlId="fromDate">
                                             <Form.Label>From Date</Form.Label>
-                                            <Form.Control type="date" value={fromDate} max="9999-12-31" onChange={(e) => setFromDate(e.target.value)} />
+                                            <Form.Control type="date" value={fromDate} max="9999-12-31" onChange={(e) => {setFromDate(e.target.value);setIsDate(true)}} />
                                         </Form.Group>
+                                        {isDate && 
                                         <Form.Group controlId="toDate">
                                             <Form.Label>To Date</Form.Label>
                                             <Form.Control type="date" value={toDate} max="9999-12-31" onChange={(e) => setToDate(e.target.value)} />
-                                        </Form.Group>
+                                        </Form.Group>}
                                         <Form.Group controlId="status">
                                             <Form.Label>Status</Form.Label>
                                             <Form.Control as="select" value={status} onChange={(e) => setStatus(e.target.value)}>

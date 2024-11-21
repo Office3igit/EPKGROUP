@@ -465,7 +465,8 @@ const formatDate = (dateString) => {
                             ) : (
                             <span
                                 style={{
-                                marginTop: "10px",
+                                display:"flex",
+                                marginTop: "15px",
                                 fontStyle: "italic",
                                 color: "#888",
                                 }}
