@@ -53,6 +53,7 @@ function App() {
         </Routes>
 
       </Router>
+      <p>Welcome Dude</p>
     </div>
   )
 }
