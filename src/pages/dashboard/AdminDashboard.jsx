@@ -98,8 +98,6 @@ const DashboardPage = () => {
                 });
                 const data = response.data;
 
-                console.log("data", data)
-
                 setTotalEmployee(data.total_employee_count);
                 setPresentCount(data.days_present);
                 setLateCount(data.days_late);
